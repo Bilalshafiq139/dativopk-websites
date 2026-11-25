@@ -21,10 +21,14 @@
     if (!/(wa\.me|whatsapp\.com)/i.test(u)) return u;
     return "https://wa.me/" + NUM + "?text=" + encodeURIComponent(MSG);
   }
-  document.addEventListener("click", function (e) {
+  function onLink(e) {
     var a = e.target && e.target.closest ? e.target.closest("a[href]") : null;
     if (a) { var n = fix(a.href); if (n !== a.href) a.href = n; }
-  }, true);
+  }
+  // click, middle-click, long-press / right-click "open in new tab", and touch: the link is fixed before it opens
+  ["pointerdown", "touchstart", "click", "auxclick", "contextmenu"].forEach(function (t) {
+    document.addEventListener(t, onLink, { capture: true, passive: true });
+  });
   var open = window.open;
   window.open = function (u) { var args = [].slice.call(arguments); args[0] = fix(u); return open.apply(window, args); };
 })();
