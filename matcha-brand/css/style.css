@@ -386,8 +386,8 @@ body.menu-open .menu-btn span:last-child { transform: translateY(-3.5px) rotate(
 .drawer-foot { padding-top: 14px; display: grid; gap: 10px; }
 .drawer-foot .row { display: flex; justify-content: space-between; font-weight: 700; font-size: 17px; }
 .fly-ghost { position: fixed; z-index: 120; border-radius: 50%; object-fit: cover; pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
-.toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 140%); background: var(--ink); color: #fff; padding: 13px 20px; border-radius: 99px; z-index: 130; font-size: 14.5px; transition: transform .5s var(--spring); max-width: calc(100% - 40px); }
-.toast.show { transform: translate(-50%, 0); }
+.toast { position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 200%); visibility: hidden; background: var(--ink); color: #fff; padding: 13px 20px; border-radius: 99px; z-index: 130; font-size: 14.5px; transition: transform .5s var(--spring); max-width: calc(100% - 40px); }
+.toast.show { transform: translate(-50%, 0); visibility: visible; }
 .toast a { color: var(--yellow); text-decoration: underline; margin-left: 6px; }
 
 /* footer */
