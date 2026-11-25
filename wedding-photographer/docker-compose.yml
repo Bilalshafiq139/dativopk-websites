@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: dastaan-studio-web
+    ports:
+      - "8084:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: dastaan-studio-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - bookings:/app/data
+    restart: unless-stopped
+
+volumes:
+  bookings:

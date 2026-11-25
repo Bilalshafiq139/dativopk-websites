@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#eeeae0" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<title>Pricing & enrolment | Gridline</title>
+<meta name="description" content="Course fees for the Advanced Data Analytics & Excel course: self-paced, live cohort and team training. Reserve your seat online." />
+</head>
+<body data-page="pricing">
+<main>
+
+<header class="page-head wrap">
+  <span class="label crumb">Pricing · Next batch 12 January</span>
+  <h1 class="display mega">Pick a pace<span class="hl">.</span></h1>
+  <p>Four courses, two ways to learn each. The difference is how much live time and feedback you want along the way.</p>
+</header>
+<section class="wrap"><div class="plans" id="plans"></div>
+  <table class="fees" id="fees"></table></section>
+<section class="block" id="enroll">
+  <div class="wrap split" style="align-items:start">
+    <div>
+      <span class="label">Enrol</span>
+      <h2 class="display big" style="margin-top:16px">Reserve<br>a seat<span class="hl">.</span></h2>
+      <p class="muted" style="max-width:40ch;margin-top:24px">No payment now. An advisor calls you within one working day to confirm the batch and share payment details. Live cohort fees can be split in two.</p>
+    </div>
+    <form class="sheet" id="enroll-form" novalidate>
+      <div class="field full"><label for="course"><b>★</b>Course</label><select id="course" name="course"></select></div>
+      <div class="field"><label for="f-name"><b>A</b>Full name</label><input id="f-name" name="name" autocomplete="name" required></div>
+      <div class="field"><label for="f-phone"><b>B</b>Phone / WhatsApp</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="03xx xxxxxxx" required></div>
+      <div class="field"><label for="f-email"><b>C</b>Email</label><input id="f-email" name="email" type="email" autocomplete="email"></div>
+      <div class="field"><label for="f-role"><b>D</b>What do you do?</label><input id="f-role" name="role" placeholder="e.g. Accounts officer"></div>
+      <div class="field"><label for="plan"><b>E</b>Plan</label><select id="plan" name="plan"></select></div>
+      <div class="field"><label for="f-level"><b>F</b>Your Excel today</label><select id="f-level" name="level"><option>Beginner</option><option selected>Uses basic formulas</option><option>Uses VLOOKUP &amp; pivots</option><option>Advanced</option></select></div>
+      <div class="field full"><label for="batch"><b>G</b>Batch</label><select id="batch" name="batch"></select></div>
+      <div class="field full"><label for="f-msg"><b>H</b>Anything we should know?</label><textarea id="f-msg" name="message" rows="2"></textarea></div>
+      <div class="form-foot"><p class="form-msg" role="status"></p><button class="btn sun" type="submit">Reserve my seat <span class="arr">→</span></button></div>
+    </form>
+  </div>
+</section>
+<section class="block" style="padding-top:0">
+  <div class="wrap split" style="align-items:start">
+    <h2 class="display big">Before<br>you ask<span class="hl">.</span></h2>
+    <div class="faq" id="faq"></div>
+  </div>
+</section>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

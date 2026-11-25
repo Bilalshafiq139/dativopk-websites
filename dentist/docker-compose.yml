@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: mehr-dental-web
+    ports:
+      - "8081:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: mehr-dental-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - appointments:/app/data
+    restart: unless-stopped
+
+volumes:
+  appointments:

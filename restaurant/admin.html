@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b1a1a">
+<meta name="robots" content="noindex, nofollow">
+<title>Host stand | Ember & Oak Steakhouse</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Noto+Serif:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<section class="login" id="login-view" hidden>
+  <div class="login-art"><div>
+    <a class="logo" href="index.html">Ember &amp; Oak</a>
+    <h1>Host stand</h1>
+    <p>Tonight's tables, new requests and confirmations, in one place.</p>
+  </div></div>
+  <form class="login-card" id="login-form">
+    <span class="kicker">Staff only</span>
+    <h2>Sign in</h2>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password" required>
+    <button class="btn solid" type="submit">Sign in</button>
+    <p class="err" id="login-err" role="alert"></p>
+    <p class="hint" id="demo-hint" hidden>Demo password: <b>admin123</b></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <a class="logo" href="index.html">Ember &amp; Oak</a>
+    <span class="sub">Host stand</span>
+    <span class="badge" id="demo-badge" hidden title="No server connected. Data is saved in this browser only.">Demo mode</span>
+    <div class="top-r">
+      <span class="today" id="today"></span>
+      <button class="btn ghost" id="reset-demo" hidden>Reset sample data</button>
+      <button class="btn ghost" id="logout">Sign out</button>
+    </div>
+  </header>
+
+  <main class="body">
+    <section class="kpis" id="kpis"></section>
+
+    <section class="grid2">
+      <div class="panel">
+        <div class="p-head"><h2>Tonight by time</h2><span class="muted" id="tl-date"></span></div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+      <div class="panel">
+        <div class="p-head"><h2>Covers, next 7 days</h2></div>
+        <div class="bars" id="bars"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="p-head">
+        <h2>Reservations</h2>
+        <div class="tools">
+          <div class="seg" id="range">
+            <button data-r="today" class="on">Today</button><button data-r="upcoming">Upcoming</button><button data-r="past">Past</button><button data-r="all">All</button>
+          </div>
+          <select id="status-filter" aria-label="Status"><option value="">All statuses</option></select>
+          <input id="search" type="search" placeholder="Search name, phone, notes">
+          <button class="btn ghost" id="export">Export CSV</button>
+          <button class="btn solid" id="add-btn">+ Walk-in / phone booking</button>
+        </div>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>When</th><th>Guest</th><th>Party</th><th>Seating</th><th>Occasion / notes</th><th>Table</th><th>Status</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <p class="empty" id="empty" hidden>No reservations match.</p>
+    </section>
+  </main>
+</div>
+
+<dialog id="add-dlg">
+  <form method="dialog" id="add-form">
+    <h2>Add a booking</h2>
+    <div class="f2">
+      <label>Name<input name="name" required></label>
+      <label>Phone<input name="phone" required></label>
+      <label>Date<input name="date" type="date" required></label>
+      <label>Time<select name="time" id="add-time"></select></label>
+      <label>Guests<input name="guests" type="number" min="1" max="40" value="2" required></label>
+      <label>Seating<select name="area" id="add-area"></select></label>
+      <label>Status<select name="status"><option value="confirmed">Confirmed</option><option value="seated">Seated now (walk-in)</option><option value="pending">Pending</option></select></label>
+      <label>Table<input name="table" placeholder="e.g. T12"></label>
+      <label class="full">Notes<input name="notes"></label>
+    </div>
+    <p class="err" id="add-err"></p>
+    <div class="dlg-actions"><button class="btn ghost" value="cancel" formnovalidate>Cancel</button><button class="btn solid" id="add-save" value="save">Save booking</button></div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0d6b65" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<script type="importmap">{ "imports": { "three": "./js/vendor/three.module.js" } }</script>
+<title>Book a visit | Mehr Dental Studio</title>
+<meta name="description" content="Request an appointment at Mehr Dental Studio, Gulberg, Lahore. Pick a treatment, dentist and time." />
+</head>
+<body data-page="book">
+<div id="site-top"></div>
+<main>
+  <header class="page-head"><div class="wrap grid">
+    <div><span class="crumbs"><a href="index.html">Home</a> / Book a visit</span><h1>Book Your <em>Appointment</em></h1></div>
+    <p class="lede">Choose a time that suits you. We confirm every request by phone or WhatsApp, usually within the hour during opening times.</p>
+  </div></header>
+  <section class="sec tight"><div class="wrap"><div class="panel mint book-grid">
+    <div id="form-wrap">
+      <form class="form-card" id="book-form" novalidate>
+        <fieldset class="form-step">
+          <legend><i>01</i> What do you need?</legend>
+          <div class="row2">
+            <div class="field"><label for="f-treatment">Treatment</label><select id="f-treatment" name="treatment" required></select></div>
+            <div class="field"><label for="f-doctor">Dentist</label><select id="f-doctor" name="doctor"></select></div>
+          </div>
+        </fieldset>
+        <fieldset class="form-step">
+          <legend><i>02</i> When suits you?</legend>
+          <div class="field" style="max-width:260px"><label for="f-date">Date</label><input type="date" id="f-date" name="date" required></div>
+          <p class="form-error" id="date-err"></p>
+          <div class="field"><label>Time</label><div class="chips" id="times"></div></div>
+        </fieldset>
+        <fieldset class="form-step">
+          <legend><i>03</i> Your details</legend>
+          <div class="row2">
+            <div class="field"><label for="f-name">Full name</label><input id="f-name" name="name" autocomplete="name" required maxlength="80"></div>
+            <div class="field"><label for="f-phone">Phone / WhatsApp</label><input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="03xx xxxxxxx" required maxlength="30"></div>
+          </div>
+          <div class="field"><label for="f-email">Email (optional)</label><input id="f-email" name="email" type="email" autocomplete="email" maxlength="120"></div>
+          <div class="field"><label for="f-notes">Anything we should know? (optional)</label><textarea id="f-notes" name="notes" maxlength="1000" placeholder="Pain, worries, previous treatment…"></textarea></div>
+        </fieldset>
+        <button class="btn" type="submit" style="margin-top:6px">Request appointment</button>
+        <p class="form-error" id="form-err" role="alert"></p>
+        <p class="form-note">We only use your details to arrange your visit.</p>
+      </form>
+    </div>
+    <aside>
+      <div class="aside-card"><h3>In pain right now?</h3><p>Message us on WhatsApp with a photo if you can. We keep slots free every day for emergencies.</p><a class="btn teal" data-wa="Assalam o Alaikum, I have tooth pain and need an urgent appointment." href="#" >WhatsApp the clinic</a></div>
+      <div class="aside-card"><h3>Office hours</h3><div id="hours"></div></div>
+      <div class="aside-card"><h3>Address</h3><div><span data-clinic="address"></span><br><a href="tel:+923001234567" data-clinic="phone"></a></div></div>
+    </aside>
+  </div></div></section>
+</main>
+<div id="site-foot"></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

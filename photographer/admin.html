@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2f4a36">
+<meta name="robots" content="noindex, nofollow">
+<title>Studio desk | Zoya Malik Studio</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<section class="login" id="login-view" hidden>
+  <div class="login-art"><div>
+    <a class="logo" href="index.html"><span class="star"></span>Zoya</a>
+    <h1>Studio desk</h1>
+    <p>New enquiries, quotes and upcoming shoots, in one place.</p>
+  </div></div>
+  <form class="login-card" id="login-form">
+    <span class="kicker">Studio only</span>
+    <h2>Sign in</h2>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password" required>
+    <button class="btn" type="submit">Sign in</button>
+    <p class="err" id="login-err" role="alert"></p>
+    <p class="hint" id="demo-hint" hidden>Demo password: <b>admin123</b></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <a class="logo" href="index.html"><span class="star"></span>Zoya</a>
+    <span class="sub">Studio desk</span>
+    <span class="badge" id="demo-badge" hidden title="No server connected. Data is saved in this browser only.">Demo mode</span>
+    <div class="top-r">
+      <span class="today" id="today"></span>
+      <button class="btn ghost" id="reset-demo" hidden>Reset sample data</button>
+      <button class="btn ghost" id="logout">Sign out</button>
+    </div>
+  </header>
+
+  <main class="body">
+    <section class="kpis" id="kpis"></section>
+
+    <section class="grid2">
+      <div class="panel">
+        <div class="panel-h">
+          <h2>Enquiries</h2>
+          <div class="tools">
+            <input type="search" id="q" placeholder="Search name, phone, location" aria-label="Search enquiries">
+            <select id="type-f" aria-label="Filter by shoot type"><option value="">All shoot types</option></select>
+            <button class="btn" id="add-btn">+ Add booking</button>
+          </div>
+        </div>
+        <div class="tabs" id="status-tabs" role="tablist"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Client</th><th>Shoot</th><th>Date</th><th>Budget / quote</th><th>Status</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <p class="empty" id="empty" hidden>No enquiries match this view.</p>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="panel">
+          <div class="panel-h"><h2>Next shoots</h2></div>
+          <ul class="upcoming" id="upcoming"></ul>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><h2>Where enquiries come from</h2></div>
+          <div class="bars" id="sources"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><h2>Shoot types</h2></div>
+          <div class="bars" id="types"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-bg" data-close></div>
+  <aside class="drawer-card" role="dialog" aria-modal="true" aria-labelledby="d-name">
+    <button class="x" data-close aria-label="Close">&times;</button>
+    <div id="d-body"></div>
+  </aside>
+</div>
+
+<div class="drawer" id="add-modal" aria-hidden="true">
+  <div class="drawer-bg" data-close></div>
+  <aside class="drawer-card" role="dialog" aria-modal="true" aria-labelledby="add-h">
+    <button class="x" data-close aria-label="Close">&times;</button>
+    <span class="kicker">Phone or walk-in</span>
+    <h2 id="add-h">Add a booking</h2>
+    <form id="add-form" class="add-form">
+      <label>Client name<input name="name" required></label>
+      <label>Phone<input name="phone" required></label>
+      <label>Shoot type<select name="type" id="add-type"></select></label>
+      <label>Date<input name="date" type="date" required></label>
+      <label>Location<input name="location" value="Studio, DHA"></label>
+      <label>Quote (PKR)<input name="quote" type="number" min="0" step="1000"></label>
+      <label>Status<select name="status"><option value="booked">Booked</option><option value="quoted">Quoted</option><option value="new">New</option></select></label>
+      <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
+      <p class="err full" id="add-err" role="alert"></p>
+      <button class="btn full" type="submit">Save booking</button>
+    </form>
+  </aside>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: nexora-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: nexora-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - enrollments:/app/data
+    restart: unless-stopped
+
+volumes:
+  enrollments:

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin | Nexora Academy</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#f3f0e8" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <script type="importmap">{ "imports": { "three": "./js/vendor/three.module.js" } }</script>
+</head>
+<body class="admin-body">
+
+<!-- Login -->
+<section class="login-wrap" id="login-view" hidden>
+  <div class="login-art">
+    <a href="index.html" class="wordmark">Nexora<small>Academy</small></a>
+    <div><h1>Staff <em>room.</em></h1><p>Applications, follow-ups and enrollments, all in one place.</p></div>
+    <span class="label" style="color:rgba(243,240,232,.45)">Restricted area</span>
+  </div>
+  <div class="login-form-wrap">
+    <form class="login-card" id="login-form">
+      <span class="label">Admin</span>
+      <h2>Sign in</h2>
+      <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required placeholder="Enter password" /></div>
+      <p class="err" id="login-err"></p>
+      <button class="btn" style="width:100%;justify-content:center" type="submit">Sign in</button>
+      <p class="hint">Demo password: <code>admin123</code></p>
+    </form>
+  </div>
+</section>
+
+<!-- Dashboard -->
+<div id="dash-view" hidden>
+  <header class="admin-top">
+    <div class="container nav">
+      <a href="index.html" class="wordmark">Nexora<small>Academy</small></a>
+      <div class="top-actions">
+        <span class="badge" id="mode-badge">Live</span>
+        <a href="index.html" class="ulink small">View site</a>
+        <button class="btn btn-sm btn-line" id="logout">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dash" style="max-width:var(--max);margin:0 auto">
+    <div class="dash-head">
+      <div>
+        <span class="label">Admissions</span>
+        <h1 style="margin-top:12px">Applications</h1>
+        <p id="greeting">Overview of everyone who applied through the website.</p>
+      </div>
+      <button class="btn btn-sm" id="export">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+        Export CSV
+      </button>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="charts">
+      <div class="card">
+        <h3>Applications in the last 14 days</h3>
+        <div class="sub" id="trend-sub"></div>
+        <svg id="trend" viewBox="0 0 600 170" preserveAspectRatio="none" role="img" aria-label="Daily applications chart"></svg>
+        <div class="trend-axis"><span id="trend-start"></span><span>Today</span></div>
+      </div>
+      <div class="card">
+        <h3>Applications by course</h3>
+        <div class="sub">All time</div>
+        <div class="bars" id="bars"></div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="Search by name, phone or email" aria-label="Search" />
+      <select id="f-course" aria-label="Filter by course"></select>
+      <select id="f-status" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="new">New</option>
+        <option value="contacted">Contacted</option>
+        <option value="enrolled">Enrolled</option>
+        <option value="not-interested">Not interested</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Student</th><th>Phone</th><th>Course</th><th>Timing</th><th>Applied</th><th>Status</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="table-foot">
+      <span id="count"></span>
+      <button class="link-btn" id="reset-demo" hidden>Reset demo data</button>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

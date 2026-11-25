@@ -1,0 +1,24 @@
+services:
+  web:
+    build: .
+    container_name: ember-oak-web
+    ports:
+      - "8082:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: ember-oak-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      TABLES_PER_SLOT: ${TABLES_PER_SLOT:-6}
+    volumes:
+      - reservations:/app/data
+    restart: unless-stopped
+
+volumes:
+  reservations:

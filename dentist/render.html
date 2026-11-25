@@ -1,0 +1,35 @@
+<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;background:transparent}</style>
+<script type="importmap">{ "imports": { "three": "./js/vendor/three.module.js" } }</script></head><body>
+<script type="module">
+import * as THREE from "three";
+import * as M from "./js/models.js";
+const q = new URLSearchParams(location.search);
+const W = +q.get("w") || 1000, H = +q.get("h") || 1000, which = q.get("m") || "molar";
+const opaque = q.get('bg'); const r = new THREE.WebGLRenderer({ antialias: true, alpha: !opaque, preserveDrawingBuffer: true });
+r.setSize(W, H); r.setPixelRatio(1); r.shadowMap.enabled = true; r.shadowMap.type = THREE.VSMShadowMap;
+r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping; r.toneMappingExposure = 1.0;
+document.body.appendChild(r.domElement);
+const scene = new THREE.Scene(); if (opaque) scene.background = new THREE.Color('#' + opaque);
+const cam = new THREE.PerspectiveCamera(30, W / H, 0.1, 100);
+let obj, floorY = -2;
+const S = {
+  molar() { obj = M.makeMolar(); obj.rotation.set(0.25, 0.6, -0.12); floorY = -2.6; cam.position.set(0, 1.2, 10); cam.lookAt(0, -0.3, 0); },
+  implant() { obj = M.makeImplant(); obj.rotation.set(0.1, 0.5, 0.08); floorY = -2.6; cam.position.set(0, 0.8, 11); cam.lookAt(0, -0.5, 0); },
+  arch() { obj = M.makeArch(); obj.rotation.set(0.35, 0, 0); floorY = -1.2; cam.position.set(0, 3, 10); cam.lookAt(0, 0, 0.3); },
+  aligner() { obj = M.makeArch({ aligner: true }); obj.rotation.set(0.35, 0, 0); floorY = -1.2; cam.position.set(0, 3, 10); cam.lookAt(0, 0, 0.3); },
+  incisor() { obj = new THREE.Group(); const a = M.makeIncisor(); a.rotation.set(0.15, 0.35, 0.05); a.position.x = -0.75; const b = M.makeIncisor({ color: 0xf7f3ea }); b.rotation.set(0.1, -0.3, -0.06); b.position.x = 0.75; obj.add(a, b); floorY = -2.3; cam.position.set(0, 0.6, 10); cam.lookAt(0, -0.2, 0); },
+  checkup() { obj = new THREE.Group(); const m = M.makeMolar(); m.rotation.set(0.2, 0.5, -0.1); m.position.x = -0.6; const mi = M.makeMirror(); mi.rotation.set(0.1, -0.6, 0.42); mi.position.set(1.9, -2.55, 0.4); mi.scale.setScalar(0.72); obj.add(m, mi); floorY = -2.6; cam.position.set(0, 1, 11); cam.lookAt(0, -0.3, 0); },
+  'aligner-dark'() { S.aligner(); },
+  before() { obj = M.makeArch({ stained: true, missing: [3], crooked: true }); obj.rotation.set(0.25, 0, 0); floorY = -1.2; cam.position.set(0, 1.6, 7.2); cam.lookAt(0, 0.1, 0.6); },
+  before2() { obj = M.makeArch({ crooked: true }); obj.rotation.set(0.25, 0, 0); floorY = -1.2; cam.position.set(0, 1.6, 7.2); cam.lookAt(0, 0.1, 0.6); },
+  after() { obj = M.makeArch(); obj.rotation.set(0.25, 0, 0); floorY = -1.2; cam.position.set(0, 1.6, 7.2); cam.lookAt(0, 0.1, 0.6); },
+  brush() { obj = new THREE.Group(); const b = M.makeToothbrush(); b.rotation.set(0.2, 0.3, -0.7); b.position.set(0.6, -2.0, 0); b.scale.setScalar(0.72); const m = M.makeMolar(); m.scale.setScalar(0.8); m.rotation.set(0.25, 0.5, -0.1); m.position.set(-1.6, -0.6, 0.4); obj.add(b, m); floorY = -2.6; cam.position.set(0, 1, 11); cam.lookAt(0, -0.3, 0); },
+  kids() { obj = new THREE.Group(); const b = M.makeToothbrush({ color: 0xf2b544 }); b.rotation.set(0.1, 0.4, 0.45); b.position.set(1.6, -2.1, 0); b.scale.setScalar(0.66); const m = M.makeMolar(); m.scale.setScalar(0.62); m.rotation.set(0.2, 0.5, -0.12); m.position.set(-0.9, -0.9, 0.5); const m2 = M.makeIncisor(); m2.scale.setScalar(0.55); m2.rotation.set(0.1, -0.4, 0.1); m2.position.set(-2.2, -1.1, -0.2); obj.add(b, m, m2); floorY = -2.6; cam.position.set(0, 1, 11); cam.lookAt(0, -0.4, 0); },
+  canal() { obj = M.makeMolar({ color: 0xece4d6 }); obj.rotation.set(0.15, 0.3, 0); floorY = -2.6; cam.position.set(0, 1, 10); cam.lookAt(0, -0.3, 0); },
+};
+S[which]();
+scene.add(obj);
+M.stage(scene, { floorY, shadow: which.endsWith('dark') ? 0 : 0.14 });
+r.render(scene, cam);
+window.done = true;
+</script></body></html>

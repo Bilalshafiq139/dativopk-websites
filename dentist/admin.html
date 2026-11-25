@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0d6b65" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/admin.css" />
+<title>Front desk | Mehr Dental Studio</title>
+</head>
+<body class="admin" data-page="admin">
+
+<section class="login" id="login-view" hidden>
+  <div class="login-art">
+    <a class="wordmark" href="index.html"><b>Mehr</b><small>Dental Studio</small></a>
+    <div><h1>Front <em>desk.</em></h1><p>Appointments, confirmations and today's chairs, in one quiet place.</p></div>
+    <span class="small" style="opacity:.5">Staff only</span>
+  </div>
+  <div class="login-side">
+    <form class="login-card" id="login-form">
+      <span class="label">Sign in</span>
+      <h2>Welcome back</h2>
+      <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required></div>
+      <button class="btn" type="submit" style="width:100%;justify-content:center">Sign in</button>
+      <p class="form-error" id="login-err" role="alert"></p>
+      <p class="form-note" id="demo-hint" hidden>Demo password: <b>admin123</b></p>
+    </form>
+  </div>
+</section>
+
+<div id="app" hidden>
+  <header class="a-top">
+    <a class="wordmark" href="index.html"><b>Mehr</b><small>Front desk</small></a>
+    <span class="demo-badge" id="demo-badge" hidden title="No server connected. Data is saved in this browser only.">Demo mode</span>
+    <div class="a-top-r">
+      <span class="small muted hide-sm" id="today-label"></span>
+      <button class="btn small-btn" id="new-btn">+ New appointment</button>
+      <button class="btn ghost small-btn" id="logout">Sign out</button>
+    </div>
+  </header>
+
+  <main class="a-main">
+    <section class="kpis" id="kpis"></section>
+
+    <section class="a-two">
+      <div class="panel">
+        <div class="panel-h"><h3>Today's chairs</h3><span class="small muted" id="today-count"></span></div>
+        <ol class="today" id="today-list"></ol>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h3>Next 7 days</h3><span class="small muted">booked visits</span></div>
+        <div class="bars" id="bars"></div>
+        <div class="panel-h" style="margin-top:28px"><h3>By treatment</h3><span class="small muted">last 30 days</span></div>
+        <ul class="mix" id="mix"></ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-h wrap-h">
+        <div class="tabs" role="tablist" id="tabs">
+          <button role="tab" data-tab="upcoming" aria-selected="true">Upcoming</button>
+          <button role="tab" data-tab="pending">Needs confirming</button>
+          <button role="tab" data-tab="past">Past</button>
+          <button role="tab" data-tab="all">All</button>
+        </div>
+        <div class="filters">
+          <input type="search" id="q" placeholder="Search name or phone" aria-label="Search">
+          <select id="f-doc" aria-label="Dentist"><option value="">All dentists</option></select>
+          <select id="f-status" aria-label="Status"><option value="">Any status</option></select>
+          <button class="btn ghost small-btn" id="export">Export CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="appts">
+          <thead><tr><th>When</th><th>Patient</th><th>Treatment</th><th>Dentist</th><th>Status</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="empty" hidden>No appointments match.</p>
+      <p class="small muted" style="margin-top:16px" id="reset-wrap" hidden><button class="text-btn" id="reset">Reset demo data</button></p>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form id="new-form" class="dlg-form">
+    <h3>New appointment</h3>
+    <p class="small muted" style="margin-top:-6px">For phone calls and walk-ins.</p>
+    <div class="row2">
+      <div class="field"><label for="n-name">Patient name</label><input id="n-name" name="name" required maxlength="80"></div>
+      <div class="field"><label for="n-phone">Phone</label><input id="n-phone" name="phone" required maxlength="30"></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="n-treat">Treatment</label><select id="n-treat" name="treatment"></select></div>
+      <div class="field"><label for="n-doc">Dentist</label><select id="n-doc" name="doctor"></select></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label for="n-date">Date</label><input id="n-date" name="date" type="date" required></div>
+      <div class="field"><label for="n-time">Time</label><select id="n-time" name="time"></select></div>
+    </div>
+    <div class="field"><label for="n-notes">Notes</label><input id="n-notes" name="notes" maxlength="300"></div>
+    <p class="form-error" id="n-err"></p>
+    <div class="dlg-actions"><button class="btn ghost" type="button" id="n-cancel">Cancel</button><button class="btn" type="submit">Save appointment</button></div>
+  </form>
+</dialog>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Websites by DATIVOPK: live demo portfolio</title>
+<meta name="description" content="Live demo websites built by DATIVOPK: academies, clinics, restaurants, photographers and course sites.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0b1230; --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12); --text:#e8ecf8; --muted:#a6afcc; --orange:#ff8a3d; --blue:#4f7cff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Inter,system-ui,sans-serif; color:var(--text); background:var(--bg);
+    background-image:radial-gradient(circle at 15% 10%, rgba(79,124,255,.25), transparent 40%), radial-gradient(circle at 85% 30%, rgba(255,138,61,.18), transparent 40%);
+    min-height:100vh; }
+  main { max-width:1080px; margin:0 auto; padding:56px 20px 64px; }
+  .tag { display:inline-block; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--orange); margin-bottom:10px; }
+  h1 { font-family:Sora,sans-serif; font-size:clamp(30px,5vw,46px); line-height:1.15; margin:0 0 14px; }
+  p.lead { color:var(--muted); font-size:18px; max-width:640px; margin:0 0 40px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+  a.card { display:flex; flex-direction:column; gap:8px; padding:24px; border:1px solid var(--line); border-radius:16px; background:var(--card);
+    color:inherit; text-decoration:none; transition:transform .2s, border-color .2s; }
+  a.card:hover, a.card:focus-visible { transform:translateY(-3px); border-color:var(--orange); }
+  .kind { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--blue); }
+  h2 { font-family:Sora,sans-serif; font-size:21px; margin:0; }
+  .card p { color:var(--muted); margin:0; flex:1; line-height:1.5; }
+  .open { color:var(--orange); font-weight:500; margin-top:8px; }
+  footer { margin-top:48px; color:var(--muted); font-size:14px; }
+  footer a { color:var(--text); }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">DATIVOPK · Website design</span>
+  <h1>Websites we build</h1>
+  <p class="lead">Live demo sites. Open any one on your phone or laptop. Forms and admin panels run in demo mode, so nothing you type is sent anywhere.</p>
+  <div class="grid">
+    <a class="card" href="academy/"><span class="kind">Education</span><h2>Nexora Academy</h2><p>Multi-page academy site with a 3D hero, course pages, enrollment form and admin panel.</p><span class="open">Open site →</span></a>
+    <a class="card" href="excel-course/"><span class="kind">Online course</span><h2>Gridline: Excel &amp; Data Analytics</h2><p>Scroll-story course site: one cell grows into a full dashboard in 3D as you scroll.</p><span class="open">Open site →</span></a>
+    <a class="card" href="dentist/"><span class="kind">Clinic</span><h2>Mehr Dental Studio</h2><p>Dentist website with a live 3D tooth, treatments, appointment booking and a front-desk panel.</p><span class="open">Open site →</span></a>
+    <a class="card" href="restaurant/"><span class="kind">Restaurant</span><h2>Ember &amp; Oak Steakhouse</h2><p>Premium restaurant site with full menu, dish pages, table reservations and a host-stand panel.</p><span class="open">Open site →</span></a>
+    <a class="card" href="wedding-photographer/"><span class="kind">Wedding studio</span><h2>Dastaan Studio</h2><p>Pakistani wedding photography &amp; films: package builder in PKR, stories, gallery, WhatsApp booking.</p><span class="open">Open site →</span></a>
+    <a class="card" href="photographer/"><span class="kind">Photographer</span><h2>Zoya Malik Studio</h2><p>Portfolio for a portrait, wedding and product photographer with case studies, blog and enquiries.</p><span class="open">Open site →</span></a>
+  </div>
+  <footer>Want a website like these? Visit <a href="https://dativopk.com">dativopk.com</a>. Business names, people and numbers on these demos are placeholders.</footer>
+</main>
+</body>
+</html>

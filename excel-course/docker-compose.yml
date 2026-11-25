@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: gridline-web
+    ports:
+      - "8085:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: gridline-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - leads:/app/data
+    restart: unless-stopped
+
+volumes:
+  leads:

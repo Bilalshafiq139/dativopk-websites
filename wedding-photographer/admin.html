@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d0a10">
+<meta name="robots" content="noindex, nofollow">
+<title>Bookings desk | Dastaan Studio</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500;600&family=Noto+Nastaliq+Urdu:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<section class="login" id="login-view" hidden>
+  <div class="login-art">
+    <img src="assets/img/couple-jharokha.webp" alt="">
+    <div class="login-copy">
+      <a class="logo" href="index.html"><span class="ur">داستان</span><span>Dastaan<small>Studio</small></span></a>
+      <h1>Bookings desk</h1>
+      <p>Requests, quotes, advances and every shaadi on the calendar, in one place.</p>
+    </div>
+  </div>
+  <form class="login-card" id="login-form">
+    <span class="kicker">Studio team only</span>
+    <h2>Sign in</h2>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" autocomplete="current-password" required>
+    <button class="btn" type="submit">Sign in</button>
+    <p class="err" id="login-err" role="alert"></p>
+    <p class="hint" id="demo-hint" hidden>Demo password: <b>admin123</b></p>
+  </form>
+</section>
+
+<div id="app" class="app" hidden>
+  <aside class="rail">
+    <a class="logo" href="index.html"><span class="ur">داستان</span><span>Dastaan<small>Bookings desk</small></span></a>
+    <nav>
+      <button class="on" data-t="all">All requests</button>
+      <button data-t="new">New</button>
+      <button data-t="quoted">Quoted</button>
+      <button data-t="booked">Booked</button>
+      <button data-t="completed">Completed</button>
+      <button data-t="declined">Declined</button>
+    </nav>
+    <div class="rail-foot">
+      <span class="badge" id="demo-badge" hidden title="No server connected. Data is saved in this browser only.">Demo mode</span>
+      <button class="ghost" id="reset-demo" hidden>Reset sample data</button>
+      <a class="ghost" href="index.html">View website</a>
+      <button class="ghost" id="logout">Sign out</button>
+    </div>
+  </aside>
+
+  <main class="body">
+    <header class="top">
+      <div><span class="kicker" id="today"></span><h1>Assalam o Alaikum, team</h1></div>
+      <button class="btn" id="add-btn">+ Add booking</button>
+    </header>
+
+    <section class="kpis" id="kpis"></section>
+
+    <section class="grid2">
+      <div class="panel">
+        <div class="panel-h">
+          <h2 id="list-title">All requests</h2>
+          <div class="tools">
+            <input type="search" id="q" placeholder="Search name, phone, venue, city" aria-label="Search bookings">
+            <select id="city-f" aria-label="Filter by city"><option value="">All cities</option></select>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Client</th><th>Events</th><th>First date</th><th>Quote / advance</th><th>Status</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <p class="empty" id="empty" hidden>No requests match this view.</p>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="panel">
+          <div class="panel-h"><h2>Upcoming shaadiyan</h2></div>
+          <ul class="upcoming" id="upcoming"></ul>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><h2>By city</h2></div>
+          <div class="bars" id="cities"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><h2>Where requests come from</h2></div>
+          <div class="bars" id="sources"></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-bg" data-close></div>
+  <aside class="drawer-card" role="dialog" aria-modal="true" aria-labelledby="d-name">
+    <button class="x" data-close aria-label="Close">&times;</button>
+    <div id="d-body"></div>
+  </aside>
+</div>
+
+<div class="drawer" id="add-modal" aria-hidden="true">
+  <div class="drawer-bg" data-close></div>
+  <aside class="drawer-card" role="dialog" aria-modal="true" aria-labelledby="add-h">
+    <button class="x" data-close aria-label="Close">&times;</button>
+    <span class="kicker">Phone call or studio visit</span>
+    <h2 id="add-h">Add a booking</h2>
+    <form id="add-form" class="add-form">
+      <label class="full">Client name<input name="name" required></label>
+      <label>Phone<input name="phone" required placeholder="03xx xxxxxxx"></label>
+      <label>First event date<input name="date" type="date" required></label>
+      <fieldset class="full"><legend>Events</legend><div class="evs" id="add-events"></div></fieldset>
+      <label>City<select name="city" id="add-city"></select></label>
+      <label>Venue<input name="venue"></label>
+      <label>Guests<input name="guests" type="number" min="0" step="50"></label>
+      <label>Package<select name="package" id="add-pkg"></select></label>
+      <label>Quote (Rs)<input name="quote" type="number" min="0" step="1000"></label>
+      <label>Advance received (Rs)<input name="advance" type="number" min="0" step="1000"></label>
+      <label class="full">Status<select name="status"><option value="booked">Booked</option><option value="quoted">Quoted</option><option value="new">New</option></select></label>
+      <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
+      <p class="err full" id="add-err" role="alert"></p>
+      <button class="btn full" type="submit">Save booking</button>
+    </form>
+  </aside>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#eeeae0" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="stylesheet" href="css/admin.css" />
+<title>Admissions desk | Gridline</title>
+</head>
+<body class="admin" data-page="admin">
+<section class="login" id="login-view" hidden>
+  <form class="login-card" id="login-form">
+    <a class="logo" href="index.html"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Gridline</a>
+    <h1 class="display big" style="margin:40px 0 10px">Admissions<span class="hl">.</span></h1>
+    <p class="muted" style="margin:0 0 28px">Enquiries, seat requests and payments for every batch.</p>
+    <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit" style="width:100%;justify-content:center;margin-top:16px">Sign in</button>
+    <p class="form-msg err" id="login-err" role="alert"></p>
+    <p class="muted small" id="demo-hint" hidden>Demo password: <b>admin123</b></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="a-top">
+    <a class="logo" href="index.html"><span class="logo-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>Gridline</a>
+    <span class="a-title">Admissions desk</span>
+    <span class="demo-badge" id="demo-badge" hidden title="No server connected. Data is saved in this browser only.">Demo mode</span>
+    <div class="a-top-r">
+      <button class="btn sun sm" id="new-btn">+ Add lead</button>
+      <button class="btn ghost sm" id="csv-btn">Export CSV</button>
+      <button class="btn ghost sm" id="logout">Sign out</button>
+    </div>
+  </header>
+  <main class="a-main">
+    <section class="kpis" id="kpis"></section>
+    <section class="a-two">
+      <div class="panel"><div class="panel-h"><h3>New leads, last 14 days</h3><span class="muted small" id="lead-sum"></span></div><div class="bars" id="bars"></div></div>
+      <div class="panel"><div class="panel-h"><h3>Seats, January batches</h3><span class="muted small">all courses, of 24 each</span></div><div id="seats"></div>
+        <div class="panel-h" style="margin-top:26px"><h3>Pipeline</h3></div><div class="pipe" id="pipe"></div></div>
+    </section>
+    <section class="panel">
+      <div class="panel-h wrapflex">
+        <h3>All leads</h3>
+        <div class="filters">
+          <input id="q" type="search" placeholder="Search name, phone, email">
+          <select id="f-status"><option value="">All statuses</option></select>
+          <select id="f-source"><option value="">Enrol + contact</option><option value="enroll">Seat requests</option><option value="contact">Contact form</option></select>
+        </div>
+      </div>
+      <div class="table-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Plan / batch</th><th>Level</th><th>Received</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p class="muted small" id="empty" hidden style="padding:30px;text-align:center">No leads match.</p>
+      <p class="small" style="margin-top:16px"><button class="linkbtn" id="reset" hidden>Reset demo data</button></p>
+    </section>
+  </main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="dlg-form" class="dlg">
+    <h3 id="dlg-title">Lead</h3>
+    <div id="dlg-body"></div>
+    <div class="dlg-foot"><button class="btn ghost sm" value="cancel" formnovalidate>Close</button><button class="btn sm" id="dlg-save" value="save">Save</button></div>
+  </form>
+</dialog>
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

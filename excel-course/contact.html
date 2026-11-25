@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#eeeae0" />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<title>Contact | Gridline</title>
+<meta name="description" content="Talk to an advisor about the Advanced Data Analytics & Excel course. Call, WhatsApp or visit our Lahore campus." />
+</head>
+<body data-page="contact">
+<main>
+
+<header class="page-head wrap">
+  <span class="label crumb">Contact</span>
+  <h1 class="display mega">Ask us<br>anything<span class="hl">.</span></h1>
+  <p>Not sure which plan fits, or want a team quote? Leave a message and an advisor gets back within one working day. WhatsApp is usually faster.</p>
+</header>
+<section class="block" style="padding-top:30px">
+  <div class="wrap contact-grid">
+    <ul class="info" id="info"></ul>
+    <form class="sheet" id="contact-form" novalidate>
+      <div class="field"><label for="c-name"><b>A</b>Full name</label><input id="c-name" name="name" autocomplete="name" required></div>
+      <div class="field"><label for="c-phone"><b>B</b>Phone / WhatsApp</label><input id="c-phone" name="phone" type="tel" autocomplete="tel" placeholder="03xx xxxxxxx" required></div>
+      <div class="field full"><label for="c-email"><b>C</b>Email</label><input id="c-email" name="email" type="email" autocomplete="email"></div>
+      <div class="field full"><label for="c-msg"><b>D</b>Your question</label><textarea id="c-msg" name="message" rows="5"></textarea></div>
+      <div class="form-foot"><p class="form-msg" role="status"></p><button class="btn" type="submit">Send message <span class="arr">→</span></button></div>
+    </form>
+  </div>
+</section>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

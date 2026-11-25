@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2f4a36">
+<meta name="description" content="Send a photoshoot enquiry to Zoya Malik Studio in Lahore. Portraits, weddings, fashion and product shoots.">
+<title>Book a shoot | Zoya Malik, photographer in Lahore</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="contact">
+<a class="skip" href="#main">Skip to content</a>
+<main id="main">
+  <section class="green page-hero">
+    <div class="wrap ph-grid">
+      <div>
+        <div class="crumbs"><a href="index.html">Home</a><span class="star"></span><span>Contact</span></div>
+        <h1 class="split">Let&rsquo;s make <em>something</em></h1>
+        <p class="lead light rv">Tell me what you have in mind. I reply to every enquiry within one working day, usually much sooner on WhatsApp.</p>
+      </div>
+      <div class="ph-art rv"><div class="arch mask"><img src="assets/img/photog-yellow.webp" alt="Zoya holding a camera to her eye"></div><span data-badge></span></div>
+    </div>
+    <div class="marquee on-dark ph-band" data-marquee><div class="marquee-track"><span>Say hello</span><span class="star"></span><span>Pick a date</span><span class="star"></span><span>Plan the shoot</span><span class="star"></span><span>Shoot day</span><span class="star"></span></div></div>
+  </section>
+
+  <section class="sec paper">
+    <span class="aperture-bg left" data-aperture></span>
+    <div class="wrap contact-grid">
+      <div class="contact-info rv">
+        <span class="kicker">The studio</span>
+        <h2>Visit, call or send a voice note</h2>
+        <p class="lead">Studio visits are by appointment, so we can have the lights and the chai ready.</p>
+        <dl>
+          <div><dt>Phone</dt><dd><a href="tel:+923001234567" data-site="phone">+92 300 1234567</a></dd></div>
+          <div><dt>WhatsApp</dt><dd><a data-wa href="#" target="_blank" rel="noopener">Chat with Zoya</a></dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:hello@zoyamalik.studio">hello@zoyamalik.studio</a></dd></div>
+          <div><dt>Studio</dt><dd data-site="address">Studio 4, 27-C Main Boulevard, DHA Phase 6, Lahore</dd></div>
+          <div><dt>Hours</dt><dd>Tue to Sun, 11 am to 8 pm</dd></div>
+        </dl>
+        <div class="arch mask"><img src="assets/img/studio-3.webp" alt="Makeup artist preparing a model in the studio" loading="lazy"></div>
+      </div>
+      <form class="form rv rv-d1" id="enquiry" novalidate>
+        <div class="form-body">
+          <h3>Shoot enquiry</h3>
+          <p>Fields with <span class="coral">*</span> are needed. Everything else helps me prepare a better quote.</p>
+          <div class="fields">
+            <div class="field full"><label>What are we shooting? <i>*</i></label><div class="chips" id="types" role="radiogroup"></div></div>
+            <div class="field"><label for="name">Your name <i>*</i></label><input id="name" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="phone">Phone / WhatsApp <i>*</i></label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="03xx xxxxxxx" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
+            <div class="field"><label for="date">Preferred date</label><input id="date" name="date" type="date"><small id="date-hint" aria-live="polite"></small></div>
+            <div class="field"><label for="location">Location</label><input id="location" name="location" placeholder="Studio, venue or city"></div>
+            <div class="field"><label for="budget">Budget</label><select id="budget" name="budget"></select></div>
+            <div class="field full"><label for="message">Tell me about it</label><textarea id="message" name="message" placeholder="Number of events, outfits, products, guests, ideas..."></textarea></div>
+            <div class="field"><label for="source">How did you find me?</label><select id="source" name="source"></select></div>
+          </div>
+          <div class="form-foot"><small>Your details are only used to reply to this enquiry.</small><button class="btn" type="submit" data-icon="arrow">Send enquiry </button></div>
+          <p class="form-err" role="alert"></p>
+        </div>
+        <div class="done" role="status">
+          <div class="tick" data-icon="tick"></div>
+          <h3>Thank you, <span class="done-name"></span>!</h3>
+          <p>Your enquiry is in. I will reply within one working day with availability and a quote. Want a faster answer? Send a WhatsApp too.</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a class="btn done-wa" href="#" target="_blank" rel="noopener">WhatsApp Zoya</a><button class="btn ink again" type="button">Send another</button></div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
