@@ -8,14 +8,15 @@
 <link rel="icon" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=5">
+<link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 <main id="main">
 
 <section class="hero3d" id="hero3d" aria-label="Lakri living room">
   <div class="h3-sticky">
-    <canvas class="h3-canvas" aria-hidden="true"></canvas>
+    <div class="hp-arch" aria-hidden="true"><img class="hp-room" src="assets/img/room-empty.webp" alt=""></div>
+    <div class="hp-pieces"></div>
     <div class="wrap h3-layer">
       <div class="h3-copy">
         <p class="mono eyebrow rise">Solid wood furniture · Made in Chiniot</p>
@@ -30,11 +31,7 @@
       <div class="h3-scroll mono">Scroll to step inside <span class="h3-arrow">↓</span></div>
     </div>
     <div class="h3-tags"></div>
-    <div class="h3-fallback">
-      <div class="arch a1"><img src="assets/img/p-noor.webp" alt="Cream lounge chair on a wooden floor"></div>
-      <div class="arch a2"><img src="assets/img/detail-table.webp" alt="Round wooden table top with ceramic pieces"></div>
-    </div>
-  </div>
+      </div>
 </section>
 
 <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
@@ -159,10 +156,10 @@ import { init, card, esc, $, $$, reveal } from "./js/layout.js";
 import { WOODS, ROOMS, CATEGORIES, TESTIMONIALS, img, money, priceFor } from "./js/data.js";
 import * as S from "./js/store.js";
 import { roomStage } from "./js/rooms.js";
-import { initHero3D } from "./js/hero3d.js";
+import { initHeroRoom } from "./js/hero-room.js";
 
 await init("home");
-try { initHero3D(document.getElementById("hero3d")); } catch (e) { console.warn(e); document.getElementById("hero3d").classList.add("no3d"); }
+initHeroRoom(document.getElementById("hero3d"));
 
 $("#marquee").innerHTML = Array(2).fill(["Made in Chiniot", "Four woods", "Delivered across Pakistan", "Ten-year warranty", "Free swatch box", "Pay half on delivery"].map((t) => `<span>${t}</span>`).join("")).join("");
 

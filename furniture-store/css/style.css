@@ -110,7 +110,12 @@ section { position: relative; }
 /* 3D hero */
 .hero3d { position: relative; height: 330vh; }
 .h3-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-.h3-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hp-arch { position: absolute; inset: 0; overflow: hidden; visibility: hidden; clip-path: inset(100% 50% 0 50%); }
+.hp-room { position: absolute; max-width: none; object-fit: cover; transform-origin: 50% 70%; }
+.hp-pieces { position: absolute; inset: 0; perspective: 1200px; pointer-events: none; }
+.hp-piece { position: absolute; left: 0; top: 0; margin: 0; transform-origin: 50% 50%; will-change: transform; transform-style: preserve-3d; }
+.hp-piece img { display: block; width: 100%; height: auto; filter: drop-shadow(0 calc(26px - 22px * var(--land, 0)) calc(30px - 22px * var(--land, 0)) rgba(60, 40, 20, calc(.22 + .1 * var(--land, 0)))); user-select: none; }
+.hp-shadow { position: absolute; left: 8%; right: 8%; bottom: -4%; height: 12%; border-radius: 50%; background: radial-gradient(closest-side, rgba(50, 35, 20, .38), transparent); opacity: calc(.15 + .85 * var(--land, 0)); transform: translateY(calc(60px * (1 - var(--land, 0)))) scale(calc(.6 + .4 * var(--land, 0))); }
 .h3-layer { position: relative; height: 100%; pointer-events: none; }
 .h3-copy { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); max-width: 560px; pointer-events: auto; padding-top: 40px; }
 .h3-copy h1 { font-size: clamp(52px, 7.6vw, 116px); line-height: .92; letter-spacing: -.045em; }
@@ -126,13 +131,6 @@ section { position: relative; }
 .h3-tags { position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s; }
 .h3-tags.on { opacity: 1; }
 .h3-tags.on .hotspot { pointer-events: auto; }
-.h3-fallback { display: none; }
-.hero3d.no3d { height: auto; }
-.hero3d.no3d .h3-sticky { position: relative; height: auto; min-height: 640px; }
-.hero3d.no3d .h3-canvas, .hero3d.no3d .h3-title, .hero3d.no3d .h3-scroll, .hero3d.no3d .h3-tags { display: none; }
-.hero3d.no3d .h3-fallback { display: block; position: absolute; right: 4%; top: 60px; width: 44%; height: 560px; }
-.hero3d.no3d .h3-fallback .a1 { right: 0; top: 0; width: 64%; height: 92%; }
-.hero3d.no3d .h3-fallback .a2 { left: 0; bottom: 0; width: 44%; height: 52%; border-radius: 18px; }
 
 /* marquee */
 .marquee { overflow: hidden; border-block: 1px solid var(--line); padding: 16px 0; background: var(--paper); }
@@ -483,7 +481,6 @@ section { position: relative; }
   .h3-copy .lead { margin: 16px 0 18px; font-size: 14.5px; }
   .h3-title { top: 84px; padding: 0 18px; }
   .h3-scroll { right: 18px; bottom: 20px; }
-  .hero3d.no3d .h3-fallback { position: relative; width: auto; height: 420px; margin: 430px 18px 0; right: auto; top: auto; }
   .site-head { grid-template-columns: 1fr auto; padding: 12px 18px; }
   .pill-nav { display: none; }
   .menu-btn { display: inline-flex; }
