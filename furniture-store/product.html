@@ -6,7 +6,7 @@
 <link rel="icon" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=8">
 <title>Lakri &amp; Co.</title>
 <meta name="description" content="Solid wood furniture made to order in four woods.">
 </head>
@@ -23,7 +23,7 @@
   </div>
 </main>
 <script type="module">
-import { init, card, esc, $, $$, toast, openBag, icon, reveal } from "./js/layout.js";
+import { init, card, esc, $, $$, toast, openBag, flyToBag, icon, reveal } from "./js/layout.js";
 import { WOODS, FABRICS, CATEGORIES, img, money, priceFor, dimsText, woodById, fabricById, BRAND } from "./js/data.js";
 import * as S from "./js/store.js";
 await init("shop");
@@ -88,9 +88,12 @@ document.addEventListener("click", (e) => {
   if (z) { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${z.dataset.zoom}" alt="">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); }
 });
 $("#add").addEventListener("click", () => {
-  S.addToBag(p.id, wood, fabric);
   $("#add").innerHTML = `Added ${icon.check}`; setTimeout(() => ($("#add").innerHTML = `Add to bag ${icon.arrow}`), 1600);
-  openBag();
+  flyToBag(document.querySelector(".gallery .g img"), () => {
+    S.addToBag(p.id, wood, fabric);
+    toast(`${esc(p.name)} in ${esc(woodById(wood).name)}${fabric ? " and " + esc(fabricById(fabric).name) : ""} added. <a href="#" data-open-bag>View bag</a>`);
+    setTimeout(openBag, 450);
+  });
 });
 $("#buyNow").addEventListener("click", () => { S.addToBag(p.id, wood, fabric); location.href = "checkout.html"; });
 if (p.status === "paused") { $("#add").disabled = true; $("#buyNow").disabled = true; $("#add").textContent = "Not taking orders right now"; }

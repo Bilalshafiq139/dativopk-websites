@@ -108,6 +108,29 @@ export function lineHtml(l) {
   </li>`;
 }
 
+// The product photo shrinks and flies along a curve into the Bag button, which then bounces and counts up.
+export function flyToBag(fromEl, then) {
+  const target = document.querySelector(".bag-btn");
+  const src = fromEl && (fromEl.tagName === "IMG" ? fromEl : fromEl.querySelector("img"));
+  const done = () => { bumpBag(); then && then(); };
+  if (!target || !src || matchMedia("(prefers-reduced-motion: reduce)").matches || !src.animate) { done(); return; }
+  const a = src.getBoundingClientRect(), b = target.getBoundingClientRect();
+  const size = Math.min(a.width, a.height, 260);
+  const ghost = src.cloneNode(); ghost.removeAttribute("loading"); ghost.className = "fly-ghost";
+  Object.assign(ghost.style, { left: a.left + a.width / 2 - size / 2 + "px", top: a.top + a.height / 2 - size / 2 + "px", width: size + "px", height: size + "px" });
+  document.body.appendChild(ghost);
+  const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
+  const anim = ghost.animate([
+    { transform: "translate(0,0) scale(1) rotate(0deg)", opacity: 1, borderRadius: "16px" },
+    { transform: `translate(${dx * 0.45}px, ${dy * 0.45 - 120}px) scale(.55) rotate(-8deg)`, opacity: 1, offset: 0.45 },
+    { transform: `translate(${dx}px, ${dy}px) scale(.08) rotate(0deg)`, opacity: 0.6, borderRadius: "50%" },
+  ], { duration: 850, easing: "cubic-bezier(.5,0,.3,1)" });
+  anim.onfinish = () => { ghost.remove(); done(); };
+}
+function bumpBag() {
+  document.querySelectorAll(".bag-btn").forEach((b) => { b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump"); });
+}
+
 export function openBag() {
   renderDrawer();
   $("#bagDrawer").classList.add("open"); $("#bagDrawer").setAttribute("aria-hidden", "false");
@@ -133,6 +156,7 @@ export function card(p, opts = {}) {
     <a class="pc-img" href="product.html?id=${p.id}&wood=${wood}">
       <img src="${img(p.img)}" alt="${esc(p.name)} ${esc(p.type.toLowerCase())}" loading="lazy">
     </a>
+    <button class="quick-add" data-quick-add="${p.id}" aria-label="Add ${esc(p.name)} to bag">+ Add to bag</button>
     <button class="save-btn${isSaved ? " on" : ""}" data-save="${p.id}" aria-label="Save ${esc(p.name)}" aria-pressed="${isSaved}">${icon.heart}</button>
     <div class="pc-sw">
       <div class="woods" role="radiogroup" aria-label="Wood">${WOODS.map((w) => `<button role="radio" aria-checked="${w.id === wood}" class="wdot${w.id === wood ? " on" : ""}" style="--c:${w.color}" data-card-wood="${w.id}" title="${w.name}"></button>`).join("")}</div>
@@ -147,6 +171,19 @@ export function card(p, opts = {}) {
 
 function cardEvents() {
   document.addEventListener("click", (e) => {
+    const qa = e.target.closest("[data-quick-add]");
+    if (qa) {
+      e.preventDefault();
+      const c = qa.closest(".pcard"), p = S.productById(qa.dataset.quickAdd);
+      const w = c.querySelector(".wdot.on")?.dataset.cardWood || S.getWood();
+      qa.textContent = "Added ✓";
+      flyToBag(c.querySelector(".pc-img img"), () => {
+        S.addToBag(p.id, w, p.fabric ? "ivory" : "");
+        toast(`${esc(p.name)} in ${esc(woodById(w).name)} added. <a href="#" data-open-bag>View bag</a>`);
+        setTimeout(() => (qa.textContent = "+ Add to bag"), 1200);
+      });
+      return;
+    }
     const sv = e.target.closest("[data-save]");
     if (sv) {
       e.preventDefault();

@@ -1,7 +1,7 @@
 // "Shop the room": a photo with clickable price tags on each piece.
 import { img, money, priceFor } from "./data.js";
 import * as S from "./store.js";
-import { esc, toast, openBag } from "./layout.js";
+import { esc, toast, openBag, flyToBag } from "./layout.js";
 
 export function roomStage(el, room, withTitle = false) {
   const wood = S.getWood();
@@ -13,9 +13,12 @@ export function roomStage(el, room, withTitle = false) {
     const add = e.target.closest("[data-pop-add]");
     if (add) {
       const p = S.productById(add.dataset.popAdd);
-      S.addToBag(p.id, S.getWood(), p.fabric ? "ivory" : "");
-      toast(`${esc(p.name)} added to your bag. <a href="#" data-open-bag>View bag</a>`);
-      el.querySelector(".pop")?.remove();
+      const pop = el.querySelector(".pop");
+      flyToBag(pop?.querySelector("img"), () => {
+        S.addToBag(p.id, S.getWood(), p.fabric ? "ivory" : "");
+        toast(`${esc(p.name)} added to your bag. <a href="#" data-open-bag>View bag</a>`);
+      });
+      setTimeout(() => pop?.remove(), 60);
       return;
     }
     const b = e.target.closest("[data-spot]");
