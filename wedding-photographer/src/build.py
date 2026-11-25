@@ -7,5 +7,5 @@ for f in sorted(os.listdir(os.path.join(root, "src", "pages"))):
     meta = dict(re.findall(r"^<!--\s*(\w+):\s*(.*?)\s*-->$", raw, re.M))
     body = re.sub(r"^<!--\s*\w+:.*?-->\n", "", raw, flags=re.M)
     html = HEAD.replace("{{title}}", meta["title"]).replace("{{desc}}", meta["desc"]).replace("{{page}}", f[:-5])
-    open(os.path.join(root, f), "w", encoding="utf-8", newline="\n").write(html + body + '<script type="module" src="js/main.js"></script>\n</body>\n</html>\n')
+    open(os.path.join(root, f), "w", encoding="utf-8", newline="\n").write(html + body + '<script type="module" src="js/main.js"></script>\n<script src="../dativo-lead.js" defer></script>\n</body>\n</html>\n')
     print("built", f)
