@@ -11,7 +11,8 @@
     "wedding-photographer": "Dastaan Studio (wedding photographer)",
     "photographer": "Zoya Malik Studio (photographer)",
     "data-analyst": "Hamza Qureshi (data analyst portfolio)",
-    "furniture-store": "Lakri & Co. (furniture online store)"
+    "furniture-store": "Lakri & Co. (furniture online store)",
+    "handbag-store": "Zarine (luxury handbag store)"
   };
   var slug = (location.pathname.split("/").filter(Boolean)[0] || "").toLowerCase();
   var name = NAMES[slug] || "demo";

@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Zarine</title>
+<meta name="description" content="Contact Zarine: WhatsApp, studio visits in Gulberg, bulk and corporate gifting, delivery and exchange FAQ.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Contact</p><div class="ph-row"><h1 class="split-h reveal">Say salam</h1><p>Questions about a bag, a bulk order for Eid gifting, or a studio visit. We reply within a few hours.</p></div></div></section>
+  <section class="wrap" style="padding-bottom:90px"><div class="contact-grid">
+    <div>
+      <a class="btn btn-dark" id="waBtn" target="_blank" rel="noopener">Chat on WhatsApp</a>
+      <div class="contact-list">
+        <div><p class="label">Studio</p><p id="studio"></p><p class="muted small">Mon to Sat, 12pm to 9pm. Sundays by appointment.</p></div>
+        <div><p class="label">Phone</p><p id="phone"></p></div>
+        <div><p class="label">Email</p><p id="email"></p></div>
+      </div>
+    </div>
+    <form class="panel" id="cf" novalidate>
+      <div class="form">
+        <div class="field"><label for="n">Name</label><input id="n" name="name" required autocomplete="name"></div>
+        <div class="field"><label for="p">Phone (optional)</label><input id="p" name="phone" autocomplete="tel"></div>
+        <div class="field full"><label for="e">Email</label><input id="e" name="email" type="email" required autocomplete="email"></div>
+        <div class="field full"><label for="t">Topic</label><select id="t" name="topic"><option>Order question</option><option>Bulk / corporate</option><option>Gift</option><option>Exchange</option><option>Studio visit</option><option>Other</option></select></div>
+        <div class="field full"><label for="m">Message</label><textarea id="m" name="message" required></textarea></div>
+      </div>
+      <p id="err" style="color:#a3343f;margin:12px 0 0"></p>
+      <button class="btn btn-dark btn-block" style="margin-top:10px">Send message</button>
+    </form>
+  </div></section>
+
+  <section class="sec sec-alt" id="faq"><div class="wrap" style="max-width:860px">
+    <div class="sec-head"><h2>Delivery &amp; exchange</h2></div>
+    <div class="acc">
+      <details open><summary>How long does delivery take?</summary><div>We ship from Lahore within a day. Leopards or TCS deliver in 1 to 2 days in Lahore and 2 to 4 days elsewhere in Pakistan.</div></details>
+      <details><summary>How much is delivery?</summary><div>Rs 350 anywhere in Pakistan, free on orders over Rs 20,000.</div></details>
+      <details><summary>Can I pay cash on delivery?</summary><div>Yes, on every order. You can also pay by card, bank transfer, Easypaisa or JazzCash.</div></details>
+      <details><summary>Can I exchange a bag?</summary><div>Within 7 days, if the bag is unused and has its tags. Message us on WhatsApp and we send a rider to collect it.</div></details>
+      <details><summary>Do you do bulk or corporate orders?</summary><div>Yes, from 20 bags, with your logo on a leather tag and custom gift boxes. Use the form above and choose "Bulk / corporate".</div></details>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, splitWords, toast } from "./js/layout.js";
+import { BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+document.querySelectorAll(".split-h").forEach(splitWords);
+await init("contact");
+$("#waBtn").href = BRAND.whatsapp; $("#studio").textContent = BRAND.studio; $("#phone").textContent = BRAND.phone; $("#email").textContent = BRAND.email;
+$("#cf").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  if (!d.name.trim() || !/^\S+@\S+\.\S+$/.test(d.email) || !d.message.trim()) { $("#err").textContent = "Please add your name, a valid email and a message."; return; }
+  try { await S.sendMessage(d); e.target.reset(); $("#err").textContent = ""; toast("Message sent. We will reply within a few hours."); }
+  catch (err) { $("#err").textContent = err.message; }
+});
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

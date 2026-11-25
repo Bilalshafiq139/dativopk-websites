@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop all bags · Zarine</title>
+<meta name="description" content="Totes, camera bags, pleated hobos, top-handle and barrel bags, made in Lahore. Prices in PKR, cash on delivery.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Shop</p>
+    <div class="ph-row"><h1 class="split-h reveal" id="shopTitle">All bags</h1><p>Fourteen bags in five shapes. Every one ships from our Lahore atelier in 1 to 4 days, cash on delivery.</p></div>
+  </div></section>
+  <section class="wrap" style="padding-bottom:90px">
+    <div class="toolbar">
+      <div class="chips" id="chips" role="tablist" aria-label="Bag type"></div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <span class="muted small" id="count"></span>
+        <select class="sel" id="sort" aria-label="Sort"><option value="feat">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="sale">On sale</option></select>
+      </div>
+    </div>
+    <div class="grid grid-4" id="grid"></div>
+  </section>
+</main>
+<script type="module">
+import { init, card, $, reveal, splitWords } from "./js/layout.js";
+import { CATEGORIES } from "./js/data.js";
+import * as S from "./js/store.js";
+splitWords($("#shopTitle"));
+await init("shop");
+const q = new URLSearchParams(location.search);
+let cat = CATEGORIES.some((c) => c[0] === q.get("cat")) ? q.get("cat") : "all", sort = "feat";
+function draw() {
+  $("#chips").innerHTML = CATEGORIES.map(([id, label]) => `<button class="chip${cat === id ? " on" : ""}" role="tab" aria-selected="${cat === id}" data-cat="${id}">${label}</button>`).join("");
+  let list = S.visibleProducts().filter((p) => cat === "all" || p.cat === cat);
+  if (sort === "low") list.sort((a, b) => a.price - b.price);
+  if (sort === "high") list.sort((a, b) => b.price - a.price);
+  if (sort === "sale") list = list.filter((p) => p.old);
+  $("#count").textContent = list.length + (list.length === 1 ? " bag" : " bags");
+  $("#grid").innerHTML = list.length ? list.map((p, i) => card(p, i)).join("") : `<p class="no-results muted">No bags here yet. <a href="shop.html">See all bags</a></p>`;
+  reveal($("#grid"));
+}
+$("#chips").addEventListener("click", (e) => { const b = e.target.closest("[data-cat]"); if (!b) return; cat = b.dataset.cat; history.replaceState(null, "", cat === "all" ? "shop.html" : "shop.html?cat=" + cat); draw(); });
+$("#sort").addEventListener("change", (e) => { sort = e.target.value; draw(); });
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

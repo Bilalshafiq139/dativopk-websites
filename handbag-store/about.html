@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The atelier · Zarine</title>
+<meta name="description" content="How Zarine bags are made: eleven artisans, a small atelier in Gulberg, Lahore.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Atelier</p>
+    <div class="ph-row"><h1 class="split-h reveal">Made slowly, in Lahore</h1><p>Zarine started in 2021 with one sewing machine and a tote for a cousin's rukhsati. Today eleven of us cut, stitch and finish every bag in a small studio off MM Alam Road.</p></div>
+  </div></section>
+
+  <section class="wrap"><div class="band">
+    <figure class="reveal"><img src="assets/img/photo/ed-sit.webp" alt="The model seated on the studio floor with an olive tote" loading="lazy"></figure>
+    <figure class="reveal" style="--i:1"><img src="assets/img/photo/ed-pedestal.webp" alt="Two bags styled on a studio pedestal" loading="lazy"></figure>
+    <figure class="reveal" style="--i:2"><img src="assets/img/photo/ed-trio.webp" alt="The model reaching out with two bags in her hand" loading="lazy"></figure>
+  </div></section>
+
+  <section class="sec"><div class="wrap">
+    <p class="big-quote reveal">“We wanted a bag that keeps its shape through a Lahore summer, a wedding season and a daily rickshaw ride, and still looks new in its second year.”</p>
+    <p class="muted reveal" style="margin-top:18px">Sana Mir, founder (placeholder)</p>
+  </div></section>
+
+  <section class="sec sec-alt"><div class="wrap">
+    <div class="sec-head"><h2 class="split-h reveal">How a Zarine bag is made</h2><p class="muted">About six hours of hand work go into every bag.</p></div>
+    <div class="steps">
+      <div class="reveal"><b>Pattern</b><p class="muted small">Each shape is drafted in card, tested in calico and carried for two weeks before we cut a single hide.</p></div>
+      <div class="reveal" style="--i:1"><b>Cut</b><p class="muted small">Panels are hand cut from firm, grained faux leather that will not crack or peel in heat.</p></div>
+      <div class="reveal" style="--i:2"><b>Stitch</b><p class="muted small">Double-stitched seams, reinforced handle roots and a cotton twill lining with pockets.</p></div>
+      <div class="reveal" style="--i:3"><b>Finish</b><p class="muted small">Edges are painted by hand, hardware is fitted and every bag is checked before it is wrapped.</p></div>
+    </div>
+  </div></section>
+
+  <section class="sec"><div class="wrap split">
+    <div class="ed-img reveal"><img src="assets/img/photo/ed-hand.webp" alt="A hand holding two structured bags" loading="lazy"></div>
+    <div class="reveal" style="--i:1">
+      <p class="label">Our promise</p>
+      <h2>A bag for years, not a season</h2>
+      <p class="muted">Every bag carries a one-year stitching warranty. If a handle or seam gives way, send it to us and we will repair it free.</p>
+      <div class="facts"><div><b>2021</b><span class="muted small">founded</span></div><div><b>9,000+</b><span class="muted small">bags delivered</span></div><div><b>4.8 / 5</b><span class="muted small">average review</span></div></div>
+      <p style="margin-top:28px"><a class="btn btn-dark" href="shop.html">Shop the bags</a></p>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, splitWords } from "./js/layout.js";
+document.querySelectorAll(".split-h").forEach(splitWords);
+await init("atelier");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wishlist · Zarine</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Wishlist</p><div class="ph-row"><h1>Wishlist</h1><p>Bags you saved. They stay here on this device.</p></div></div></section>
+  <div class="wrap" style="padding-bottom:90px"><div class="grid grid-4" id="grid"></div></div>
+</main>
+<script type="module">
+import { init, card, $, icon, reveal } from "./js/layout.js";
+import * as S from "./js/store.js";
+await init("wish");
+function draw() {
+  const list = S.wished().map(S.productById).filter(Boolean);
+  $("#grid").innerHTML = list.length ? list.map((p, i) => card(p, i)).join("")
+    : `<div class="no-results"><p class="display-sm">No saved bags yet</p><p class="muted">Tap the heart on any bag to keep it here.</p><a class="btn btn-dark" href="shop.html">Shop bags ${icon.arrow}</a></div>`;
+  reveal($("#grid"));
+}
+addEventListener("store:change", () => { if (S.wished().length !== document.querySelectorAll("#grid .pcard").length) draw(); });
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

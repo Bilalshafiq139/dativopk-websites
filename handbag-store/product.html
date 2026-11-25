@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bag · Zarine</title>
+<meta name="description" content="A Zarine handbag, made in Lahore. Cash on delivery across Pakistan.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main id="main">
+  <div class="wrap" style="padding-top:34px" id="root"></div>
+  <section class="sec sec-alt" id="moreSec"><div class="wrap">
+    <div class="sec-head"><h2>You may also like</h2></div>
+    <div class="grid grid-4" id="more"></div>
+  </div></section>
+</main>
+<div class="sticky-buy" id="stickyBuy" aria-hidden="true"></div>
+<script type="module">
+import { init, card, $, $$, esc, icon, flyToBag, toast, reveal } from "./js/layout.js";
+import { money, bagImg, photo, catName, BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("shop");
+
+const id = new URLSearchParams(location.search).get("id");
+const p = S.productById(id) || S.visibleProducts()[0];
+document.title = `${p.name} · Zarine`;
+const imgs = [{ src: bagImg(p), cut: true, alt: `${p.name} in ${p.colour}` }, ...p.gallery.map((g) => ({ src: photo(g), alt: `${p.name} styled in the studio` }))];
+const siblings = S.visibleProducts().filter((x) => x.cat === p.cat);
+const wished = () => S.wished().includes(p.id);
+const pct = p.old ? Math.round((1 - p.price / p.old) * 100) : 0;
+
+$("#root").innerHTML = `
+  <p class="crumbs"><a href="index.html">Home</a> / <a href="shop.html">Shop</a> / <a href="shop.html?cat=${p.cat}">${esc(catName(p.cat))}</a> / ${esc(p.short)}</p>
+  <div class="pdp">
+    <div class="pdp-gallery">
+      <div class="thumbs">${imgs.map((m, i) => `<button class="${i ? "" : "on"}" data-i="${i}" aria-label="Photo ${i + 1}"><img src="${m.src}" alt="" style="${m.cut ? "object-fit:contain;padding:10%" : ""}"></button>`).join("")}</div>
+      <div class="stage" id="stage"><img id="main-img" class="cut" src="${imgs[0].src}" alt="${esc(imgs[0].alt)}"></div>
+    </div>
+    <div class="buy">
+      <p class="label">${esc(p.type)} · ${esc(p.colour)}${p.tag ? " · " + esc(p.tag) : ""}</p>
+      <h1>${esc(p.name)}</h1>
+      <p class="muted">${esc(p.blurb)}</p>
+      <p class="price">${money(p.price)}${p.old ? `<s>${money(p.old)}</s><span class="save-pill">Save ${pct}%</span>` : ""}</p>
+      <p class="muted small">Or 3 payments of ${money(Math.ceil(p.price / 3))} with card instalments.</p>
+      ${siblings.length > 1 ? `<p class="label" style="margin-top:22px">Also in this shape</p><div class="colour-row">${siblings.map((s) => `<a href="product.html?id=${s.id}" class="${s.id === p.id ? "on" : ""}"><i style="background:${s.hex}"></i>${esc(s.colour)}</a>`).join("")}</div>` : ""}
+      <div class="buy-row">
+        <button class="btn btn-dark" id="add">Add to bag · ${money(p.price)}</button>
+        <button class="wish-btn${wished() ? " on" : ""}" data-wish="${p.id}" aria-label="Save to wishlist" aria-pressed="${wished()}">${icon.heart}</button>
+      </div>
+      <a class="btn btn-line btn-block" style="margin-top:10px" target="_blank" rel="noopener" href="${BRAND.whatsapp}?text=${encodeURIComponent("Salam, I'd like to order the " + p.name + " (" + money(p.price) + ").")}">Order on WhatsApp</a>
+      <div class="perks">
+        <div>${icon.check} Cash on delivery anywhere in Pakistan</div>
+        <div>${icon.check} Ships from Lahore in 1 to 4 days${p.price >= BRAND.freeDeliveryOver ? ", free" : ""}</div>
+        <div>${icon.check} 7-day exchange, unused with tags</div>
+      </div>
+      <div class="acc">
+        <details open><summary>Details</summary><div>${esc(p.desc)}</div></details>
+        <details><summary>Size &amp; material</summary><div><p><b>Size:</b> ${esc(p.size)}</p><p style="margin:0"><b>Material:</b> ${esc(p.material)}</p></div></details>
+        <details><summary>Delivery &amp; exchange</summary><div>Leopards and TCS courier, 1 to 4 working days. Delivery is ${money(BRAND.delivery)}, free over ${money(BRAND.freeDeliveryOver)}. Exchange within 7 days if unused and with tags.</div></details>
+        <details><summary>Care</summary><div>Wipe with a soft dry cloth. Keep stuffed with paper and in the dust bag when not in use. Keep away from perfume and direct heat.</div></details>
+      </div>
+    </div>
+  </div>`;
+
+$("#stickyBuy").innerHTML = `<div class="wrap"><div style="display:flex;gap:12px;align-items:center"><img src="${bagImg(p)}" alt=""><div><b>${esc(p.short)}</b><br><span class="muted small">${esc(p.colour)}</span></div></div><button class="btn btn-dark" id="add2">Add to bag · ${money(p.price)}</button></div>`;
+
+// gallery: thumbs swap with a soft crossfade, hover zooms toward the pointer
+const main = $("#main-img"), stage = $("#stage");
+$$(".thumbs button").forEach((b) => b.addEventListener("click", () => {
+  const m = imgs[+b.dataset.i];
+  $$(".thumbs button").forEach((x) => x.classList.toggle("on", x === b));
+  main.style.opacity = 0;
+  setTimeout(() => { main.src = m.src; main.alt = m.alt; main.classList.toggle("cut", !!m.cut); main.style.opacity = 1; }, 220);
+}));
+stage.addEventListener("pointermove", (e) => { const r = stage.getBoundingClientRect(); main.style.transformOrigin = `${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`; main.style.transform = "scale(1.6)"; });
+stage.addEventListener("pointerleave", () => { main.style.transform = ""; });
+
+const add = (btn) => {
+  btn.disabled = true;
+  flyToBag($$(".thumbs button")[0].querySelector("img"), () => {
+    S.addToBag(p.id); btn.disabled = false;
+    toast(`${esc(p.name)} added. <a href="#" data-open-bag>View bag</a>`);
+  });
+};
+$("#add").addEventListener("click", (e) => add(e.currentTarget));
+$("#add2").addEventListener("click", (e) => add(e.currentTarget));
+const io = new IntersectionObserver(([en]) => { $("#stickyBuy").classList.toggle("show", !en.isIntersecting && en.boundingClientRect.top < 0); }, { threshold: 0 });
+io.observe($("#add"));
+
+$("#more").innerHTML = S.visibleProducts().filter((x) => x.id !== p.id).sort((a, b) => (b.cat === p.cat) - (a.cat === p.cat)).slice(0, 4).map((x, i) => card(x, i)).join("");
+reveal($("#more"));
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

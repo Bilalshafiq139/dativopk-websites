@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your bag · Zarine</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Bag</p><h1>Your bag</h1></div></section>
+  <div class="wrap" id="root"></div>
+  <section class="sec" id="recoSec"><div class="wrap"><div class="sec-head"><h2>Pairs well with</h2></div><div class="grid grid-4" id="reco"></div></div></section>
+</main>
+<script type="module">
+import { init, card, $, esc, icon, lineHtml, reveal } from "./js/layout.js";
+import { BRAND, money } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("bag");
+const gift = () => { try { return localStorage.getItem("zr-gift") === "1"; } catch { return false; } };
+function draw() {
+  const t = S.totals(gift());
+  if (!t.lines.length) {
+    $("#root").innerHTML = `<div class="confirm" style="padding-top:20px"><p class="display-sm">Nothing in your bag yet</p><p class="muted">Pick a bag and she will carry it for you on the home page.</p><a class="btn btn-dark" href="shop.html">Shop bags ${icon.arrow}</a></div>`;
+  } else {
+    const pct = Math.min(100, (t.subtotal / BRAND.freeDeliveryOver) * 100);
+    $("#root").innerHTML = `<div class="cart-grid">
+      <div class="panel">
+        <div class="free-bar" style="background:var(--bg)"><p>${t.toFree ? `Add <b>${money(t.toFree)}</b> more for free delivery` : "Your order ships <b>free</b>"}</p><div class="bar"><span style="width:${pct}%"></span></div></div>
+        <ul class="bag-lines">${t.lines.map(lineHtml).join("")}</ul>
+      </div>
+      <aside class="panel summary">
+        <h3>Summary</h3>
+        <div class="sum-row"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>
+        <div class="sum-row"><span>Delivery</span><span>${t.delivery ? money(t.delivery) : "Free"}</span></div>
+        <label class="check"><input type="checkbox" id="gift" ${gift() ? "checked" : ""}><span><b>Gift wrap</b><br><span class="muted small">Dust bag, ribbon and a handwritten card.</span></span><span>+${money(BRAND.giftWrap)}</span></label>
+        <div class="sum-total"><span>Total</span><b>${money(t.total)}</b></div>
+        <a class="btn btn-dark btn-block" href="checkout.html" style="height:52px">Checkout ${icon.arrow}</a>
+        <p class="muted small" style="text-align:center;margin:12px 0 0">Cash on delivery, card or bank transfer</p>
+      </aside>
+    </div>`;
+    $("#gift").addEventListener("change", (e) => { try { localStorage.setItem("zr-gift", e.target.checked ? "1" : "0"); } catch {} draw(); });
+  }
+  const inBag = new Set(t.lines.map((l) => l.id));
+  $("#reco").innerHTML = S.visibleProducts().filter((p) => !inBag.has(p.id)).slice(0, 4).map((p, i) => card(p, i)).join("");
+  reveal($("#reco"));
+}
+addEventListener("store:change", draw);
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+// Catalogue for "Zarine" (placeholder brand). Change names, prices and photos here.
+// Photos: Pexels (studio series by DHANNO, Lahore). Cut-outs made with rembg.
+export const BRAND = {
+  name: "Zarine",
+  tagline: "Handbags made in Lahore",
+  phone: "+92 300 0000000",
+  whatsapp: "https://wa.me/923000000000",
+  email: "hello@zarine.example",
+  studio: "Studio 7, MM Alam Road, Gulberg III, Lahore",
+  freeDeliveryOver: 20000,
+  delivery: 350,
+  giftWrap: 500,
+};
+
+export const CATEGORIES = [
+  ["all", "All bags"], ["tote", "Totes"], ["crossbody", "Crossbody"], ["hobo", "Hobo"], ["top-handle", "Top-handle"], ["barrel", "Barrel"],
+];
+
+// look: model photo for the home hero (same model, one bag each). gallery: extra photos for the product page.
+export const PRODUCTS = [
+  { id: "gulnar", name: "Gulnar Structured Tote", short: "Gulnar", cat: "tote", type: "Structured tote", colour: "Blush", hex: "#e6b9aa",
+    price: 18500, old: 22000, look: "gulnar", gallery: ["gulnar", "gulnar-2", "ed-blush"], tag: "Bestseller",
+    blurb: "A boxy, polished tote with a gold clasp. Holds a laptop and still looks like evening.",
+    desc: "Gulnar keeps its shape on its own: stiffened base, piped edges and a gold-tone clasp that closes with a soft click. Carry it by the handles or clip on the long strap.",
+    size: "32 × 25 × 13 cm", material: "Smooth faux leather, suede-touch lining" },
+  { id: "asmaan", name: "Asmaan Work Tote", short: "Asmaan", cat: "tote", type: "Work tote", colour: "Sky blue", hex: "#bcd3ea",
+    price: 21000, old: 24500, look: "asmaan", gallery: ["asmaan", "asmaan-2", "ed-sky"], tag: "New",
+    blurb: "A wide shoulder tote in powder blue, built for a 15-inch laptop and a full day.",
+    desc: "Asmaan has a zip top, a padded laptop sleeve and two inside pockets. The long handles sit flat on the shoulder, so it carries comfortably even when full.",
+    size: "40 × 29 × 12 cm", material: "Saffiano-finish faux leather, twill lining" },
+  { id: "raat", name: "Raat Zip Camera Bag", short: "Raat", cat: "crossbody", type: "Camera bag", colour: "Midnight navy", hex: "#2b3443",
+    price: 12900, old: 15000, look: "raat", gallery: ["raat", "raat-2"], tag: "",
+    blurb: "A pebbled crossbody with a front zip pocket and an adjustable strap.",
+    desc: "Raat is the bag you forget you are wearing: phone, wallet, keys and a lipstick, with a quick front zip for the things you reach for most.",
+    size: "23 × 16 × 7 cm", material: "Pebbled faux leather, gold-tone zips" },
+  { id: "baadal", name: "Baadal Pleated Hobo", short: "Baadal", cat: "hobo", type: "Pleated hobo", colour: "Cloud grey", hex: "#a8abb5",
+    price: 11500, old: 13500, look: "baadal", gallery: ["baadal", "baadal-2"], tag: "",
+    blurb: "A soft, gathered hobo that slouches just enough and goes with everything.",
+    desc: "Baadal is cut from soft-touch faux leather and gathered into pleats along the top. The strap adjusts from shoulder to crossbody.",
+    size: "30 × 22 × 10 cm", material: "Soft-touch faux leather, magnetic closure" },
+  { id: "jamun", name: "Jamun Pleated Hobo", short: "Jamun", cat: "hobo", type: "Pleated hobo", colour: "Wine", hex: "#6e1f2c",
+    price: 11500, old: 13500, look: "jamun", gallery: ["jamun", "baadal-2"], tag: "Wedding edit",
+    blurb: "The Baadal hobo in deep wine, made for shaadi season and long evenings.",
+    desc: "Same soft pleated shape as Baadal, in a rich jamun shade that sits beautifully with gold jewellery and formal wear.",
+    size: "30 × 22 × 10 cm", material: "Soft-touch faux leather, magnetic closure" },
+  { id: "sabz", name: "Sabz Buckle Tote", short: "Sabz", cat: "tote", type: "Buckle tote", colour: "Sage", hex: "#7f9c86",
+    price: 18500, old: 0, look: "", gallery: ["sabz", "sabz-2", "ed-sage-pair"], tag: "",
+    blurb: "Gulnar's sister in sage green, with a detachable shoulder strap.",
+    desc: "A structured tote with gold hardware and a soft green that works from office to dinner.",
+    size: "32 × 25 × 13 cm", material: "Smooth faux leather, suede-touch lining" },
+  { id: "phool", name: "Phool Quilted Tote", short: "Phool", cat: "tote", type: "Quilted tote", colour: "Rose", hex: "#e4a5b0",
+    price: 16900, old: 19500, look: "", gallery: ["phool", "phool-2", "ed-rose-wine"], tag: "Bestseller",
+    blurb: "A roomy quilted tote with long handles that sit easily on the shoulder.",
+    desc: "Phool is stitched in a diamond quilt and lined in cotton twill. It holds a 13-inch laptop, a water bottle and the rest of your day.",
+    size: "38 × 28 × 12 cm", material: "Quilted faux leather, cotton twill lining" },
+  { id: "zaitoon", name: "Zaitoon Everyday Tote", short: "Zaitoon", cat: "tote", type: "Everyday tote", colour: "Olive", hex: "#7a6a3e",
+    price: 14500, old: 0, look: "", gallery: ["zaitoon", "ed-floor2"], tag: "",
+    blurb: "An easy, open tote in olive for university, office and travel.",
+    desc: "Zaitoon has a wide opening, a zip pocket inside and sturdy handles. Simple, light and very hard to wear out.",
+    size: "36 × 27 × 14 cm", material: "Grained faux leather" },
+  { id: "qahwa", name: "Qahwa Box Satchel", short: "Qahwa", cat: "top-handle", type: "Box satchel", colour: "Coffee", hex: "#4b3a36",
+    price: 15500, old: 0, look: "", gallery: ["qahwa", "ed-pedestal"], tag: "",
+    blurb: "A crisp box satchel with contrast handles and a long strap.",
+    desc: "Qahwa opens wide like a doctor's bag and holds its square shape. Two handles for the hand, one strap for the shoulder.",
+    size: "28 × 22 × 14 cm", material: "Textured faux leather" },
+  { id: "kajal", name: "Kajal Dome Satchel", short: "Kajal", cat: "top-handle", type: "Dome satchel", colour: "Black", hex: "#17171a",
+    price: 16500, old: 18900, look: "", gallery: ["kajal", "ed-hand"], tag: "",
+    blurb: "A classic dome satchel in black wave-embossed leather finish.",
+    desc: "Kajal has a two-way zip, rolled handles and gold feet so it can stand on a table. The one black bag that goes everywhere.",
+    size: "30 × 23 × 13 cm", material: "Embossed faux leather, gold-tone hardware" },
+  { id: "chandni", name: "Chandni Flap Top-Handle", short: "Chandni", cat: "top-handle", type: "Flap bag", colour: "Ivory beige", hex: "#d8cbb9",
+    price: 17900, old: 0, look: "", gallery: ["chandni", "ed-group"], tag: "New",
+    blurb: "A ladylike flap bag with a gold turn-lock and a single top handle.",
+    desc: "Chandni is small and structured, with a turn-lock flap and a slim detachable strap. Made for weddings, Eid and dinners.",
+    size: "24 × 19 × 10 cm", material: "Saffiano-finish faux leather" },
+  { id: "mitti", name: "Mitti Zip Camera Bag", short: "Mitti", cat: "crossbody", type: "Camera bag", colour: "Tan", hex: "#a0714a",
+    price: 12900, old: 0, look: "", gallery: ["ed-tan", "mitti-2"], tag: "",
+    blurb: "The Raat camera bag in warm tan, with a gold zip across the front.",
+    desc: "A small crossbody that sits at the hip. Phone, cards and keys, with a front zip for quick reach.",
+    size: "23 × 16 × 7 cm", material: "Distressed faux leather" },
+  { id: "gulab", name: "Gulab Barrel Bag", short: "Gulab", cat: "barrel", type: "Barrel bag", colour: "Rose print", hex: "#b07a74",
+    price: 9800, old: 11500, look: "", gallery: ["gulab"], tag: "",
+    blurb: "A rounded barrel bag in a soft marbled rose print.",
+    desc: "Gulab zips all the way across and carries by two short handles or a long strap. A playful shape for weekends.",
+    size: "26 × 16 × 16 cm", material: "Printed faux leather" },
+  { id: "sharbat", name: "Sharbat Barrel Bag", short: "Sharbat", cat: "barrel", type: "Barrel bag", colour: "Burgundy", hex: "#5e1b26",
+    price: 9800, old: 0, look: "", gallery: ["sharbat", "ed-wine-seated"], tag: "",
+    blurb: "The Gulab barrel in rich burgundy with gold hardware.",
+    desc: "A compact barrel bag with a long detachable strap and a zip that runs end to end.",
+    size: "26 × 16 × 16 cm", material: "Marbled faux leather" },
+];
+
+export const LOOKS = PRODUCTS.filter((p) => p.look);
+export const img = (path) => `assets/img/${path}.webp`;
+export const bagImg = (p) => img("bag/" + p.id);
+export const photo = (n) => img("photo/" + n);
+export const money = (n) => "Rs " + Math.round(n).toLocaleString("en-PK");
+export const catName = (id) => (CATEGORIES.find((c) => c[0] === id) || [, ""])[1];
