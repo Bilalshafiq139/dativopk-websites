@@ -12,15 +12,15 @@ const range = (p, a, b) => clamp((p - a) / (b - a));
 // start: centre of the piece on screen (fractions of the viewport) + width as a fraction of viewport width
 // end: centre x and bottom y on the room photo (fractions of the photo) + width as a fraction of the photo width
 const PIECES = [
-  { id: "gol", img: "cut-gol", ratio: 582 / 611, order: 0,
+  { id: "gol", img: "cut-gol", ratio: 601 / 1200, order: 0,
     wide: { s: [0.47, 0.76, 0.08], e: [0.37, 0.905, 0.1] }, tall: { s: [0.24, 0.5, 0.2], e: [0.4, 0.9, 0.075] } },
-  { id: "reet", img: "cut-reet", ratio: 363 / 557, order: 1,
+  { id: "reet", img: "cut-reet", ratio: 609 / 1135, order: 1,
     wide: { s: [0.66, 0.58, 0.24], e: [0.26, 0.645, 0.2] }, tall: { s: [0.55, 0.36, 0.56], e: [0.335, 0.645, 0.13] } },
-  { id: "sirhana", img: "cut-sirhana", ratio: 463 / 318, order: 2,
+  { id: "sirhana", img: "cut-sirhana", ratio: 997 / 662, order: 2,
     wide: { s: [0.9, 0.72, 0.06], e: [0.395, 0.635, 0.045] }, tall: { s: [0.84, 0.52, 0.14], e: [0.43, 0.635, 0.032] } },
-  { id: "saira", img: "cut-saira", ratio: 863 / 859, order: 3,
+  { id: "saira", img: "cut-saira", ratio: 1206 / 1200, order: 3,
     wide: { s: [0.9, 0.4, 0.12], e: [0.17, 0.87, 0.17] }, tall: { s: [0.2, 0.2, 0.3], e: [0.3, 0.88, 0.12] } },
-  { id: "noor", img: "cut-noor", ratio: 618 / 458, order: 4,
+  { id: "noor", img: "cut-noor", ratio: 1329 / 984, order: 4,
     wide: { s: [0.68, 0.2, 0.09], e: [0.56, 0.8, 0.11] }, tall: { s: [0.82, 0.17, 0.22], e: [0.5, 0.8, 0.085] } },
 ];
 const ROOM_RATIO = 2000 / 1333;
