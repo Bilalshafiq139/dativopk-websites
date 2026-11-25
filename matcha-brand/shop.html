@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop · Koya Matcha Bar</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap ph-row">
+    <div><p class="crumbs"><a href="index.html">Home</a> / Shop</p><h1 data-letters>The menu</h1><p class="lead">Drinks and treats delivered across Lahore. Matcha powder, kits and teaware shipped to every city in Pakistan.</p></div>
+    <img class="ph-img" src="assets/img/y-iced.webp" alt="">
+  </div></section>
+  <section class="sec-tight"><div class="wrap">
+    <div class="toolbar"><div class="tabs" id="tabs" role="tablist"></div>
+      <label><span class="skip">Sort</span><select class="sel" id="sort"><option value="feat">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="sale">On sale first</option></select></label></div>
+    <p class="muted small" id="count" style="margin:-14px 0 22px"></p>
+    <div class="grid grid-4" id="grid"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, card, letters, tabPill } from "./js/layout.js";
+import { CATEGORIES } from "./js/data.js";
+import * as S from "./js/store.js";
+letters($("[data-letters]"));
+await init("shop");
+const q = new URLSearchParams(location.search);
+let cat = q.get("cat") || "all", sort = "feat";
+const cats = [["all", "All"], ...CATEGORIES];
+if (!cats.some(([c]) => c === cat)) cat = "all";
+const tabs = $("#tabs");
+tabs.innerHTML = cats.map(([c, n]) => `<button role="tab" data-cat="${c}" class="${c === cat ? "on" : ""}">${n}</button>`).join("");
+function draw() {
+  let list = S.visibleProducts().filter((p) => cat === "all" || p.cat === cat);
+  if (sort === "low") list.sort((a, b) => a.price - b.price);
+  if (sort === "high") list.sort((a, b) => b.price - a.price);
+  if (sort === "sale") list.sort((a, b) => (b.old ? 1 : 0) - (a.old ? 1 : 0));
+  list.sort((a, b) => (a.status === "soldout") - (b.status === "soldout"));
+  const g = $("#grid"); g.classList.remove("grid-anim"); void g.offsetWidth;
+  g.innerHTML = list.map((p, i) => card(p, i)).join("") || '<p class="muted">Nothing here right now.</p>';
+  g.classList.add("grid-anim");
+  $("#count").textContent = `${list.length} item${list.length === 1 ? "" : "s"}`;
+}
+tabs.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-cat]"); if (!b) return; cat = b.dataset.cat;
+  $$("button", tabs).forEach((x) => x.classList.toggle("on", x === b)); tabPill(tabs);
+  history.replaceState(null, "", cat === "all" ? "shop.html" : "shop.html?cat=" + cat); draw();
+});
+$("#sort").addEventListener("change", (e) => { sort = e.target.value; draw(); });
+addEventListener("store:change", () => { if (!document.querySelector(".add-btn.added")) draw(); });
+draw();
+requestAnimationFrame(() => tabPill(tabs)); document.fonts?.ready.then(() => tabPill(tabs)); addEventListener("resize", () => tabPill(tabs));
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -12,7 +12,8 @@
     "photographer": "Zoya Malik Studio (photographer)",
     "data-analyst": "Hamza Qureshi (data analyst portfolio)",
     "furniture-store": "Lakri & Co. (furniture online store)",
-    "handbag-store": "Zarine (luxury handbag store)"
+    "handbag-store": "Zarine (luxury handbag store)",
+    "matcha-brand": "Koya Matcha Bar (matcha cafe and brand website)"
   };
   var slug = (location.pathname.split("/").filter(Boolean)[0] || "").toLowerCase();
   var name = NAMES[slug] || "demo";

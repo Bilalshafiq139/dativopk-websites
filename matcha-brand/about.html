@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About · Koya Matcha Bar</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap ph-row">
+    <div><p class="crumbs"><a href="index.html">Home</a> / About</p><h1 data-letters>Our story</h1><p class="lead">From a shaded tea field in Uji to a bamboo whisk in Lahore. This is how every cup of Koya gets made.</p></div>
+    <img class="ph-img" src="assets/img/y-layer.webp" alt="">
+  </div></section>
+
+  <section class="sec">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow reveal">Since 2022</span>
+        <h2 data-split>Lahore's first matcha-only bar</h2>
+        <p class="reveal">Koya started with one bamboo whisk and a folding table at a Sunday market in Gulberg. People came back for the iced latte, then for the powder, then for lessons on how to whisk it at home.</p>
+        <p class="reveal">Today we import first-harvest matcha straight from family farms in Uji and Kagoshima, whisk every drink by hand, and deliver across Lahore. Our tins, kits and teaware ship to every city in Pakistan.</p>
+        <div class="reveal" style="margin-top:26px"><a class="btn" href="shop.html">Shop the menu<span class="arr"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a></div>
+      </div>
+      <div class="round-img parallax reveal" style="aspect-ratio:4/4.4"><img src="assets/img/a-cafe.webp" alt="Iced matcha on a tray inside the Koya bar"></div>
+    </div>
+  </section>
+
+  <section class="sec-tight"><div class="wrap">
+    <div class="stats">
+      <div class="stat reveal" style="--i:0"><b data-count="5000" data-suffix="+">0</b><span class="muted">Happy customers</span></div>
+      <div class="stat reveal" style="--i:1"><b data-count="48000" data-suffix="+">0</b><span class="muted">Cups whisked</span></div>
+      <div class="stat reveal" style="--i:2"><b data-count="38">0</b><span class="muted">Cities we ship to</span></div>
+      <div class="stat reveal" style="--i:3"><b data-count="21" data-suffix=" days">0</b><span class="muted">Leaves shaded before harvest</span></div>
+    </div>
+  </div></section>
+
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title" data-split>From leaf to cup</h2>
+      <p class="sec-sub reveal">Good matcha is slow. Three steps decide how it tastes, and we don't skip any of them.</p>
+      <div class="steps">
+        <article class="step reveal" style="--i:0"><div class="round-img"><img src="assets/img/a-field2.webp" alt="Rows of tea bushes on a hillside" loading="lazy"></div><div class="t"><h3>Shade grown</h3><p class="muted">Tea bushes are covered for three weeks before picking. Less sun means sweeter, greener leaves full of L-theanine.</p></div></article>
+        <article class="step reveal" style="--i:1"><div class="round-img"><img src="assets/img/g-sift.webp" alt="Matcha powder being sifted into a glass" loading="lazy"></div><div class="t"><h3>Stone ground</h3><p class="muted">The leaves are de-veined and ground on granite stones, about 40 grams an hour, into a powder finer than flour.</p></div></article>
+        <article class="step reveal" style="--i:2"><div class="round-img"><img src="assets/img/a-whisk.webp" alt="Whisking matcha in a white bowl" loading="lazy"></div><div class="t"><h3>Whisked fresh</h3><p class="muted">Every drink is whisked by hand at 75°C until it foams. Twenty seconds that make all the difference.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-tight"><div class="wrap">
+    <div class="green-band split">
+      <div>
+        <h2 data-split>Bring Koya to your event</h2>
+        <p style="color:rgba(255,255,255,.85);max-width:440px">Weddings, mehndis, office days and launches. Our matcha cart and two baristas serve up to 300 cups a day, with a custom menu for your guests.</p>
+        <a class="btn btn-yellow" href="contact.html">Ask for a quote<span class="arr"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a>
+      </div>
+      <div class="round-img parallax reveal" style="aspect-ratio:4/3"><img src="assets/img/a-bar.webp" alt="Barista whisking matcha at the bar" loading="lazy"></div>
+    </div>
+  </div></section>
+
+  <section class="sec">
+    <div class="wrap split">
+      <div class="round-img parallax reveal" style="aspect-ratio:16/11"><img src="assets/img/a-field.webp" alt="Green tea fields under a blue sky" loading="lazy"></div>
+      <div>
+        <span class="eyebrow reveal">Our promise</span>
+        <h2 data-split>Nothing added. Ever.</h2>
+        <p class="reveal">No sugar in our powder, no colour, no fillers. If a drink is sweet, it's because you asked for it, with our house syrups made from real cane sugar, honey or dates.</p>
+        <p class="reveal">Every tin carries its harvest date. If yours isn't the brightest green you've seen, we'll replace it.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, $$, letters, splitWords, reveal, countUp, onVisible, reduced } from "./js/layout.js";
+letters($("[data-letters]"));
+await init("about");
+$$("[data-split]").forEach(splitWords); reveal();
+$$("[data-count]").forEach((el) => onVisible(el, countUp));
+if (!reduced()) {
+  const imgs = $$(".parallax img");
+  const f = () => imgs.forEach((im) => { const r = im.parentElement.getBoundingClientRect(); const k = (r.top + r.height / 2 - innerHeight / 2) / innerHeight; if (Math.abs(k) < 1.3) im.style.transform = `scale(1.15) translateY(${(k * -40).toFixed(1)}px)`; });
+  addEventListener("scroll", f, { passive: true }); f();
+}
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

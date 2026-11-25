@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: koya-matcha-web
+    ports:
+      - "8089:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: koya-matcha-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - store-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  store-data:

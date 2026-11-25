@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koya Matcha Bar</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<main id="main"><div class="wrap" id="root"></div>
+  <section class="sec-tight" style="padding-top:30px"><div class="wrap"><h2 class="sec-title" style="font-size:clamp(40px,4.6vw,64px)">Goes well with</h2><div class="grid grid-4" id="reco" style="margin-top:36px"></div></div></section>
+</main>
+<script type="module">
+import { init, $, $$, esc, card, icon, addWithFlight } from "./js/layout.js";
+import { BRAND, img, money, catName } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("shop");
+const id = new URLSearchParams(location.search).get("id");
+const p = S.productById(id) || S.products()[0];
+document.title = p.name + " · Koya Matcha Bar";
+const sold = p.status !== "active", drink = ["drinks", "treats"].includes(p.cat);
+let qty = 1;
+$("#root").innerHTML = `<div class="pdp">
+  <div class="gallery">
+    <div class="thumbs">${p.gallery.map((g, i) => `<button class="${i ? "" : "on"}" data-g="${g}" aria-label="Photo ${i + 1}"><img src="${img(g)}" alt=""></button>`).join("")}</div>
+    <div class="main-img" id="mainImg"><img src="${img(p.gallery[0])}" alt="${esc(p.name)}"></div>
+  </div>
+  <div class="pdp-info">
+    <p class="crumbs"><a href="shop.html">Shop</a> / <a href="shop.html?cat=${p.cat}">${catName(p.cat)}</a></p>
+    ${sold ? '<span class="tag tag-sold">Sold out</span>' : p.tag ? `<span class="tag${/save/i.test(p.tag) ? " tag-sale" : /new/i.test(p.tag) ? " tag-new" : ""}">${esc(p.tag)}</span>` : ""}
+    <h1>${esc(p.name)}</h1>
+    <div class="pdp-price">${money(p.price)}${p.old ? `<s>${money(p.old)}</s>` : ""}</div>
+    <p style="margin-top:18px;font-size:17px">${esc(p.desc)}</p>
+    <div class="notes">${p.notes.map((n) => `<span>${esc(n)}</span>`).join("")}</div>
+    <div class="specs"><div><small>Size</small>${esc(p.size)}</div><div><small>Origin</small>${esc(p.origin)}</div><div><small>Delivery</small>${drink ? "Lahore, 30 to 50 min" : "All Pakistan, 2 to 4 days"}</div><div><small>Payment</small>Cash on delivery or card</div></div>
+    <div class="buy-row">
+      <div class="qty"><button data-q="-1" aria-label="Less">−</button><span id="qty">1</span><button data-q="1" aria-label="More">+</button></div>
+      <button class="btn" id="add" ${sold ? "disabled" : ""}>${sold ? "Sold out" : "Add to cart"}<span class="arr">${icon.cart}</span></button>
+      <a class="btn btn-line" href="${BRAND.whatsapp}" target="_blank" rel="noopener">Order on WhatsApp</a>
+    </div>
+    <div class="perks">
+      <div>${icon.check} Free delivery on orders over ${money(BRAND.freeDeliveryOver)}</div>
+      <div>${icon.check} ${drink ? "Made to order and packed with ice on the side" : "Sealed fresh, best within 2 months of opening"}</div>
+      <div>${icon.check} Not happy? We replace it, no questions asked</div>
+    </div>
+  </div></div>`;
+$$(".thumbs button").forEach((b) => b.addEventListener("click", () => {
+  $$(".thumbs button").forEach((x) => x.classList.toggle("on", x === b));
+  const m = $("#mainImg img"); m.style.opacity = 0;
+  setTimeout(() => { m.onload = () => (m.style.opacity = 1); m.src = img(b.dataset.g); }, 200);
+}));
+const mi = $("#mainImg");
+mi.addEventListener("click", () => mi.classList.toggle("zoom"));
+mi.addEventListener("pointermove", (e) => { const r = mi.getBoundingClientRect(); $("img", mi).style.transformOrigin = `${((e.clientX - r.left) / r.width) * 100}% ${((e.clientY - r.top) / r.height) * 100}%`; });
+mi.addEventListener("pointerleave", () => mi.classList.remove("zoom"));
+$$("[data-q]").forEach((b) => b.addEventListener("click", () => { qty = Math.max(1, Math.min(10, qty + Number(b.dataset.q))); $("#qty").textContent = qty; }));
+$("#add").addEventListener("click", (e) => { addWithFlight(p.id, $("#mainImg img"), qty); });
+$("#reco").innerHTML = S.visibleProducts().filter((x) => x.id !== p.id && x.status === "active").sort((a, b) => (b.cat === p.cat) - (a.cat === p.cat)).slice(0, 4).map((x, i) => card(x, i)).join("");
+$("#reco").classList.add("grid-anim");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

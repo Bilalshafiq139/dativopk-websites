@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recipes · Koya Matcha Bar</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap ph-row">
+    <div><p class="crumbs"><a href="index.html">Home</a> / Recipes</p><h1 data-letters>Recipes</h1><p class="lead">Make Koya at home. Simple recipes and a brewing guide, tested in our Lahore kitchen.</p></div>
+    <img class="ph-img" src="assets/img/y-strawberry.webp" alt="">
+  </div></section>
+
+  <section class="sec-tight"><div class="wrap">
+    <div class="toolbar"><div class="tabs" id="tabs" role="tablist"></div></div>
+    <div class="rgrid" id="rgrid"></div>
+  </div></section>
+
+  <section class="sec" id="guide">
+    <div class="wrap">
+      <h2 class="sec-title" data-split>The perfect bowl in 4 steps</h2>
+      <p class="sec-sub reveal">All you need is a tin of ceremonial matcha, a bamboo whisk, a bowl and water just off the boil.</p>
+      <div class="steps" style="grid-template-columns:repeat(4,1fr)" id="guideSteps">
+        <article class="step reveal" style="--i:0"><div class="round-img"><img src="assets/img/p-ceremonial.webp" alt="" loading="lazy"></div><div class="t"><h3>Sift</h3><p class="muted">Sift 2 g (one bamboo scoop) into a warm bowl so there are no lumps.</p></div></article>
+        <article class="step reveal" style="--i:1"><div class="round-img"><img src="assets/img/r-hojicha.webp" alt="" loading="lazy"></div><div class="t"><h3>Pour</h3><p class="muted">Add 70 ml of water at 70 to 80°C. Boiling water makes it bitter.</p></div></article>
+        <article class="step reveal" style="--i:2"><div class="round-img"><img src="assets/img/g-whisk.webp" alt="" loading="lazy"></div><div class="t"><h3>Whisk</h3><p class="muted">Whisk fast in a W shape for 20 seconds until a fine foam forms.</p></div></article>
+        <article class="step reveal" style="--i:3"><div class="round-img"><img src="assets/img/r-layer.webp" alt="" loading="lazy"></div><div class="t"><h3>Enjoy</h3><p class="muted">Drink it straight, or pour over cold milk and ice for a latte.</p></div></article>
+      </div>
+      <div style="text-align:center;margin-top:40px" class="reveal"><a class="btn" href="product.html?id=starter">Get the starter kit<span class="arr"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span></a></div>
+    </div>
+  </section>
+
+  <div class="modal" id="modal" aria-hidden="true"><div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="mTitle" id="mBox"></div></div>
+</main>
+<script type="module">
+import { init, $, $$, esc, letters, splitWords, reveal, tabPill, icon } from "./js/layout.js";
+import { img } from "./js/data.js";
+letters($("[data-letters]"));
+await init("recipes");
+const R = [
+  { id: "iced", cat: "iced", t: "Classic iced matcha latte", img: "r-pour", time: "5 min", lvl: "Easy",
+    ing: ["2 g ceremonial matcha", "60 ml water at 75°C", "200 ml cold milk (any kind)", "1 to 2 tsp honey or syrup", "A glass full of ice"],
+    steps: ["Sift the matcha into a bowl and whisk with the water until foamy.", "Fill a tall glass with ice, add the milk and sweetener.", "Slowly pour the matcha over the back of a spoon so it sits on top.", "Stir just before you drink."] },
+  { id: "strawberry", cat: "iced", t: "Strawberry cloud matcha", img: "r-iced", time: "10 min", lvl: "Easy",
+    ing: ["4 strawberries, chopped", "1 tsp sugar", "2 g ceremonial matcha", "60 ml water at 75°C", "180 ml cold milk", "Ice"],
+    steps: ["Mash the strawberries with the sugar and leave for 5 minutes.", "Spoon them into a glass, then add ice and milk.", "Whisk the matcha with the water and pour it on top."] },
+  { id: "hojicha", cat: "hot", t: "Hojicha honey latte", img: "r-hojicha", time: "5 min", lvl: "Easy",
+    ing: ["2 tsp hojicha powder", "40 ml hot water", "200 ml steamed milk", "1 tsp honey"],
+    steps: ["Whisk the hojicha with hot water until smooth.", "Stir in the honey.", "Top with steamed milk. A cosy, low-caffeine evening drink."] },
+  { id: "hot", cat: "hot", t: "Ceremonial usucha", img: "r-cafe", time: "3 min", lvl: "Easy",
+    ing: ["2 g ceremonial matcha", "70 ml water at 75°C"],
+    steps: ["Warm the bowl with hot water, then dry it.", "Sift in the matcha and add the water.", "Whisk in a W motion for 20 seconds until foamy and drink straight away."] },
+  { id: "pancakes", cat: "bake", t: "Matcha pancakes with strawberries", img: "r-pancake", time: "25 min", lvl: "Medium",
+    ing: ["1 cup flour", "1 tbsp culinary matcha", "1 tbsp sugar", "1 tsp baking powder", "1 egg", "3/4 cup milk", "Fresh strawberries"],
+    steps: ["Sift the flour, matcha, sugar and baking powder together.", "Whisk in the egg and milk to a thick batter.", "Cook small pancakes on a buttered pan, 2 minutes each side.", "Stack with strawberries and a drizzle of honey."] },
+  { id: "bowl", cat: "bake", t: "Matcha breakfast bowl", img: "r-bowl", time: "10 min", lvl: "Easy",
+    ing: ["1 frozen banana", "1 tsp culinary matcha", "1/2 cup yoghurt", "Granola, chocolate and berries to top"],
+    steps: ["Blend the banana, matcha and yoghurt until thick.", "Pour into a bowl and top with granola, chocolate and berries.", "Eat straight away while it's cold."] },
+];
+const cats = [["all", "All recipes"], ["iced", "Iced drinks"], ["hot", "Hot drinks"], ["bake", "Baking"]];
+let cat = ["iced", "hot", "bake"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "all";
+const tabs = $("#tabs");
+tabs.innerHTML = cats.map(([c, n]) => `<button role="tab" data-cat="${c}" class="${c === cat ? "on" : ""}">${n}</button>`).join("");
+function draw() {
+  const g = $("#rgrid"); g.classList.remove("grid-anim"); void g.offsetWidth;
+  g.innerHTML = R.filter((r) => cat === "all" || r.cat === cat).map((r, i) => `<button class="rcard pcard-anim" style="--i:${i};animation:cardIn .8s var(--ease) both;animation-delay:${i * 80}ms" data-r="${r.id}">
+    <div class="round-img"><img src="${img(r.img)}" alt="" loading="lazy"></div>
+    <div class="t"><div class="meta"><span>⏱ ${r.time}</span><span>${r.lvl}</span></div><h3>${esc(r.t)}</h3><span style="color:var(--green);font-weight:600">See recipe →</span></div></button>`).join("");
+}
+tabs.addEventListener("click", (e) => { const b = e.target.closest("[data-cat]"); if (!b) return; cat = b.dataset.cat; $$("button", tabs).forEach((x) => x.classList.toggle("on", x === b)); tabPill(tabs); draw(); });
+const modal = $("#modal");
+function open(r) {
+  $("#mBox").innerHTML = `<div class="round-img"><img src="${img(r.img)}" alt=""></div>
+    <div class="t"><button class="icon-btn modal-close" id="mClose" aria-label="Close">${icon.close}</button>
+      <div class="meta"><span>⏱ ${r.time}</span><span>${r.lvl}</span></div><h2 id="mTitle">${esc(r.t)}</h2>
+      <p class="label">You need</p><ul>${r.ing.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+      <p class="label">Method</p><ol>${r.steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
+      <a class="btn btn-sm" href="shop.html?cat=powder">Shop matcha<span class="arr">${icon.arrow}</span></a></div>`;
+  modal.classList.add("open"); modal.setAttribute("aria-hidden", "false"); document.body.classList.add("lock");
+  $("#mClose").onclick = close; $("#mClose").focus();
+}
+function close() { modal.classList.remove("open"); modal.setAttribute("aria-hidden", "true"); document.body.classList.remove("lock"); }
+$("#rgrid").addEventListener("click", (e) => { const c = e.target.closest("[data-r]"); if (c) open(R.find((r) => r.id === c.dataset.r)); });
+modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+draw(); requestAnimationFrame(() => tabPill(tabs)); document.fonts?.ready.then(() => tabPill(tabs)); addEventListener("resize", () => tabPill(tabs));
+$$("[data-split]").forEach(splitWords); reveal();
+if (location.hash === "#guide") setTimeout(() => $("#guide").scrollIntoView(), 300);
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

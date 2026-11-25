@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your cart · Koya Matcha Bar</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body>
+<main id="main">
+  <section class="page-head"><div class="wrap ph-row"><div><p class="crumbs"><a href="index.html">Home</a> / Cart</p><h1 data-letters>Your cart</h1></div></div></section>
+  <div class="wrap" id="root" style="padding-top:50px"></div>
+  <section class="sec-tight" style="padding-top:0"><div class="wrap"><h2 class="sec-title" style="font-size:clamp(40px,4.6vw,64px)">Add something sweet</h2><div class="grid grid-4" id="reco" style="margin-top:36px"></div></div></section>
+</main>
+<script type="module">
+import { init, card, $, icon, lineHtml, freeBar, letters, arrowBtn } from "./js/layout.js";
+import { money } from "./js/data.js";
+import * as S from "./js/store.js";
+letters($("[data-letters]"));
+await init("cart");
+function draw() {
+  const t = S.totals();
+  if (!t.lines.length) {
+    $("#root").innerHTML = `<div class="confirm" style="padding-top:10px"><h1 style="font-size:52px">Nothing here yet</h1><p class="muted">Your next favourite matcha is one tap away.</p>${arrowBtn("Shop the menu", "shop.html")}</div>`;
+  } else {
+    $("#root").innerHTML = `<div class="cart-grid">
+      <div class="panel">${freeBar(t)}<ul class="cart-lines">${t.lines.map(lineHtml).join("")}</ul></div>
+      <aside class="panel summary">
+        <h3>Summary</h3>
+        <div class="sum-row"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>
+        <div class="sum-row"><span>Delivery</span><span>${t.delivery ? money(t.delivery) : "Free"}</span></div>
+        <div class="sum-total"><span>Total</span><b>${money(t.total)}</b></div>
+        <a class="btn btn-block" href="checkout.html" style="height:54px">Checkout</a>
+        <p class="muted small" style="text-align:center;margin:12px 0 0">Cash on delivery, card, Easypaisa or JazzCash</p>
+      </aside></div>`;
+  }
+  const inCart = new Set(t.lines.map((l) => l.id));
+  $("#reco").innerHTML = S.visibleProducts().filter((p) => !inCart.has(p.id) && p.status === "active" && ["treats", "drinks"].includes(p.cat)).slice(0, 4).map((p, i) => card(p, i)).join("");
+}
+addEventListener("store:change", draw);
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>
