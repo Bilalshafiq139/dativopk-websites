@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Project enquiries | Hamza Qureshi</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { background: var(--paper); }
+  .login { min-height: 100vh; display: grid; place-items: center; background: radial-gradient(900px 500px at 80% -10%, #20406a, transparent 60%), var(--ink); padding: 20px; }
+  .login form { background: #fff; border-radius: 24px; padding: 38px; width: min(400px, 100%); box-shadow: 0 30px 80px -30px rgba(0,0,0,.6); }
+  .login h1 { font-size: 2.2rem; margin: 18px 0 6px; }
+  .login p { color: var(--muted); font-size: .92rem; }
+  .login .hint { background: #f0f8e0; color: var(--lime-ink); border-radius: 10px; padding: 10px 12px; font-size: .84rem; margin: 16px 0; }
+  .login .err { color: var(--down); font-size: .88rem; min-height: 1.2em; margin-top: 10px; }
+  .app { display: none; }
+  .app.on { display: block; }
+  .a-head { background: var(--ink); color: #fff; }
+  .a-head .wrap { display: flex; justify-content: space-between; align-items: center; height: 68px; gap: 14px; }
+  .a-head .right { display: flex; gap: 10px; align-items: center; }
+  .a-head .btn { padding: 9px 16px; font-size: .85rem; }
+  .demo-pill { font-size: .75rem; background: rgba(200,241,105,.14); color: var(--lime); padding: 5px 11px; border-radius: 99px; }
+  .a-main { padding: 34px 0 80px; }
+  .a-title { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+  .a-title h1 { font-size: 2.6rem; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
+  .kpis .panel small { color: var(--muted); font-size: .8rem; }
+  .kpis .panel b { display: block; font-family: var(--mono); font-size: 1.9rem; letter-spacing: -.04em; font-weight: 600; margin-top: 4px; }
+  .kpis .panel span { font-size: .78rem; font-family: var(--mono); }
+  .a-charts { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .toolbar { display: flex; gap: 10px; justify-content: space-between; flex-wrap: wrap; margin-bottom: 14px; }
+  .toolbar input { border: 1px solid var(--line); border-radius: 99px; padding: 9px 16px; background: #fff; min-width: 240px; outline: none; }
+  table.list { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  .list th { text-align: left; font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 600; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .list td { padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .list tr { cursor: pointer; transition: background .15s; }
+  .list tbody tr:hover { background: #fafbf8; }
+  .list td small { display: block; color: var(--muted); font-size: .8rem; }
+  .list .msg { color: var(--muted); max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .st { display: inline-block; font-size: .75rem; padding: 4px 10px; border-radius: 99px; font-weight: 600; white-space: nowrap; }
+  .st-new { background: #e8f0ff; color: #2849a8; }
+  .st-replied { background: #f1f2ee; color: #4a5263; }
+  .st-call { background: #fff4d8; color: #8a6100; }
+  .st-proposal { background: #f3e9ff; color: #6a35a8; }
+  .st-won { background: #e6f5d0; color: #3d5a0a; }
+  .st-lost { background: #fdecea; color: #b0372f; }
+  .table-wrap { overflow-x: auto; }
+  .drawer { position: fixed; inset: 0; background: rgba(14,23,38,.4); display: none; z-index: 80; }
+  .drawer.on { display: block; }
+  .drawer .sheet-in { position: absolute; right: 0; top: 0; bottom: 0; width: min(480px, 100%); background: #fff; padding: 30px; overflow-y: auto; box-shadow: -20px 0 60px rgba(0,0,0,.2); }
+  .drawer h2 { font-size: 2rem; margin: 6px 0 4px; }
+  .drawer .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+  .drawer .meta div { background: var(--paper); border-radius: 12px; padding: 10px 12px; font-size: .88rem; }
+  .drawer .meta small { display: block; color: var(--muted); font-size: .72rem; }
+  .drawer blockquote { margin: 0 0 20px; padding: 16px; border-left: 3px solid var(--lime-2); background: #fafbf8; border-radius: 0 12px 12px 0; }
+  .drawer .acts { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .x { position: absolute; right: 20px; top: 20px; border: 0; background: var(--paper); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
+  .empty { text-align: center; color: var(--muted); padding: 40px; }
+  @media (max-width: 900px) { .kpis { grid-template-columns: 1fr 1fr; } .a-charts { grid-template-columns: 1fr; } .list .hide-s { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="login" id="login">
+  <form id="login-form">
+    <span class="eyebrow">Admin</span>
+    <h1>Project enquiries</h1>
+    <p>Sign in to see briefs sent from the contact form.</p>
+    <div class="hint" id="hint" hidden>Demo mode: messages are saved in this browser. Password: <b>admin123</b></div>
+    <div class="field"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required></div>
+    <button class="btn btn-ink" style="width:100%;justify-content:center;margin-top:16px">Sign in</button>
+    <div class="err" id="err" role="alert"></div>
+    <p style="margin-top:16px;font-size:.84rem"><a href="index.html" style="text-decoration:underline">← Back to website</a></p>
+  </form>
+</div>
+
+<div class="app" id="app">
+  <div class="a-head"><div class="wrap">
+    <a class="brand" href="index.html"><span class="brand-mark"><svg viewBox="0 0 20 20" fill="#0e1726"><rect x="2" y="11" width="3.4" height="7" rx="1"/><rect x="8.3" y="6" width="3.4" height="12" rx="1"/><rect x="14.6" y="2" width="3.4" height="16" rx="1"/></svg></span><span>Hamza Qureshi<small>Admin</small></span></a>
+    <div class="right"><span class="demo-pill" id="demo-pill" hidden>Demo mode</span><button class="btn btn-ghost" id="reset" style="color:#fff;border-color:rgba(255,255,255,.2);background:transparent" hidden>Reset sample data</button><button class="btn btn-lime" id="logout">Sign out</button></div>
+  </div></div>
+  <main class="a-main"><div class="wrap">
+    <div class="a-title"><div><span class="eyebrow">Inbox</span><h1 style="margin-top:12px">Project <em>enquiries</em></h1></div><a class="btn btn-ghost" href="contact.html" target="_blank">Open contact form ↗</a></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="a-charts">
+      <div class="panel"><div class="panel-head"><h3>Enquiries per week</h3><span style="font-size:.78rem;color:var(--muted)">Last 10 weeks</span></div><div class="chart-box" id="wk" style="height:220px"></div></div>
+      <div class="panel"><div class="panel-head"><h3>By project type</h3></div><div class="donut-wrap"><div id="donut"></div><div class="legend" id="legend"></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="toolbar"><div class="filters" id="tabs" style="margin:0"></div><input id="q" type="search" placeholder="Search name, company, message…" aria-label="Search enquiries"></div>
+      <div class="table-wrap"><table class="list"><thead><tr><th>From</th><th>Need</th><th class="hide-s">Budget</th><th class="hide-s">Message</th><th>Status</th><th class="hide-s">Received</th></tr></thead><tbody id="rows"></tbody></table></div>
+    </div>
+  </div></main>
+</div>
+
+<div class="drawer" id="drawer"><div class="sheet-in" id="sheet"></div></div>
+
+<script type="module">
+  import { login, logout, loggedIn, listMessages, updateMessage, removeMessage, isDemo, resetDemo, STATUSES, TYPES } from "./js/store.js";
+  import { lineChart, donut, PALETTE } from "./js/charts.js";
+
+  const $ = (s) => document.getElementById(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const stCls = (s) => "st st-" + ({ "call booked": "call", "proposal sent": "proposal" }[s] || s);
+  const pkr = (n) => "PKR " + Math.round(n).toLocaleString("en-PK");
+  const when = (iso) => { const d = new Date(iso), days = Math.floor((Date.now() - d) / 864e5); return days < 1 ? "Today" : days < 2 ? "Yesterday" : days < 30 ? days + " days ago" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }); };
+
+  let all = [], tab = "all", q = "", chart;
+  const demo = await isDemo();
+  if (demo) { $("hint").hidden = false; }
+
+  async function show() {
+    $("login").style.display = "none"; $("app").classList.add("on");
+    $("demo-pill").hidden = !demo; $("reset").hidden = !demo;
+    await load();
+  }
+  $("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault(); $("err").textContent = "";
+    try { await login($("pw").value); show(); } catch (err) { $("err").textContent = err.message; }
+  });
+  $("logout").onclick = () => { logout(); location.reload(); };
+  $("reset").onclick = async () => { if (confirm("Reset to the sample enquiries? Messages you added in this browser will be removed.")) { resetDemo(); await load(); } };
+
+  async function load() {
+    try { all = await listMessages(); } catch (e) { alert(e.message); logout(); location.reload(); return; }
+    all.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    stats(); tabs(); rows();
+  }
+
+  function stats() {
+    const month = all.filter((m) => Date.now() - new Date(m.createdAt) < 30 * 864e5).length;
+    const won = all.filter((m) => m.status === "won");
+    const open = all.filter((m) => ["call booked", "proposal sent"].includes(m.status));
+    const decided = all.filter((m) => ["won", "lost"].includes(m.status)).length;
+    $("kpis").innerHTML = [
+      ["New, not replied", all.filter((m) => m.status === "new").length, `<span class="down">needs a reply</span>`],
+      ["Enquiries · 30 days", month, `<span class="up">${all.length} all time</span>`],
+      ["Open pipeline", pkr(open.reduce((a, m) => a + (+m.quote || 0), 0)), `<span style="color:var(--muted)">${open.length} calls & proposals</span>`],
+      ["Won · win rate", pkr(won.reduce((a, m) => a + (+m.quote || 0), 0)), `<span class="up">${decided ? Math.round((won.length / decided) * 100) : 0}% of decided</span>`],
+    ].map(([a, b, c]) => `<div class="panel"><small>${a}</small><b>${b}</b>${c}</div>`).join("");
+
+    const weeks = Array.from({ length: 10 }, (_, i) => {
+      const end = Date.now() - (9 - i) * 7 * 864e5, start = end - 7 * 864e5;
+      return all.filter((m) => { const t = +new Date(m.createdAt); return t > start && t <= end; }).length;
+    });
+    const labels = weeks.map((_, i) => { const d = new Date(Date.now() - (9 - i) * 7 * 864e5); return `${d.getDate()} ${d.toLocaleString("en", { month: "short" })} ${d.getFullYear()}`; });
+    if (!chart) chart = lineChart($("wk"), { values: weeks, labels, unit: "num" });
+    else chart.update(weeks, labels, null, "num");
+
+    const byType = TYPES.map((t) => [t, all.filter((m) => m.type === t).length]).filter((x) => x[1]).sort((a, b) => b[1] - a[1]);
+    const top = byType.slice(0, 3), rest = byType.slice(3).reduce((a, x) => a + x[1], 0);
+    const parts = [...top, ...(rest ? [["Other", rest]] : [])];
+    const total = parts.reduce((a, x) => a + x[1], 0) || 1;
+    const pct = parts.map(([n, v]) => [n, Math.round((v / total) * 100)]);
+    $("donut").innerHTML = donut(pct);
+    $("legend").innerHTML = parts.map(([n, v], i) => `<div><i style="background:${PALETTE[i]}"></i>${n}<b>${v}</b></div>`).join("");
+  }
+
+  function tabs() {
+    const list = ["all", ...STATUSES];
+    $("tabs").innerHTML = list.map((s) => `<button class="chip${s === tab ? " on" : ""}" data-s="${s}">${s === "all" ? "All" : s[0].toUpperCase() + s.slice(1)}<span class="c">${s === "all" ? all.length : all.filter((m) => m.status === s).length}</span></button>`).join("");
+  }
+  $("tabs").addEventListener("click", (e) => { const b = e.target.closest(".chip"); if (!b) return; tab = b.dataset.s; tabs(); rows(); });
+  $("q").addEventListener("input", (e) => { q = e.target.value.toLowerCase(); rows(); });
+
+  function rows() {
+    const list = all.filter((m) => (tab === "all" || m.status === tab) && (!q || [m.name, m.company, m.message, m.email].join(" ").toLowerCase().includes(q)));
+    $("rows").innerHTML = list.length ? list.map((m) => `<tr data-id="${esc(m.id)}">
+      <td><b>${esc(m.name)}</b><small>${esc(m.company || "—")}</small></td>
+      <td>${esc(m.type)}<small>${esc(m.timeline || "")}</small></td>
+      <td class="hide-s">${esc(m.budget || "—")}</td>
+      <td class="hide-s"><div class="msg">${esc(m.message)}</div></td>
+      <td><span class="${stCls(m.status)}">${esc(m.status)}</span></td>
+      <td class="hide-s" style="white-space:nowrap">${when(m.createdAt)}</td></tr>`).join("")
+      : `<tr><td colspan="6" class="empty">No enquiries here yet.</td></tr>`;
+  }
+  $("rows").addEventListener("click", (e) => { const tr = e.target.closest("tr[data-id]"); if (tr) open(tr.dataset.id); });
+
+  function open(id) {
+    const m = all.find((x) => x.id === id); if (!m) return;
+    const wa = (m.phone || "").replace(/\D/g, "");
+    $("sheet").innerHTML = `<button class="x" id="x" aria-label="Close">✕</button>
+      <span class="${stCls(m.status)}">${esc(m.status)}</span>
+      <h2>${esc(m.name)}</h2><div style="color:var(--muted)">${esc(m.company || "")}</div>
+      <div class="meta">
+        <div><small>Need</small>${esc(m.type)}</div><div><small>Budget</small>${esc(m.budget || "—")}</div>
+        <div><small>Start</small>${esc(m.timeline || "—")}</div><div><small>Data sources</small>${esc(m.sources || "—")}</div>
+        <div><small>Email</small>${m.email ? `<a href="mailto:${esc(m.email)}" style="text-decoration:underline">${esc(m.email)}</a>` : "—"}</div><div><small>Phone</small>${esc(m.phone || "—")}</div>
+      </div>
+      <blockquote>${esc(m.message)}</blockquote>
+      <div class="form-grid" style="margin-top:0">
+        <div class="field"><label for="d-st">Status</label><select id="d-st">${STATUSES.map((s) => `<option${s === m.status ? " selected" : ""}>${s}</option>`).join("")}</select></div>
+        <div class="field"><label for="d-q">Quote (PKR)</label><input id="d-q" type="number" min="0" step="5000" value="${+m.quote || 0}"></div>
+        <div class="field full"><label for="d-n">Private notes</label><textarea id="d-n" style="min-height:90px">${esc(m.notes || "")}</textarea></div>
+      </div>
+      <div class="acts">
+        <button class="btn btn-ink" id="d-save">Save changes</button>
+        ${wa ? `<a class="btn btn-lime" target="_blank" rel="noopener" href="https://wa.me/${wa}?text=${encodeURIComponent(`Hi ${m.name.split(" ")[0]}, thanks for your brief about ${m.type.toLowerCase()}. When is a good time for a quick call?`)}">Reply on WhatsApp</a>` : ""}
+        <button class="btn btn-ghost" id="d-del" style="color:var(--down)">Delete</button>
+      </div>
+      <p style="color:var(--muted);font-size:.8rem;margin-top:20px">Received ${new Date(m.createdAt).toLocaleString("en-GB")}</p>`;
+    $("drawer").classList.add("on");
+    $("x").onclick = close;
+    $("d-save").onclick = async () => { await updateMessage(id, { status: $("d-st").value, quote: +$("d-q").value || 0, notes: $("d-n").value }); close(); load(); };
+    $("d-del").onclick = async () => { if (confirm(`Delete the enquiry from ${m.name}? This cannot be undone.`)) { await removeMessage(id); close(); load(); } };
+  }
+  const close = () => $("drawer").classList.remove("on");
+  $("drawer").addEventListener("click", (e) => { if (e.target.id === "drawer") close(); });
+  document.addEventListener("keydown", (e) => e.key === "Escape" && close());
+
+  if (loggedIn()) show();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

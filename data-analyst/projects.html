@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case studies | Hamza Qureshi, Data Analyst</title>
+<meta name="description" content="Data analytics case studies: retail dashboards, e-commerce returns, hospital wait times, demand forecasting, churn prediction and manufacturing OEE.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="projects">
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a><span>/</span>Case studies</div>
+    <span class="eyebrow">Case studies</span>
+    <h1 style="margin-top:20px">Real problems, measured <em style="color:var(--lime)">results.</em></h1>
+    <p class="lead">Six projects across retail, e-commerce, healthcare, logistics, fintech and manufacturing. Client names are changed; the methods and the size of the results are real.</p>
+  </div>
+</div>
+
+<section style="padding-top:60px">
+  <div class="wrap">
+    <div class="panel rv" style="margin-bottom:40px">
+      <div class="panel-head"><h3>Impact across all projects</h3><span class="live">Results measured 3–6 months after launch</span></div>
+      <div class="keystats" style="grid-template-columns:repeat(4,1fr)" id="summary"></div>
+    </div>
+    <div class="filters" id="filters" role="tablist" aria-label="Filter case studies"></div>
+    <div class="grid-3" id="grid"></div>
+  </div>
+</section>
+
+<section style="padding:0">
+  <div class="wrap">
+    <div class="cta-band rv">
+      <div><span class="eyebrow">Your data, your question</span><h2 style="margin-top:18px">Want a case study like these for <em>your</em> business?</h2></div>
+      <div class="actions"><a class="btn btn-lime" href="contact.html">Start a project <span class="arr">→</span></a><a class="btn btn-ghost" href="skills.html">See my tools <span class="arr">→</span></a></div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import { PROJECTS, CATEGORIES } from "./js/data.js";
+  import { projectCard } from "./js/cards.js";
+  import { reveal } from "./js/layout.js";
+
+  document.getElementById("summary").innerHTML = [["Projects shown", "6"], ["Industries", "6"], ["Avg. improvement", "38%"], ["Savings found", "PKR 11 Cr+"]]
+    .map(([a, b]) => `<div><small>${a}</small><b>${b}</b></div>`).join("");
+
+  const grid = document.getElementById("grid"), filters = document.getElementById("filters");
+  const cats = ["All", ...CATEGORIES];
+  const count = (c) => (c === "All" ? PROJECTS.length : PROJECTS.filter((p) => p.category === c).length);
+  filters.innerHTML = cats.map((c, i) => `<button class="chip${i ? "" : " on"}" role="tab" aria-selected="${!i}" data-c="${c}">${c}<span class="c">${count(c)}</span></button>`).join("");
+  function render(c) {
+    grid.innerHTML = PROJECTS.filter((p) => c === "All" || p.category === c).map(projectCard).join("");
+    reveal(grid);
+  }
+  filters.addEventListener("click", (e) => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    filters.querySelectorAll(".chip").forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-selected", x === b); });
+    render(b.dataset.c);
+  });
+  render("All");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

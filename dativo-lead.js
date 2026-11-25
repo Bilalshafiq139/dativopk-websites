@@ -9,7 +9,8 @@
     "dentist": "Mehr Dental Studio",
     "restaurant": "Ember & Oak Steakhouse",
     "wedding-photographer": "Dastaan Studio (wedding photographer)",
-    "photographer": "Zoya Malik Studio (photographer)"
+    "photographer": "Zoya Malik Studio (photographer)",
+    "data-analyst": "Hamza Qureshi (data analyst portfolio)"
   };
   var slug = (location.pathname.split("/").filter(Boolean)[0] || "").toLowerCase();
   var name = NAMES[slug] || "demo";

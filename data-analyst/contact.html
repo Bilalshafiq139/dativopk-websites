@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact | Hamza Qureshi, Data Analyst</title>
+<meta name="description" content="Send a project brief to Hamza Qureshi, data analyst in Lahore. Dashboards, forecasting, analysis and training.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="contact">
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a><span>/</span>Contact</div>
+    <span class="eyebrow">Contact</span>
+    <h1 style="margin-top:20px">Let's find out what your data <em style="color:var(--lime)">can tell you.</em></h1>
+    <p class="lead">Share a short brief. I reply within 24 hours with whether I can help, a rough plan and a price range. No sales calls unless you ask for one.</p>
+  </div>
+</div>
+
+<section style="padding-top:60px">
+  <div class="wrap contact-grid">
+    <form class="form-card rv" id="form" novalidate>
+      <span class="eyebrow">Project brief</span>
+      <h2 style="margin-top:16px">Tell me about the project.</h2>
+      <p style="color:var(--muted)">Takes about 2 minutes. Fields marked * are required.</p>
+      <div class="form-grid">
+        <div class="field"><label for="name">Your name *</label><input id="name" name="name" required autocomplete="name" placeholder="e.g. Ayesha Siddiqui"></div>
+        <div class="field"><label for="company">Company</label><input id="company" name="company" autocomplete="organization" placeholder="e.g. Bloom Skincare"></div>
+        <div class="field"><label for="email">Email *</label><input id="email" name="email" type="email" required autocomplete="email" placeholder="you@company.pk"></div>
+        <div class="field"><label for="phone">WhatsApp number</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+92 3xx xxxxxxx"></div>
+        <div class="field full"><span class="lbl">What do you need? *</span><div class="opts" id="types"></div></div>
+        <div class="field full"><span class="lbl">Budget range</span><div class="opts" id="budgets"></div></div>
+        <div class="field"><label for="timeline">When do you want to start?</label><select id="timeline" name="timeline"><option>This month</option><option>Next 1–2 months</option><option>Just exploring</option></select></div>
+        <div class="field"><label for="sources">Where does your data live?</label><input id="sources" name="sources" placeholder="e.g. Excel, POS, Shopify, SQL Server"></div>
+        <div class="field full"><label for="message">The question you want answered *</label><textarea id="message" name="message" required placeholder="e.g. We have 11 cafes and want to know daily sales by item and hour, on my phone."></textarea></div>
+      </div>
+      <div class="form-foot">
+        <small>Your details are only used to reply to you. I'm happy to sign an NDA before you share data.</small>
+        <button class="btn btn-ink" type="submit" id="send">Send brief <span class="arr">→</span></button>
+      </div>
+      <div class="form-msg" id="msg" role="status"></div>
+    </form>
+
+    <div>
+      <div class="side-card rv">
+        <h3>Prefer to talk?</h3>
+        <p>WhatsApp is the fastest way to reach me during working hours (Mon–Sat, 10am–7pm PKT).</p>
+        <div class="line"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 6h16v12H4z"/><path d="M4 7l8 6 8-6"/></svg></span><div><small>Email</small><span id="email-l"></span></div></div>
+        <div class="line"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21s-7-6.3-7-11a7 7 0 0114 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span><div><small>Based in</small>Lahore · working with clients across Pakistan & the Gulf</div></div>
+        <div class="line"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><small>Response time</small>Within 24 hours</div></div>
+        <a class="btn btn-lime" id="wa-btn" target="_blank" rel="noopener">Chat on WhatsApp <span class="arr">→</span></a>
+      </div>
+      <div class="cal rv">
+        <h3>Availability</h3>
+        <p id="cal-title"></p>
+        <div class="cal-grid" id="cal"></div>
+        <div class="cal-key"><span><i style="background:#eef8dc"></i>Open for kick-off</span><span><i style="background:var(--paper-2)"></i>Booked</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv" style="justify-content:center;text-align:center"><div><span class="eyebrow">FAQ</span><h2>Questions clients <em>usually</em> ask.</h2></div></div>
+    <div class="faq rv">
+      <details open><summary>My data is messy. Is that a problem?</summary><p>No. Almost every project starts with messy Excel files. The first week is a data health check, and I tell you honestly what can be used and what needs fixing.</p></details>
+      <details><summary>Do I need to buy Power BI or other software?</summary><p>Not always. I often start with what you already have (Excel, Google Sheets, Looker Studio). If a paid tool makes sense, I'll explain the monthly cost before we start.</p></details>
+      <details><summary>How do you keep our data private?</summary><p>I sign an NDA by default, work inside your systems where possible, and delete my copies at the end of the project.</p></details>
+      <details><summary>How do payments work?</summary><p>Fixed price per project: 40% to start, 40% at the dashboard or model review, 20% after handover. Monthly partner work is billed at the start of each month.</p></details>
+      <details><summary>Can you train my team after the project?</summary><p>Yes. Every project includes a handover session. Longer workshops in Urdu or English can be added for teams of up to 15 people.</p></details>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import { PERSON } from "./js/data.js";
+  import { waLink } from "./js/layout.js";
+  import { submitMessage, TYPES, BUDGETS } from "./js/store.js";
+
+  const $ = (s) => document.getElementById(s);
+  $("email-l").innerHTML = `<a href="mailto:${PERSON.email}">${PERSON.email}</a>`;
+  $("wa-btn").href = waLink();
+  const chips = (name, list, first) => list.map((t, i) => `<label><input type="radio" name="${name}" value="${t}"${i === first ? " checked" : ""}><span>${t}</span></label>`).join("");
+  $("types").innerHTML = chips("type", TYPES, 0);
+  $("budgets").innerHTML = chips("budget", BUDGETS, 1);
+  const pre = new URLSearchParams(location.search).get("type");
+  if (pre) { const r = document.querySelector(`input[name=type][value="${CSS.escape(pre)}"]`); if (r) r.checked = true; }
+
+  // availability calendar (next month)
+  const now = new Date(), m = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+  $("cal-title").textContent = `Next opening: ${m.toLocaleString("en", { month: "long", year: "numeric" })}. Two project slots left.`;
+  let c = ["M", "T", "W", "T", "F", "S", "S"].map((d) => `<b>${d}</b>`).join("");
+  const lead = (m.getDay() + 6) % 7;
+  c += "<span></span>".repeat(lead);
+  for (let d = 1; d <= days; d++) {
+    const dow = (lead + d - 1) % 7;
+    const free = dow < 5 && d > 8 && ![14, 15, 21, 22].includes(d);
+    c += `<span class="${dow === 6 ? "" : free ? "free" : "busy"}">${d}</span>`;
+  }
+  $("cal").innerHTML = c;
+
+  const form = $("form"), msg = $("msg");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(form));
+    msg.className = "form-msg";
+    if (!d.name?.trim() || !/^\S+@\S+\.\S+$/.test(d.email || "") || !d.message?.trim()) {
+      msg.className = "form-msg bad"; msg.textContent = "Please add your name, a valid email and your question.";
+      return;
+    }
+    $("send").disabled = true;
+    try {
+      await submitMessage(d);
+      form.reset();
+      document.querySelector("input[name=type]").checked = true;
+      document.querySelectorAll("input[name=budget]")[1].checked = true;
+      msg.className = "form-msg ok";
+      msg.textContent = `Thank you, ${d.name.split(" ")[0]}! Your brief is in. I'll reply within 24 hours on email or WhatsApp.`;
+    } catch (err) {
+      msg.className = "form-msg bad"; msg.textContent = err.message + ". You can also WhatsApp me directly.";
+    } finally { $("send").disabled = false; }
+  });
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

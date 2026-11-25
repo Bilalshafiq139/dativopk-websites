@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skills & tools | Hamza Qureshi, Data Analyst</title>
+<meta name="description" content="SQL, Power BI, Python, Excel, Tableau, BigQuery and statistics: the skills and tools Hamza Qureshi uses on analytics projects.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="skills">
+
+<div class="page-hero">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Home</a><span>/</span>Skills & tools</div>
+    <span class="eyebrow">Skills & tools</span>
+    <h1 style="margin-top:20px">The right tool for the question, <em style="color:var(--lime)">not the other way round.</em></h1>
+    <p class="lead">I pick tools your team can actually keep running after I leave. Here is what I use, how often, and how well.</p>
+  </div>
+</div>
+
+<section style="padding-top:60px">
+  <div class="wrap">
+    <div class="panel radar-card rv">
+      <div>
+        <span class="eyebrow">Skill profile</span>
+        <h2 style="margin:18px 0 14px">Strong in the <em>middle</em> of the data stack.</h2>
+        <p class="lead">My sweet spot is between raw data and business decisions: modelling, analysis and visual storytelling. I can set up light data engineering, and I partner with engineers for heavy pipelines.</p>
+        <div class="keystats" style="margin-top:26px">
+          <div><small>Hours of SQL / week</small><b>18</b></div>
+          <div><small>Dashboards live</small><b>27</b></div>
+          <div><small>Models in production</small><b>9</b></div>
+        </div>
+      </div>
+      <div id="radar" style="display:grid;place-items:center"></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="eyebrow">Proficiency</span><h2>Depth, <em>honestly</em> rated.</h2></div><p class="lead" style="max-width:420px">Rated on real project use, not course certificates. 100 means I could teach it; 60 means I use it with the docs open.</p></div>
+    <div class="skill-layout" id="groups"></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <figure class="figure rv" style="position:relative"><img src="assets/img/working.webp" alt="Analyst reviewing a live dashboard" loading="lazy"></figure>
+    <div class="sec-head rv"><div><span class="eyebrow">Toolbox</span><h2>Tools I work in <em>every month.</em></h2></div></div>
+    <div class="toolbox" id="toolbox"></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="panel rv">
+      <div class="panel-head"><h3>Tool usage over the last 12 months</h3><span style="font-size:.78rem;color:var(--muted)">Darker = more project hours</span></div>
+      <div class="heat" id="heat"></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap">
+    <div class="sec-head rv"><div><span class="eyebrow">Certifications</span><h2>Checked by <em>someone else</em> too.</h2></div></div>
+    <div class="certs">
+      <div class="cert rv"><span class="seal">✓</span><div><b>Microsoft Certified: Power BI Data Analyst</b><small>PL-300 · 2023</small></div></div>
+      <div class="cert rv"><span class="seal">✓</span><div><b>Google Data Analytics Professional Certificate</b><small>Coursera · 2021</small></div></div>
+      <div class="cert rv"><span class="seal">✓</span><div><b>Tableau Desktop Specialist</b><small>Tableau · 2022</small></div></div>
+      <div class="cert rv"><span class="seal">✓</span><div><b>Google Cloud: BigQuery for Data Analysts</b><small>Skill badge · 2024</small></div></div>
+      <div class="cert rv"><span class="seal">✓</span><div><b>Applied Time-Series Forecasting</b><small>Online course · 2024</small></div></div>
+      <div class="cert rv"><span class="seal">✓</span><div><b>dbt Fundamentals</b><small>dbt Labs · 2025</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-bottom:0">
+  <div class="wrap">
+    <div class="cta-band rv">
+      <div><span class="eyebrow">Not sure what you need?</span><h2 style="margin-top:18px">Tell me your tools today. I'll suggest the <em>simplest</em> next step.</h2></div>
+      <div class="actions"><a class="btn btn-lime" href="contact.html">Ask a question <span class="arr">→</span></a><a class="btn btn-ghost" href="projects.html">See them in action <span class="arr">→</span></a></div>
+    </div>
+  </div>
+</section>
+
+<script type="module">
+  import { TOOLS } from "./js/data.js";
+  import { radar } from "./js/charts.js";
+  import { reveal } from "./js/layout.js";
+
+  document.getElementById("radar").innerHTML = radar([["SQL", 95], ["Visualisation", 92], ["Statistics", 84], ["Python", 82], ["Forecasting", 80], ["Data eng.", 64], ["Storytelling", 90]]);
+
+  const groups = [
+    ["Data & querying", "Getting the right rows, fast, and making them reconcile.", [["SQL (PostgreSQL, SQL Server, BigQuery)", 95], ["Data modelling (star schema)", 90], ["dbt", 68], ["Airflow / scheduling", 62]]],
+    ["Analysis & statistics", "Finding what actually drives the number.", [["Exploratory analysis", 94], ["A/B testing & significance", 85], ["Regression & segmentation", 82], ["Cohort & funnel analysis", 90]]],
+    ["Visualisation & BI", "Dashboards people open without being reminded.", [["Power BI & DAX", 93], ["Tableau", 80], ["Looker Studio", 86], ["Excel (Power Query, pivots)", 96]]],
+    ["Python & ML", "When spreadsheets and SQL are not enough.", [["pandas & NumPy", 88], ["Forecasting (Prophet, ARIMA)", 80], ["scikit-learn / XGBoost", 76], ["Automation scripts", 84]]],
+  ];
+  document.getElementById("groups").innerHTML = groups.map(([t, d, items]) => `<div class="skill-group rv"><h3>${t}</h3><p>${d}</p>${items.map(([n, v]) => `<div class="meter"><div class="top">${n}<span>${v}</span></div><div class="track"><div class="fill${v >= 90 ? " hi" : ""}" data-w="${v}"></div></div></div>`).join("")}</div>`).join("");
+
+  document.getElementById("toolbox").innerHTML = TOOLS.map(([n, ab, c, d, y]) => `<div class="tool rv"><span class="badge" style="background:${c}">${ab}</span><div><b>${n}</b><br><small>${d}</small></div><span class="yrs">${y}</span></div>`).join("");
+
+  // heatmap
+  const months = ["Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"];
+  const rows = [["SQL", 9], ["Power BI", 8], ["Python", 6], ["Excel", 7], ["Tableau", 3], ["BigQuery", 5]];
+  let h = `<span></span>${months.map((m) => `<span class="m">${m}</span>`).join("")}`;
+  rows.forEach(([n, base], r) => {
+    h += `<span class="h">${n}</span>`;
+    months.forEach((_, i) => {
+      const v = Math.max(0.08, Math.min(1, (base + Math.sin(i * 1.3 + r) * 3) / 10));
+      h += `<i style="background:rgba(14,23,38,${v.toFixed(2)})" title="${n}, ${months[i]}"></i>`;
+    });
+  });
+  document.getElementById("heat").innerHTML = h;
+  reveal();
+
+  // animate meters on view
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.style.width = e.target.dataset.w + "%"; io.unobserve(e.target); } }), { threshold: .3 });
+  document.querySelectorAll(".fill").forEach((f) => io.observe(f));
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>
