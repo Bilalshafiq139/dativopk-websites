@@ -8,37 +8,31 @@
 <link rel="icon" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="stylesheet" href="css/style.css?v=5">
 </head>
 <body>
 <main id="main">
 
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div class="hero-copy">
+<section class="hero3d" id="hero3d" aria-label="Lakri living room">
+  <div class="h3-sticky">
+    <canvas class="h3-canvas" aria-hidden="true"></canvas>
+    <div class="wrap h3-layer">
+      <div class="h3-copy">
         <p class="mono eyebrow rise">Solid wood furniture · Made in Chiniot</p>
-        <h1 class="reveal d1">Made slowly,<span class="l2"><em>kept</em> for</span><span class="l3">a lifetime.</span></h1>
-        <p class="lead rise d2">Fifteen pieces, each one in oak, sheesham, walnut or ebonised ash. Made to order by hand, sized for real Pakistani homes, and delivered to your door.</p>
+        <h1 class="rise d1">Made slowly,<span class="l2"><em>kept</em> for</span><span class="l3">a lifetime.</span></h1>
+        <p class="lead rise d2">Fifteen pieces, each one in oak, sheesham, walnut or ebonised ash. Made to order by hand and delivered to the room you choose.</p>
         <div class="hero-cta rise d3">
           <a class="btn btn-dark" href="shop.html">Shop the collection <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
           <a class="btn btn-line" href="rooms.html">Shop by room</a>
         </div>
       </div>
-      <div class="hero-visual rise d2">
-        <div class="arch a1"><img src="assets/img/p-noor.webp" alt="Cream bouclé lounge chair beside a warm lamp"></div>
-        <div class="arch a2"><img src="assets/img/detail-table.webp" alt="Round wooden table top with ceramic pieces"></div>
-        <a class="float-card f1" href="product.html?id=noor"><i></i><span><b>Noor</b><span class="muted small">Lounge chair</span></span></a>
-        <a class="float-card f2" href="product.html?id=chand"><i></i><span><b>Chand · Rs 68,000</b><span class="muted small">Coffee table</span></span></a>
-      </div>
+      <div class="h3-title"><h2>A living room, <em>one piece</em> at a time.</h2><p>Tap a piece to see it in the shop.</p></div>
+      <div class="h3-scroll mono">Scroll to step inside <span class="h3-arrow">↓</span></div>
     </div>
-    <div class="hero-foot">
-      <div class="stats">
-        <div><b>15</b><span class="mono">Pieces</span></div>
-        <div><b>4</b><span class="mono">Woods</span></div>
-        <div><b>10 yr</b><span class="mono">Frame warranty</span></div>
-      </div>
-      <span class="mono">Scroll to see a room ↓</span>
+    <div class="h3-tags"></div>
+    <div class="h3-fallback">
+      <div class="arch a1"><img src="assets/img/p-noor.webp" alt="Cream lounge chair on a wooden floor"></div>
+      <div class="arch a2"><img src="assets/img/detail-table.webp" alt="Round wooden table top with ceramic pieces"></div>
     </div>
   </div>
 </section>
@@ -165,13 +159,15 @@ import { init, card, esc, $, $$, reveal } from "./js/layout.js";
 import { WOODS, ROOMS, CATEGORIES, TESTIMONIALS, img, money, priceFor } from "./js/data.js";
 import * as S from "./js/store.js";
 import { roomStage } from "./js/rooms.js";
+import { initHero3D } from "./js/hero3d.js";
 
 await init("home");
+try { initHero3D(document.getElementById("hero3d")); } catch (e) { console.warn(e); document.getElementById("hero3d").classList.add("no3d"); }
 
 $("#marquee").innerHTML = Array(2).fill(["Made in Chiniot", "Four woods", "Delivered across Pakistan", "Ten-year warranty", "Free swatch box", "Pay half on delivery"].map((t) => `<span>${t}</span>`).join("")).join("");
 
 // shop the room
-let roomId = "living";
+let roomId = "dining";
 const tabs = $("#roomTabs");
 tabs.innerHTML = ROOMS.map((r) => `<button class="tab" role="tab" aria-selected="${r.id === roomId}" data-room="${r.id}">${r.name}<sup>${r.hotspots.length}</sup></button>`).join("");
 const drawRoom = () => roomStage($("#roomStage"), ROOMS.find((r) => r.id === roomId), true);
