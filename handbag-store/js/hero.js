@@ -56,10 +56,10 @@ export function initHero(root) {
 
   // ---------- product text ----------
   function renderInfo() {
-    const p = S.productById(LOOKS[active].id);
+    const p = S.productById(LOOKS[active % N].id);
     const w = S.wished().includes(p.id);
     info.innerHTML = `
-      <p class="label hx-l"><span>${String(active + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}</span> ${esc(p.type)}</p>
+      <p class="label hx-l"><span>${String((active % N) + 1).padStart(2, "0")} / ${String(N).padStart(2, "0")}</span> ${esc(p.type)}</p>
       <h2 class="hx-l"><span>${esc(p.name)}</span></h2>
       <p class="muted hx-l"><span>${esc(p.blurb)}</span></p>
       <p class="hx-price hx-l"><span>${money(p.price)}${p.old ? ` <s>${money(p.old)}</s>` : ""}</span></p>
@@ -69,7 +69,7 @@ export function initHero(root) {
   }
   info.addEventListener("click", (e) => {
     if (!e.target.closest("[data-hero-add]")) return;
-    const p = S.productById(LOOKS[active].id);
+    const p = S.productById(LOOKS[active % N].id);
     flyToBag($("img", pcard), () => { S.addToBag(p.id); toast(`${esc(p.name)} added. <a href="#" data-open-bag>View bag</a>`); });
   });
   addEventListener("store:change", () => { if (ready && !busy) { const b = $("[data-wish]", info); if (b) { const on = S.wished().includes(b.dataset.wish); b.classList.toggle("on", on); b.innerHTML = `${on ? "In wishlist" : "Add to wishlist"} ${icon.plus}`; } } });
@@ -88,14 +88,17 @@ export function initHero(root) {
     root.classList.add("switching");
     if (!reduce) { swoosh.classList.remove("run"); void swoosh.getBoundingClientRect(); swoosh.classList.add("run"); }
     await wait(reduce ? 0 : 380);
-    active = k;
-    models.forEach((m) => m.classList.toggle("on", Number(m.dataset.i) === lookOf()));
-    placeCards();
-    await wait(reduce ? 0 : 420);
-    renderInfo();
-    root.classList.remove("switching");
-    await wait(reduce ? 0 : 700);
-    busy = false;
+    try {
+      active = k;
+      models.forEach((m) => m.classList.toggle("on", Number(m.dataset.i) === lookOf()));
+      placeCards();
+      await wait(reduce ? 0 : 420);
+      renderInfo();
+    } finally {
+      root.classList.remove("switching");
+      await wait(reduce ? 0 : 700);
+      busy = false;
+    }
   }
   const next = () => goCard((active + 1) % CARDS), prev = () => goCard((active - 1 + CARDS) % CARDS);
   $(".hx-next", root).addEventListener("click", () => { next(); restart(); });
