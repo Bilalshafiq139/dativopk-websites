@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Our craft · Lakri &amp; Co.</title>
+<meta name="description" content="How Lakri furniture is made: four woods, ten carpenters, one workshop in Chiniot.">
+</head>
+<body>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Craft</p>
+      <div class="ph-row"><h1>Our <em>craft</em></h1><p>Ten carpenters, one finisher and a workshop in Chiniot. This is how every piece is made.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="brand-block"><div class="bb-img reveal" style="height:560px"><img src="assets/img/workshop.webp" alt="Carpenter building a wooden chair in the Chiniot workshop"><div class="word">chiniot</div></div></div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <p class="mono eyebrow">Why we started</p>
+      <p class="big-quote reveal">Most furniture is built to be replaced. We wanted to make the <em>opposite</em>: a small set of pieces, in honest wood, that a family keeps for <em>forty years</em>.</p>
+      <div class="numbers" style="margin-top:70px">
+        <div class="reveal"><b>15</b><span class="mono">Pieces, nothing else</span></div>
+        <div class="reveal d1"><b>10</b><span class="mono">Carpenters</span></div>
+        <div class="reveal d2"><b>1,200+</b><span class="mono">Homes furnished</span></div>
+        <div class="reveal d3"><b>0</b><span class="mono">Particle board</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt" id="woods">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="mono eyebrow">The four woods</p><h2 class="reveal">Pick the wood, <em>we</em> do the rest.</h2></div><p>Every piece is made in all four. Ask for a free swatch box to hold them first.</p></div>
+      <div class="wood-cards" id="woodCards"></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap split">
+      <div>
+        <p class="mono eyebrow">From board to your room</p>
+        <h2 class="reveal">Six steps, <em>all</em> by hand.</h2>
+        <ol class="steps">
+          <li><span class="mono">01</span><div><b>Choose the boards</b><span class="muted small">Our ustad picks boards for your piece by grain, so the pattern flows across the top.</span></div></li>
+          <li><span class="mono">02</span><div><b>Dry and rest</b><span class="muted small">Wood rests in the workshop for two weeks so it settles to Pakistani humidity and doesn't crack later.</span></div></li>
+          <li><span class="mono">03</span><div><b>Cut and join</b><span class="muted small">Mortise and tenon, dovetails, dowels. Glue and wood, no metal brackets.</span></div></li>
+          <li><span class="mono">04</span><div><b>Sand three times</b><span class="muted small">120, 180, then 240 grit, by hand on every edge you will touch.</span></div></li>
+          <li><span class="mono">05</span><div><b>Oil and cure</b><span class="muted small">Two coats of hard-wax oil. Food safe, easy to repair, never plastic-looking.</span></div></li>
+          <li><span class="mono">06</span><div><b>Wrap and deliver</b><span class="muted small">Blanket-wrapped, no foam. Our team brings it in and takes the packaging away.</span></div></li>
+        </ol>
+      </div>
+      <div class="imgs reveal">
+        <div class="i1"><img src="assets/img/craftsman.webp" alt="Craftsman planing a long board"></div>
+        <div class="i2"><img src="assets/img/detail-chair.webp" alt="Unfinished wooden chair frame"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec-tight">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <div><p class="mono" style="color:#a99e91">Visit</p><h2>Come and <em>sit</em> on them.</h2><p>Our Gulberg showroom has every piece in all four woods. Tea is on us.</p><a class="btn btn-light" href="delivery.html#contact">Plan a visit →</a></div>
+        <div class="swatches" aria-hidden="true"><span style="background-image:url(assets/img/p-noor.webp)"></span><span style="background-image:url(assets/img/p-daal.webp)"></span><span style="background-image:url(assets/img/p-roshan.webp)"></span><span style="background-image:url(assets/img/p-gol.webp)"></span></div>
+      </div>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, reveal } from "./js/layout.js";
+import { WOODS, img } from "./js/data.js";
+await init("craft");
+$("#woodCards").innerHTML = WOODS.map((w, i) => `<article class="wood-card reveal d${i}"><img src="${img(w.img)}" alt="${w.name} wood grain" loading="lazy"><div><span class="mono">0${i + 1}${w.add ? " · +" + Math.round(w.add * 100) + "%" : " · no extra cost"}</span><h3>${w.name}</h3><p>${w.note}</p><a class="link-btn" style="display:inline-block;margin-top:12px" href="shop.html?wood=${w.id}">Shop in ${w.short} →</a></div></article>`).join("");
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

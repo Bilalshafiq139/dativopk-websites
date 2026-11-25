@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Your bag · Lakri &amp; Co.</title>
+</head>
+<body>
+<main id="main">
+  <section class="page-head" style="padding-bottom:30px">
+    <div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Bag</p>
+      <div class="ph-row"><h1>Your <em>bag</em></h1><a class="link-btn" href="shop.html" style="font-size:14px">← Keep shopping</a></div>
+    </div>
+  </section>
+  <div class="wrap">
+    <div class="cart-grid" id="cart"></div>
+    <section style="padding-bottom:60px">
+      <div class="sec-head"><h2>You might also <em>like.</em></h2></div>
+      <div class="grid" id="related"></div>
+    </section>
+  </div>
+</main>
+<script type="module">
+import { init, card, lineHtml, $, icon } from "./js/layout.js";
+import { BRAND, money } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("bag");
+
+const wgKey = "lakri-wg";
+const getWg = () => { try { return localStorage.getItem(wgKey) === "1"; } catch { return false; } };
+function draw() {
+  const t = S.totals(getWg());
+  if (!t.lines.length) {
+    $("#cart").innerHTML = `<div class="panel empty" style="grid-column:1/-1"><p class="serif-lg">Your bag is <em>empty.</em></p><p class="muted">Every piece is made to order in your choice of wood.</p><a class="btn btn-dark" href="shop.html">Shop the collection ${icon.arrow}</a></div>`;
+  } else {
+    const pct = Math.min(100, (t.subtotal / BRAND.freeDeliveryOver) * 100);
+    $("#cart").innerHTML = `
+      <div class="panel"><ul class="bag-lines">${t.lines.map(lineHtml).join("")}</ul></div>
+      <aside class="panel summary">
+        <h3>Order summary</h3>
+        <div class="free-bar"><p>${t.toFree ? `Add <b>${money(t.toFree)}</b> more for free delivery` : "Your order ships <b>free</b>"}</p><div class="bar"><span style="width:${pct}%"></span></div></div>
+        <div class="sum-row"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>
+        <div class="sum-row"><span>Delivery</span><span>${t.delivery ? money(t.delivery) : "Free"}</span></div>
+        <div class="sum-row"><span>Sales tax</span><span>Included</span></div>
+        <label class="check"><input type="checkbox" id="wg" ${getWg() ? "checked" : ""}><span><b>White-glove delivery</b><br><span class="muted small">Carried in, unwrapped and set up in your room. Packaging taken away.</span></span><span>+${money(BRAND.whiteGlove)}</span></label>
+        <div class="sum-total"><span>Estimated total</span><b>${money(t.total)}</b></div>
+        <a class="btn btn-dark btn-block" href="checkout.html">Check out ${icon.arrow}</a>
+        <ul class="ticks"><li>${icon.check} 30-day returns</li><li>${icon.check} Pay 50% now, the rest on delivery</li><li>${icon.check} Free swatches before you decide</li></ul>
+      </aside>`;
+    $("#wg").addEventListener("change", (e) => { try { localStorage.setItem(wgKey, e.target.checked ? "1" : "0"); } catch {} draw(); });
+  }
+  const inBag = new Set(t.lines.map((l) => l.id));
+  $("#related").innerHTML = S.visibleProducts().filter((p) => !inBag.has(p.id)).slice(0, 4).map((p) => card(p)).join("");
+}
+window.addEventListener("store:change", draw);
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

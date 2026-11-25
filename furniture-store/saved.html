@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Saved pieces · Lakri &amp; Co.</title>
+</head>
+<body>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Saved</p>
+      <div class="ph-row"><h1>Saved <em>pieces</em></h1><p>Your shortlist stays on this device. Share it with family before you decide.</p></div>
+    </div>
+  </section>
+  <div class="wrap" style="padding-bottom:90px"><div class="grid" id="grid"></div></div>
+</main>
+<script type="module">
+import { init, card, $ } from "./js/layout.js";
+import * as S from "./js/store.js";
+await init("saved");
+function draw() {
+  const ids = S.saved();
+  const list = S.visibleProducts().filter((p) => ids.includes(p.id));
+  $("#grid").innerHTML = list.length ? list.map((p) => card(p)).join("") :
+    `<div class="no-results"><p class="serif-lg">Nothing saved <em>yet.</em></p><p class="muted">Tap the heart on any piece to keep it here.</p><a class="btn btn-dark" href="shop.html">Shop the collection</a></div>`;
+}
+window.addEventListener("store:change", draw);
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

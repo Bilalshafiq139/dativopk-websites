@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Checkout · Lakri &amp; Co.</title>
+<meta name="robots" content="noindex">
+</head>
+<body>
+<main id="main">
+  <div class="wrap" style="padding-top:40px" id="root"></div>
+</main>
+<script type="module">
+import { init, esc, $, icon, toast } from "./js/layout.js";
+import { BRAND, money, img } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("bag");
+
+const CITIES = ["Lahore", "Karachi", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Sialkot", "Gujranwala", "Quetta", "Hyderabad", "Other"];
+const getWg = () => { try { return localStorage.getItem("lakri-wg") === "1"; } catch { return false; } };
+const demo = await S.isDemo();
+
+function form() {
+  const t = S.totals(getWg());
+  if (!t.lines.length) {
+    $("#root").innerHTML = `<div class="confirm"><p class="serif-lg">Your bag is <em>empty.</em></p><p class="muted">Add a piece to check out.</p><a class="btn btn-dark" href="shop.html">Shop the collection ${icon.arrow}</a></div>`;
+    return;
+  }
+  const codOk = t.total < 50000;
+  $("#root").innerHTML = `
+  <div class="steps-bar"><a href="cart.html">Bag</a> › <b>Details</b> › <span>Payment</span> › <span>Done</span></div>
+  <h1 style="font-size:clamp(44px,6vw,76px);margin-bottom:30px">Check<em>out</em></h1>
+  <div class="cart-grid">
+    <form class="panel" id="co" novalidate>
+      <p class="mono" style="margin-bottom:14px">Delivery details</p>
+      <div class="form">
+        <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="phone">Mobile (WhatsApp)</label><input id="phone" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx" required></div>
+        <div class="field full"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="city">City</label><select id="city" name="city" required><option value="">Choose city</option>${CITIES.map((c) => `<option>${c}</option>`).join("")}</select></div>
+        <div class="field"><label for="floor">Floor / lift</label><select id="floor" name="floor"><option>Ground floor</option><option>Upper floor, with lift</option><option>Upper floor, stairs only</option></select></div>
+        <div class="field full"><label for="address">Address</label><input id="address" name="address" autocomplete="street-address" placeholder="House, street, area" required></div>
+        <div class="field full"><label for="notes">Notes for our team (optional)</label><textarea id="notes" name="notes" rows="3" placeholder="Narrow gate, best time to call..."></textarea></div>
+      </div>
+      <p class="mono" style="margin:26px 0 12px">Payment</p>
+      <div class="pay-opts">
+        <label><input type="radio" name="payment" value="50% advance (bank transfer)" checked><span><b>50% advance by bank transfer</b><br><span class="muted small">We send account details on WhatsApp. Pay ${money(Math.round(t.total / 2))} now, the rest on delivery.</span></span></label>
+        <label><input type="radio" name="payment" value="50% advance (card)"><span><b>50% advance by card</b><br><span class="muted small">Visa / Mastercard, secure payment link sent by SMS.</span></span></label>
+        <label style="${codOk ? "" : "opacity:.5"}"><input type="radio" name="payment" value="Cash on delivery" ${codOk ? "" : "disabled"}><span><b>Cash on delivery</b><br><span class="muted small">${codOk ? "Available for orders under Rs 50,000." : "Only for orders under Rs 50,000."}</span></span></label>
+      </div>
+      <p class="err" id="err" style="color:var(--clay);margin-top:14px"></p>
+      <button class="btn btn-dark btn-block" style="height:54px;margin-top:10px" id="place">Place order · ${money(t.total)}</button>
+      ${demo ? `<p class="muted small" style="text-align:center;margin-top:10px">Demo store: no payment is taken and nothing is sent.</p>` : ""}
+    </form>
+    <aside class="panel summary">
+      <h3>Your order</h3>
+      <div class="mini-lines">${t.lines.map((l) => `<div class="mini-line"><span class="q"><img src="${img(l.p.img)}" alt=""><span>${l.qty}</span></span><span><b>${esc(l.p.name)}</b> <span class="muted">${esc(l.p.type)}</span><br><span class="muted small">${esc(l.woodName)}${l.fabricName ? " · " + esc(l.fabricName) : ""}</span></span><span>${money(l.unit * l.qty)}</span></div>`).join("")}</div>
+      <div class="sum-row"><span>Subtotal</span><span>${money(t.subtotal)}</span></div>
+      <div class="sum-row"><span>Delivery</span><span>${t.delivery ? money(t.delivery) : "Free"}</span></div>
+      <label class="check"><input type="checkbox" id="wg" ${getWg() ? "checked" : ""}><span><b>White-glove delivery</b><br><span class="muted small">Carried in and set up.</span></span><span>+${money(BRAND.whiteGlove)}</span></label>
+      <div class="sum-total"><span>Total</span><b>${money(t.total)}</b></div>
+      <div class="sum-row" style="font-size:13px"><span class="muted">Due now (50%)</span><span>${money(Math.round(t.total / 2))}</span></div>
+      <ul class="ticks"><li>${icon.check} 30-day returns</li><li>${icon.check} 10-year frame warranty</li><li>${icon.check} Workshop photos on WhatsApp</li></ul>
+    </aside>
+  </div>`;
+  $("#wg").addEventListener("change", (e) => { try { localStorage.setItem("lakri-wg", e.target.checked ? "1" : "0"); } catch {} const keep = new FormData($("#co")); form(); for (const [k, v] of keep) { const el = $("#co").elements[k]; if (el && el.type !== "radio") el.value = v; } });
+  $("#co").addEventListener("submit", submit);
+}
+
+async function submit(e) {
+  e.preventDefault();
+  const f = e.target, d = Object.fromEntries(new FormData(f));
+  const bad = [];
+  if (d.name.trim().length < 2) bad.push("name");
+  if (!/^[0-9+\-\s]{10,15}$/.test(d.phone.trim())) bad.push("phone");
+  if (!/^\S+@\S+\.\S+$/.test(d.email.trim())) bad.push("email");
+  if (!d.city) bad.push("city");
+  if (d.address.trim().length < 6) bad.push("address");
+  [...f.elements].forEach((el) => el.style && (el.style.borderColor = bad.includes(el.name) ? "var(--clay)" : ""));
+  if (bad.length) { $("#err").textContent = "Please check: " + bad.join(", ") + "."; f.elements[bad[0]].focus(); return; }
+  $("#place").disabled = true; $("#place").textContent = "Placing order…";
+  try {
+    const o = await S.placeOrder({ name: d.name, phone: d.phone, email: d.email, city: d.city, address: d.address + (d.floor ? " (" + d.floor + ")" : ""), notes: d.notes || "", payment: d.payment }, getWg());
+    try { localStorage.removeItem("lakri-wg"); } catch {}
+    done(o); scrollTo(0, 0);
+  } catch (err) {
+    $("#err").textContent = err.message; $("#place").disabled = false; $("#place").textContent = "Try again";
+  }
+}
+
+function done(o) {
+  const first = String(o.name || "").split(" ")[0];
+  $("#root").innerHTML = `<div class="confirm">
+    <div class="tick">${icon.check.replace('width="14" height="14"', 'width="30" height="30"')}</div>
+    <p class="mono">Order ${esc(o.id)}</p>
+    <h1>Shukriya, <em>${esc(first)}.</em></h1>
+    <p class="muted">Your order is in. We'll message you on WhatsApp within a few hours to confirm the wood and fabric, and send ${o.payment === "Cash on delivery" ? "your delivery date" : "payment details for the 50% advance"}.</p>
+    <div class="timeline"><div class="on"><b>Today</b><br><span class="muted">Order placed</span></div><div><b>Day 1</b><br><span class="muted">Confirmed on WhatsApp</span></div><div><b>Weeks 1 to 6</b><br><span class="muted">Made in Chiniot</span></div><div><b>Delivery</b><br><span class="muted">${esc(o.city)}</span></div></div>
+    <div class="panel" style="text-align:left">
+      ${o.items.map((i) => `<div class="sum-row"><span>${i.qty} × ${esc(i.name)} <span class="muted small">${esc(i.wood)}${i.fabric ? " · " + esc(i.fabric) : ""}</span></span><span>${money(i.price * i.qty)}</span></div>`).join("")}
+      <div class="sum-total"><span>Total</span><b>${money(o.total)}</b></div>
+    </div>
+    <div class="hero-cta" style="justify-content:center;margin-top:26px"><a class="btn btn-dark" href="shop.html">Keep shopping</a><a class="btn btn-line" href="${BRAND.whatsapp}" target="_blank" rel="noopener">Message us on WhatsApp</a></div>
+  </div>`;
+}
+
+if (new URLSearchParams(location.search).has("done") && S.lastOrder()) done(S.lastOrder()); else form();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

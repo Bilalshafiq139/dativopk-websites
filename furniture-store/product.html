@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Lakri &amp; Co.</title>
+<meta name="description" content="Solid wood furniture made to order in four woods.">
+</head>
+<body>
+<main id="main">
+  <div class="wrap" style="padding-top:34px">
+    <p class="crumbs" id="crumbs"></p>
+    <div class="pdp" id="pdp"></div>
+    <section class="fitcheck reveal" id="fitcheck"></section>
+    <section class="sec">
+      <div class="sec-head"><h2>You might also <em>like.</em></h2><a class="btn btn-line btn-sm" href="shop.html">All pieces →</a></div>
+      <div class="grid" id="related"></div>
+    </section>
+  </div>
+</main>
+<script type="module">
+import { init, card, esc, $, $$, toast, openBag, icon, reveal } from "./js/layout.js";
+import { WOODS, FABRICS, CATEGORIES, img, money, priceFor, dimsText, woodById, fabricById, BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("shop");
+
+const q = new URLSearchParams(location.search);
+const p = S.productById(q.get("id")) || S.visibleProducts()[0];
+let wood = WOODS.some((w) => w.id === q.get("wood")) ? q.get("wood") : S.getWood();
+let fabric = p.fabric ? "ivory" : "";
+document.title = `${p.name} ${p.type.toLowerCase()} · Lakri & Co.`;
+const cat = CATEGORIES.find((c) => c.id === p.cat);
+$("#crumbs").innerHTML = `<a href="shop.html">Shop</a> / <a href="shop.html?cat=${p.cat}">${cat.name}</a> / ${esc(p.name)}`;
+
+const arrive = new Date(Date.now() + (p.weeks * 7 + 3) * 864e5).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+const labelOf = (g, i) => i === 0 ? "Front" : g.startsWith("room") ? "In a room" : /workshop|craftsman|tools/.test(g) ? "In the workshop" : "Detail";
+
+$("#pdp").innerHTML = `
+  <div class="gallery">${p.gallery.map((g, i) => `<button class="g" data-zoom="${img(g)}" aria-label="Enlarge photo ${i + 1}"><img src="${img(g)}" alt="${esc(p.name)}, ${labelOf(g, i).toLowerCase()}"><span class="mono">${labelOf(g, i)}</span></button>`).join("")}</div>
+  <div class="buy">
+    <div class="buy-top"><span class="mono">${esc(p.type)}</span><span class="mono">${p.status === "paused" ? "Currently paused" : "Made to order"}</span></div>
+    <h1>${esc(p.name)}</h1>
+    <p>${esc(p.blurb)}</p>
+    <p class="price" id="price"></p>
+    <p class="muted small">Includes the wood you choose. Pay 50% now, the rest on delivery.</p>
+    <div class="opt-box">
+      <div class="opt"><div class="opt-h"><span><span class="mono">Wood</span><b id="woodLbl"></b></span><span class="muted small">4 woods</span></div><div class="swatch-row" id="woodSw" role="radiogroup" aria-label="Wood"></div></div>
+      ${p.fabric ? `<div class="opt"><div class="opt-h"><span><span class="mono">Fabric</span><b id="fabLbl"></b></span><span class="muted small">${FABRICS.length} colours</span></div><div class="swatch-row" id="fabSw" role="radiogroup" aria-label="Fabric"></div></div>` : ""}
+    </div>
+    <div class="buy-row">
+      <button class="btn btn-dark" id="add">Add to bag ${icon.arrow}</button>
+      <button class="save-btn${S.saved().includes(p.id) ? " on" : ""}" data-save="${p.id}" aria-label="Save ${esc(p.name)}">${icon.heart}</button>
+    </div>
+    <button class="btn btn-line btn-block" id="buyNow" style="margin-top:8px">Buy now · express checkout</button>
+    <div class="eta">${icon.truck}<div>Order today, arrives around <b>${arrive}</b><small>Made to order · Free delivery over ${money(BRAND.freeDeliveryOver)} · 30-day returns</small></div></div>
+    <div class="acc">
+      <details open><summary>The story</summary><div>${esc(p.story)}</div></details>
+      <details><summary>Size &amp; materials</summary><div><div class="spec">
+        <div><span class="mono">Size</span><br>${dimsText(p.dims)}</div>
+        <div><span class="mono">Arrives</span><br>Ships in ${p.weeks} weeks</div>
+        <div><span class="mono">Wood</span><br>Solid <span id="specWood"></span>, oil finish</div>
+        <div><span class="mono">Assembly</span><br>${p.dims[0] > 60 ? "Set up by our team" : "Arrives ready to use"}</div>
+      </div></div></details>
+      <details><summary>Delivery &amp; returns</summary><div>Our own vans deliver in Lahore, Karachi, Islamabad and Rawalpindi; other cities by freight partner. Add white-glove set-up at checkout. Returns within 30 days, in original condition. <a href="delivery.html">Read more</a></div></details>
+      <details><summary>Care</summary><div>Wipe with a dry cloth. Re-oil once a year with the free care kit. Keep out of direct sun for the first month while the oil cures.</div></details>
+    </div>
+  </div>`;
+
+function drawOpts() {
+  const w = woodById(wood);
+  $("#price").textContent = money(priceFor(p, wood));
+  $("#woodLbl").textContent = w.name; $("#specWood").textContent = w.name.toLowerCase();
+  $("#woodSw").innerHTML = WOODS.map((x) => `<button class="wdot${x.id === wood ? " on" : ""}" role="radio" aria-checked="${x.id === wood}" style="--c:${x.color}" data-w="${x.id}" title="${x.name}${x.add ? " (+" + Math.round(x.add * 100) + "%)" : ""}"></button>`).join("");
+  if (p.fabric) {
+    $("#fabLbl").textContent = fabricById(fabric).name;
+    $("#fabSw").innerHTML = FABRICS.map((f) => `<button class="wdot${f.id === fabric ? " on" : ""}" role="radio" aria-checked="${f.id === fabric}" style="--c:${f.color}" data-f="${f.id}" title="${f.name}"></button>`).join("");
+  }
+  drawFit();
+}
+document.addEventListener("click", (e) => {
+  const w = e.target.closest("[data-w]"); if (w) { wood = w.dataset.w; history.replaceState(null, "", `?id=${p.id}&wood=${wood}`); drawOpts(); }
+  const f = e.target.closest("[data-f]"); if (f) { fabric = f.dataset.f; drawOpts(); }
+  const z = e.target.closest("[data-zoom]");
+  if (z) { const lb = document.createElement("div"); lb.className = "lightbox"; lb.innerHTML = `<img src="${z.dataset.zoom}" alt="">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb); }
+});
+$("#add").addEventListener("click", () => {
+  S.addToBag(p.id, wood, fabric);
+  $("#add").innerHTML = `Added ${icon.check}`; setTimeout(() => ($("#add").innerHTML = `Add to bag ${icon.arrow}`), 1600);
+  openBag();
+});
+$("#buyNow").addEventListener("click", () => { S.addToBag(p.id, wood, fabric); location.href = "checkout.html"; });
+if (p.status === "paused") { $("#add").disabled = true; $("#buyNow").disabled = true; $("#add").textContent = "Not taking orders right now"; }
+
+// will it fit
+$("#fitcheck").innerHTML = `<div><p class="mono eyebrow">Will it fit?</p><h2 style="font-size:clamp(32px,4vw,48px)">Measure <em>before</em> you fall for it.</h2>
+  <p class="muted" style="margin-top:12px">Type the width of your wall or alcove. We'll show ${esc(p.name)} (${p.dims[0]}″ wide) against it, with room to walk around.</p>
+  <div class="fit-form"><div class="field"><label for="space">Your space width (inches)</label><input id="space" type="number" value="${Math.round(p.dims[0] * 1.6)}" min="10" max="300"></div><p id="fitMsg" style="margin:0 0 12px"></p></div></div>
+  <div class="fit-viz" aria-hidden="true"><div class="fit-wall" id="fitWall"></div><div class="fit-item" id="fitItem"></div></div>`;
+function drawFit() {
+  const sp = Number($("#space")?.value) || 0; if (!sp) return;
+  const maxW = Math.max(sp, p.dims[0]) * 1.1;
+  $("#fitWall").style.width = (sp / maxW) * 100 + "%";
+  const it = $("#fitItem"); it.style.width = (p.dims[0] / maxW) * 100 + "%"; it.style.height = Math.min(95, (p.dims[2] / Math.max(p.dims[2], 60)) * 90) + "%";
+  it.style.background = woodById(wood).color;
+  const gap = sp - p.dims[0];
+  it.classList.toggle("bad", gap < 0);
+  $("#fitMsg").innerHTML = gap < 0 ? `<b style="color:var(--clay)">Too wide by ${-gap}″.</b> Ask us about a custom size.` : gap < 12 ? `<b>It fits, just.</b> ${gap}″ to spare, tight for walking around.` : `<b>Fits well.</b> ${gap}″ to spare.`;
+}
+$("#space").addEventListener("input", drawFit);
+drawOpts();
+
+const rel = S.visibleProducts().filter((x) => x.id !== p.id).sort((a, b) => (b.room === p.room) - (a.room === p.room)).slice(0, 4);
+$("#related").innerHTML = rel.map((x) => card(x)).join("");
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Shop by room · Lakri &amp; Co.</title>
+<meta name="description" content="Living, dining, bedroom and work rooms furnished with Lakri pieces. Tap a piece to shop it.">
+</head>
+<body>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Rooms</p>
+      <div class="ph-row"><h1>Shop by <em>room</em></h1><p>Real rooms, furnished one piece at a time. Tap any tag to see the piece, or add it straight to your bag.</p></div>
+      <div class="room-tabs" style="justify-content:flex-start" id="jump"></div>
+    </div>
+  </section>
+  <div class="wrap" id="rooms"></div>
+</main>
+<script type="module">
+import { init, card, $, reveal } from "./js/layout.js";
+import { ROOMS } from "./js/data.js";
+import * as S from "./js/store.js";
+import { roomStage } from "./js/rooms.js";
+await init("rooms");
+
+$("#jump").innerHTML = ROOMS.map((r) => `<a class="tab" style="display:inline-flex;align-items:center;text-decoration:none" href="#${r.id}">${r.name}</a>`).join("");
+$("#rooms").innerHTML = ROOMS.map((r, i) => {
+  const items = S.visibleProducts().filter((p) => p.room === r.id);
+  return `<section class="room-block" id="${r.id}" style="scroll-margin-top:90px">
+    <div class="rb-head"><div><p class="mono">0${i + 1} · ${r.name}</p><h2>${r.title}</h2></div><a class="btn btn-line btn-sm" href="shop.html?room=${r.id}">All ${r.name.toLowerCase()} pieces →</a></div>
+    <div class="room-stage reveal" data-stage="${r.id}"></div>
+    <div class="room-items">${items.slice(0, 4).map((p) => card(p)).join("")}</div>
+  </section>`;
+}).join("");
+ROOMS.forEach((r) => roomStage(document.querySelector(`[data-stage="${r.id}"]`), r));
+reveal();
+if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

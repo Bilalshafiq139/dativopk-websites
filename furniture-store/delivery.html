@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Delivery, returns &amp; contact · Lakri &amp; Co.</title>
+<meta name="description" content="Delivery across Pakistan, 30-day returns, FAQ and how to reach Lakri &amp; Co.">
+</head>
+<body>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap"><p class="crumbs"><a href="index.html">Home</a> / Delivery</p>
+      <div class="ph-row"><h1>Delivery &amp; <em>help</em></h1><p>Made to order, delivered by our own team in four cities and by trusted freight everywhere else.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="info-cards">
+      <div class="info-card reveal"><div class="ic">⏱</div><h3>Made in 2 to 6 weeks</h3><p>Each product shows its lead time. You get workshop photos on WhatsApp while it is made.</p></div>
+      <div class="info-card reveal d1"><div class="ic">⛟</div><h3>Delivered to your room</h3><p>Free over Rs 150,000. White-glove set-up for Rs 9,500: carried in, assembled, packaging removed.</p></div>
+      <div class="info-card reveal d2"><div class="ic">↺</div><h3>30-day returns</h3><p>Not right for your room? Send it back within 30 days in original condition. We collect it.</p></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head"><div><p class="mono eyebrow">Delivery rates</p><h2>By <em>city</em></h2></div><p>Prices per order, not per piece. Free on every order over Rs 150,000.</p></div>
+      <div class="panel" style="overflow:auto">
+        <table class="rate-table">
+          <thead><tr><th>City</th><th>Who delivers</th><th>On the road</th><th>Under Rs 150k</th><th>Over Rs 150k</th></tr></thead>
+          <tbody>
+            <tr><td>Lahore</td><td>Lakri van</td><td>1 to 2 days</td><td>Rs 6,500</td><td>Free</td></tr>
+            <tr><td>Islamabad / Rawalpindi</td><td>Lakri van</td><td>2 days</td><td>Rs 6,500</td><td>Free</td></tr>
+            <tr><td>Karachi</td><td>Lakri van</td><td>3 to 4 days</td><td>Rs 6,500</td><td>Free</td></tr>
+            <tr><td>Faisalabad, Multan, Sialkot, Gujranwala</td><td>Freight partner</td><td>2 to 3 days</td><td>Rs 6,500</td><td>Free</td></tr>
+            <tr><td>Everywhere else in Pakistan</td><td>Freight partner</td><td>4 to 7 days</td><td>Quoted on WhatsApp</td><td>Free</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-alt" id="faq" style="scroll-margin-top:70px">
+    <div class="wrap split" style="align-items:start">
+      <div><p class="mono eyebrow">FAQ</p><h2>Questions we <em>get</em> a lot.</h2><p class="muted">Anything else, ask us on WhatsApp. A real person answers, usually within the hour.</p></div>
+      <div class="acc" id="faqList" style="margin-top:0"></div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact" style="scroll-margin-top:70px">
+    <div class="wrap contact-grid">
+      <div>
+        <p class="mono eyebrow">Contact</p>
+        <h2 style="font-size:clamp(38px,4.6vw,60px)">Talk to <em>us.</em></h2>
+        <p class="muted" style="margin-top:14px">Custom sizes, trade orders, a free swatch box, or just a question about wood.</p>
+        <div class="contact-list" id="contactList"></div>
+      </div>
+      <form class="panel" id="msg" novalidate>
+        <div class="form">
+          <div class="field"><label for="mName">Name</label><input id="mName" name="name" required autocomplete="name"></div>
+          <div class="field"><label for="mPhone">Phone (optional)</label><input id="mPhone" name="phone" autocomplete="tel"></div>
+          <div class="field full"><label for="mEmail">Email</label><input id="mEmail" name="email" type="email" required autocomplete="email"></div>
+          <div class="field full"><label for="mTopic">What is it about?</label><select id="mTopic" name="topic"><option>Swatch box</option><option>Custom size</option><option>Trade / bulk</option><option>Delivery</option><option>Showroom visit</option><option>Something else</option></select></div>
+          <div class="field full"><label for="mMsg">Message</label><textarea id="mMsg" name="message" required placeholder="For a swatch box, include your address."></textarea></div>
+        </div>
+        <p id="mErr" style="color:var(--clay);font-size:13px;margin:12px 0 0"></p>
+        <button class="btn btn-dark btn-block" style="margin-top:12px">Send message</button>
+      </form>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, esc, toast, reveal } from "./js/layout.js";
+import { FAQ, BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("delivery");
+$("#faqList").innerHTML = FAQ.map(([q, a], i) => `<details${i === 0 ? " open" : ""}><summary>${esc(q)}</summary><div>${esc(a)}</div></details>`).join("");
+$("#contactList").innerHTML = `
+  <div><span class="mono">WhatsApp</span><br><a href="${BRAND.whatsapp}" target="_blank" rel="noopener" style="font-family:var(--serif);font-size:24px">${BRAND.phone}</a></div>
+  <div><span class="mono">Email</span><br><a href="mailto:${BRAND.email}">${BRAND.email}</a></div>
+  <div><span class="mono">Showroom</span><br>${BRAND.showroom}<br><span class="muted small">Mon to Sat, 11am to 8pm · Sunday by appointment</span></div>
+  <div><span class="mono">Workshop</span><br>${BRAND.workshop}</div>`;
+const topic = new URLSearchParams(location.search).get("topic"); if (topic) $("#mTopic").value = topic;
+$("#msg").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || !/^\S+@\S+\.\S+$/.test(d.email) || d.message.trim().length < 5) { $("#mErr").textContent = "Please add your name, a valid email and a message."; return; }
+  $("#mErr").textContent = "";
+  try {
+    await S.sendMessage(d);
+    e.target.innerHTML = `<div class="empty"><p class="serif-lg">Message <em>sent.</em></p><p class="muted">Thank you, ${esc(d.name.split(" ")[0])}. We reply within one working day, usually on WhatsApp.</p></div>`;
+  } catch (err) { $("#mErr").textContent = err.message; }
+});
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

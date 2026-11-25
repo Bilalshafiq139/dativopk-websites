@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..500,50;1,9..144,300..500,50&family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<title>Shop all pieces · Lakri &amp; Co.</title>
+<meta name="description" content="All fifteen Lakri pieces: seating, tables, storage, beds and lighting, each in four solid woods.">
+</head>
+<body>
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <p class="crumbs"><a href="index.html">Home</a> / Shop</p>
+      <div class="ph-row">
+        <h1>Shop the <em>collection</em></h1>
+        <div>
+          <p>Every piece comes in four woods, made to order. Prices include the wood you choose.</p>
+          <div class="wood-pick" style="justify-content:flex-start;margin-top:14px">
+            <span class="mono">Shop in</span>
+            <div class="wood-dots" id="woodDots" role="radiogroup" aria-label="Shop in wood"></div>
+            <b id="woodName" style="font-family:var(--serif);font-weight:400;font-size:18px"></b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section style="padding-bottom:100px">
+    <div class="wrap">
+      <div class="toolbar">
+        <div class="chips" id="roomChips" role="tablist" aria-label="Room"></div>
+        <div class="tools">
+          <select class="sel" id="cat" aria-label="Category"></select>
+          <label class="fit" title="Show only pieces narrower than your space">⇔ Will it fit? <input id="fitW" type="number" min="10" max="200" placeholder="Width" aria-label="Your space width in inches"> in</label>
+          <select class="sel" id="sort" aria-label="Sort">
+            <option value="featured">Sort: Featured</option>
+            <option value="low">Price: low to high</option>
+            <option value="high">Price: high to low</option>
+            <option value="fast">Ships soonest</option>
+          </select>
+        </div>
+      </div>
+      <p class="mono" id="count" style="margin-bottom:18px"></p>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, card, $, $$, reveal } from "./js/layout.js";
+import { WOODS, ROOMS, CATEGORIES, priceFor } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("shop");
+
+const q = new URLSearchParams(location.search);
+if (q.get("wood") && WOODS.some((w) => w.id === q.get("wood"))) S.setWood(q.get("wood"));
+const st = { room: q.get("room") || "all", cat: q.get("cat") || "all", fit: "", sort: "featured" };
+const all = S.visibleProducts();
+
+$("#roomChips").innerHTML = [{ id: "all", name: "All" }, ...ROOMS].map((r) => `<button class="chip" role="tab" data-room="${r.id}">${r.name}<sup>${r.id === "all" ? all.length : all.filter((p) => p.room === r.id).length}</sup></button>`).join("");
+$("#cat").innerHTML = `<option value="all">All categories</option>` + CATEGORIES.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+$("#cat").value = st.cat;
+
+function drawWood() {
+  const w = S.getWood();
+  $("#woodDots").innerHTML = WOODS.map((x) => `<button class="wdot${x.id === w ? " on" : ""}" role="radio" aria-checked="${x.id === w}" style="--c:${x.color}" data-wood="${x.id}" title="${x.name}"></button>`).join("");
+  $("#woodName").textContent = WOODS.find((x) => x.id === w).name;
+}
+function draw() {
+  const w = S.getWood();
+  let list = all.filter((p) => (st.room === "all" || p.room === st.room) && (st.cat === "all" || p.cat === st.cat) && (!st.fit || p.dims[0] <= Number(st.fit)));
+  if (st.sort === "low") list.sort((a, b) => a.price - b.price);
+  if (st.sort === "high") list.sort((a, b) => b.price - a.price);
+  if (st.sort === "fast") list.sort((a, b) => a.weeks - b.weeks);
+  if (st.sort === "featured") list.sort((a, b) => b.featured - a.featured);
+  $$("#roomChips .chip").forEach((c) => { c.classList.toggle("on", c.dataset.room === st.room); c.setAttribute("aria-selected", c.dataset.room === st.room); });
+  $("#count").textContent = `${list.length} piece${list.length === 1 ? "" : "s"}${st.fit ? ` under ${st.fit}″ wide` : ""}`;
+  $("#grid").innerHTML = list.length ? list.map((p) => card(p, { wood: w })).join("") :
+    `<div class="no-results"><p class="serif-lg">Nothing fits <em>that</em> space.</p><p class="muted">Try a wider measurement, or ask us about a custom size on WhatsApp.</p><button class="btn btn-line" id="clear">Clear filters</button></div>`;
+}
+$("#roomChips").addEventListener("click", (e) => { const b = e.target.closest("[data-room]"); if (b) { st.room = b.dataset.room; draw(); } });
+$("#cat").addEventListener("change", (e) => { st.cat = e.target.value; draw(); });
+$("#sort").addEventListener("change", (e) => { st.sort = e.target.value; draw(); });
+$("#fitW").addEventListener("input", (e) => { st.fit = e.target.value; draw(); });
+document.addEventListener("click", (e) => {
+  const b = e.target.closest("#woodDots [data-wood]");
+  if (b) { S.setWood(b.dataset.wood); drawWood(); draw(); }
+  if (e.target.closest("#clear")) { Object.assign(st, { room: "all", cat: "all", fit: "" }); $("#cat").value = "all"; $("#fitW").value = ""; draw(); }
+});
+drawWood(); draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>
