@@ -13,7 +13,8 @@
     "data-analyst": "Hamza Qureshi (data analyst portfolio)",
     "furniture-store": "Lakri & Co. (furniture online store)",
     "handbag-store": "Zarine (luxury handbag store)",
-    "matcha-brand": "Koya Matcha Bar (matcha cafe and brand website)"
+    "matcha-brand": "Koya Matcha Bar (matcha cafe and brand website)",
+    "real-estate": "Arz Estate (real estate agency website)"
   };
   var slug = (location.pathname.split("/").filter(Boolean)[0] || "").toLowerCase();
   var name = NAMES[slug] || "demo";

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Investments · Arz Estate</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-head" id="ph"></section>
+  <section class="sec-tight"><div class="wrap">
+    <div class="stats3" id="stats">
+      <div class="stat reveal" style="--i:0"><small>Total return, 2025</small><b data-count="19" data-suffix="%">0%</b><div class="bars" data-bars="40,62,52,50,58,64,60,66,58,48"></div></div>
+      <div class="stat reveal" style="--i:1"><small>Paid to investors</small><b data-count="82000000" data-rs>Rs 0</b><div class="bars" data-bars="20,24,26,34,40,42,46,60,72,80"></div></div>
+      <div class="stat reveal" style="--i:2"><small>Average IRR</small><b data-count="14" data-suffix="%">0%</b><div class="bars" data-bars="22,80,30,46,40,74,66,24,44,46"></div></div>
+    </div>
+    <div class="row-head" style="margin-top:56px"><h3 class="h3">Open offers</h3></div>
+    <div class="offers" id="offers"></div>
+    <div class="split" style="margin-top:56px">
+      <div class="panel reveal"><h2 data-blur>How investing with Arz works</h2>
+        <p class="muted">1. Pick an offer and book a call. 2. We share the documents, valuation and rental history. 3. You invest through a registered agreement. 4. Rental income is paid to your bank every quarter, with a full statement.</p>
+        <p class="muted small">Returns shown are past results from our managed homes and are not guaranteed. Property values can go down as well as up.</p></div>
+      <div class="panel reveal" id="book"><h3 class="h3">Book an investment call</h3>
+        <form class="form" id="bf" style="margin-top:16px" novalidate>
+          <div class="field"><label for="n">Name</label><input id="n" name="name" required></div>
+          <div class="field"><label for="p">Phone</label><input id="p" name="phone" placeholder="03xx xxxxxxx" required></div>
+          <div class="field full"><label for="o">Offer</label><select id="o" name="offer"></select></div>
+          <div class="field full"><label for="m">Budget or question</label><textarea id="m" name="message"></textarea></div>
+          <p id="err" class="small" style="color:#c0392b;margin:0;grid-column:1/-1"></p>
+          <button class="btn" style="grid-column:1/-1">Book a call</button>
+        </form></div>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, esc, icon, specs, onVisible, countUp, reveal, blurWords, toast } from "./js/layout.js";
+import { pageHead } from "./js/page.js";
+import { INVEST, img, pkr } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("invest");
+pageHead($("#ph"), { crumb: "Investments", title: "Reliable property for stable returns", text: "Own a share of managed rental homes, farmhouses and holiday villas. Start from PKR 15 Lakh." });
+$("#offers").innerHTML = INVEST.map((o, i) => `<article class="offer reveal" style="--i:${i}" id="${o.id}"><div class="om"><img src="${img("l-" + o.id)}" alt="${esc(o.title)}" loading="lazy"></div>
+  <div class="ob"><h3>${esc(o.title)}</h3><div class="lc-loc">Pakistan/${esc(o.area)}</div>${specs(o)}<p>${esc(o.desc)}</p>
+    <div class="btns"><a class="btn btn-sm" href="#book" data-pick="${o.id}">Book now</a><button class="btn btn-line btn-sm" data-brochure="${esc(o.title)}">Download brochure ${icon.dl}</button></div></div>
+  <div class="on"><div><b>${pkr(o.invest)}</b><small>Invest</small></div><div><b>${o.irr}%</b><small>IRR</small></div><div><b>${pkr(o.ret)}</b><small>Return in 5 years</small></div></div></article>`).join("");
+$("#o").innerHTML = INVEST.map((o) => `<option value="${o.id}">${esc(o.title)}, from ${pkr(o.invest)}</option>`).join("");
+document.addEventListener("click", (e) => {
+  const p = e.target.closest("[data-pick]"); if (p) $("#o").value = p.dataset.pick;
+  const b = e.target.closest("[data-brochure]"); if (b) toast(`The ${esc(b.dataset.brochure)} brochure is sent on WhatsApp after a short call. <a href="#book">Book a call</a>`);
+});
+$$("[data-bars]").forEach((b) => (b.innerHTML = b.dataset.bars.split(",").map((h, k) => `<i style="--h:${h}%;--k:${k}"></i>`).join("")));
+onVisible($("#stats"), (el) => { el.classList.add("in"); $$("[data-count]", el).forEach((n) => countUp(n, (v) => (n.hasAttribute("data-rs") ? "Rs " + Math.round(v).toLocaleString("en-IN") : Math.round(v) + (n.dataset.suffix || "")))); });
+$("#bf").addEventListener("submit", async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || !/^[0-9+\-\s]{10,15}$/.test(d.phone.trim())) { $("#err").textContent = "Please add your name and a valid mobile number."; return; }
+  const o = INVEST.find((x) => x.id === d.offer);
+  try { await S.sendMessage({ name: d.name, phone: d.phone, email: "", topic: "Investment: " + o.title, message: d.message || "Please call me about this offer." });
+    e.target.outerHTML = `<div class="ok"><div class="tick">${icon.check}</div><h3 class="h3">Call booked</h3><p class="muted small">Our investment team will call you today about ${esc(o.title)}.</p></div>`; }
+  catch (er) { $("#err").textContent = er.message; }
+});
+$$("[data-blur]").forEach(blurWords); reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

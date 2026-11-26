@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About us · Arz Estate</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-head" id="ph"></section>
+  <section class="sec-tight"><div class="wrap">
+    <div class="split">
+      <div class="panel reveal"><h2 data-blur>Since 2014, one family at a time</h2>
+        <p>Arz started as a two-person office in DHA Lahore. Today we are a team of 40 across Lahore, Islamabad and Karachi, and we have helped more than 1,400 families buy, sell and rent.</p>
+        <p class="muted">We only list homes we have visited ourselves. We check the papers before you pay a rupee. And we stay with you until the keys are in your hand.</p>
+        <a class="btn" href="contact.html" style="margin-top:10px">Book a call</a></div>
+      <div class="media reveal"><img src="assets/img/office.webp" alt="Arz Estate head office building" loading="lazy"></div>
+    </div>
+    <div class="num4" id="nums" style="margin-top:14px">
+      <div class="stat reveal" style="--i:0"><small>Homes sold</small><b data-count="1420">0</b></div>
+      <div class="stat reveal" style="--i:1"><small>Happy families</small><b data-count="1280">0</b></div>
+      <div class="stat reveal" style="--i:2"><small>Cities</small><b data-count="3">0</b></div>
+      <div class="stat reveal" style="--i:3"><small>Years</small><b data-count="12">0</b></div>
+    </div>
+  </div></section>
+  <section class="sec"><div class="wrap">
+    <div class="sec-head"><h2 data-blur>What we stand for</h2><p class="reveal">Three promises written on the wall of every Arz office.</p></div>
+    <div class="values">
+      <div class="panel reveal" style="--i:0"><span>01</span><h3>Verified, always</h3><p class="muted small">Every listing is visited, photographed and checked for title, NOC and dues before it goes live.</p></div>
+      <div class="panel reveal" style="--i:1"><span>02</span><h3>Honest prices</h3><p class="muted small">We show the real asking price and tell you what similar homes actually sold for nearby.</p></div>
+      <div class="panel reveal" style="--i:2"><span>03</span><h3>With you to the keys</h3><p class="muted small">Token, agreement, society transfer, utility names. Our team handles the paperwork end to end.</p></div>
+    </div>
+    <div class="split" style="margin-top:14px">
+      <div class="media reveal"><img src="assets/img/team.webp" alt="Arz Estate consultant" loading="lazy"></div>
+      <div class="panel reveal"><h2 data-blur>Join our team</h2><p class="muted">We are hiring property consultants in Lahore and Islamabad. Fixed salary, a fair commission and real training.</p><a class="btn btn-line" href="contact.html">Send your CV</a></div>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, reveal, blurWords, onVisible, countUp } from "./js/layout.js";
+import { pageHead } from "./js/page.js";
+await init("about");
+pageHead($("#ph"), { crumb: "Company", title: "We help people find the home that will be theirs", text: "Our projects are about harmony, style and care, so that everyone lives in what really matters to them." });
+$$("[data-blur]").forEach(blurWords); reveal();
+onVisible($("#nums"), (el) => $$("[data-count]", el).forEach((n) => countUp(n, (v) => Math.round(v).toLocaleString("en-PK") + (Number(n.dataset.count) > 100 ? "+" : ""))));
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Post a property · Arz Estate</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-head" id="ph"></section>
+  <section class="sec-tight"><div class="wrap split" style="align-items:start">
+    <form class="panel reveal" id="pf" novalidate>
+      <p class="label small muted" style="margin-bottom:14px">Step <b id="stepN">1</b> of 2</p>
+      <div id="s1" class="form">
+        <div class="field full"><label>I want to</label><div class="seg" id="purp"><button type="button" class="on" data-v="Sell">Sell</button><button type="button" data-v="Rent out">Rent out</button></div></div>
+        <div class="field"><label for="city">City</label><select id="city" name="city"><option>Lahore</option><option>Islamabad</option><option>Karachi</option><option>Rawalpindi</option><option>Other</option></select></div>
+        <div class="field"><label for="area">Area / society</label><input id="area" name="area" placeholder="e.g. DHA Phase 5" required></div>
+        <div class="field"><label for="type">Type</label><select id="type" name="type"><option>House</option><option>Apartment</option><option>Plot</option><option>Office</option><option>Shop</option></select></div>
+        <div class="field"><label for="size">Size</label><input id="size" name="size" placeholder="e.g. 1 Kanal" required></div>
+        <div class="field full"><label for="price">Expected price (PKR)</label><input id="price" name="price" inputmode="numeric" placeholder="e.g. 45000000"><span class="muted small" id="priceW"></span></div>
+        <div class="field full"><label for="details">Details</label><textarea id="details" name="details" placeholder="Bedrooms, condition, corner, facing..."></textarea></div>
+        <button type="button" class="btn" id="next" style="grid-column:1/-1">Next</button>
+      </div>
+      <div id="s2" class="form" hidden>
+        <div class="field full"><label for="n">Your name</label><input id="n" name="name" required></div>
+        <div class="field"><label for="p">Phone (WhatsApp)</label><input id="p" name="phone" placeholder="03xx xxxxxxx" required></div>
+        <div class="field"><label for="e">Email (optional)</label><input id="e" name="email" type="email"></div>
+        <p id="err" class="small" style="color:#c0392b;margin:0;grid-column:1/-1"></p>
+        <button type="button" class="btn btn-line" id="back">Back</button><button class="btn">Submit property</button>
+      </div>
+    </form>
+    <div class="ccards">
+      <div class="ccard reveal" style="--i:0"><span><small>01</small><b>We call you within a day</b></span></div>
+      <div class="ccard reveal" style="--i:1"><span><small>02</small><b>Free valuation and photo shoot</b></span></div>
+      <div class="ccard reveal" style="--i:2"><span><small>03</small><b>Listed on Arz and shared with 6,000+ buyers</b></span></div>
+      <div class="media reveal" style="min-height:300px"><img src="assets/img/l-serenity.webp" alt="" loading="lazy"></div>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, reveal, icon } from "./js/layout.js";
+import { pageHead } from "./js/page.js";
+import { pkr } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("post");
+pageHead($("#ph"), { crumb: "Post a property", title: "Sell or rent out with Arz", text: "Share a few details. We visit, value and photograph your property for free, then bring you serious buyers." });
+let purpose = "Sell";
+$("#purp").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; purpose = b.dataset.v; $$("#purp button").forEach((x) => x.classList.toggle("on", x === b)); });
+$("#price").addEventListener("input", (e) => { const v = Number(e.target.value.replace(/\D/g, "")); $("#priceW").textContent = v ? "= " + pkr(v) : ""; });
+const f = $("#pf");
+const step = (n) => { $("#s1").hidden = n !== 1; $("#s2").hidden = n !== 2; $("#stepN").textContent = n; const el = n === 1 ? $("#s1") : $("#s2"); el.animate && el.animate([{ opacity: 0, transform: "translateX(20px)", filter: "blur(6px)" }, { opacity: 1, transform: "none", filter: "none" }], { duration: 500, easing: "ease-out" }); };
+$("#next").onclick = () => { if (f.area.value.trim().length < 2 || f.size.value.trim().length < 1) { f.area.style.borderColor = f.area.value.trim() ? "" : "#c0392b"; f.size.style.borderColor = f.size.value.trim() ? "" : "#c0392b"; return; } step(2); };
+$("#back").onclick = () => step(1);
+f.addEventListener("submit", async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(f));
+  if (d.name.trim().length < 2 || !/^[0-9+\-\s]{10,15}$/.test(d.phone.trim())) { $("#err").textContent = "Please add your name and a valid mobile number."; return; }
+  try { await S.sendSubmission({ ...d, purpose, price: Number(String(d.price).replace(/\D/g, "")) || 0 });
+    f.innerHTML = `<div class="ok"><div class="tick">${icon.check}</div><h3 class="h3">Property received</h3><p class="muted small">Shukriya! An agent will call you within a day to arrange a free visit and valuation.</p><a class="btn" href="properties.html" style="margin-top:12px">Browse properties</a></div>`; }
+  catch (er) { $("#err").textContent = er.message; }
+});
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Property · Arz Estate</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main"><div class="wrap" style="padding-top:28px" id="root"></div>
+  <section class="sec-tight" style="padding-top:0"><div class="wrap"><div class="row-head"><h3 class="h3">Similar properties</h3><a class="link small" href="properties.html">See all</a></div><div class="grid grid-3" id="similar"></div></div></section>
+</main>
+<div class="lightbox" id="lb" aria-hidden="true"><img alt=""><button class="lb-close" aria-label="Close">✕</button><button class="lb-prev" aria-label="Previous">‹</button><button class="lb-next" aria-label="Next">›</button><span class="lb-count"></span></div>
+<script type="module">
+import { init, $, $$, esc, card, icon, reveal, blurWords, toast } from "./js/layout.js";
+import { BRAND, img, cover, agentById, priceLabel, pkr, perMonth } from "./js/data.js";
+import * as S from "./js/store.js";
+await init("properties");
+const l = S.byId(new URLSearchParams(location.search).get("id")) || S.visible()[0];
+document.title = `${l.title}, ${l.area} · Arz Estate`;
+const a = agentById(l.agent);
+const photos = [cover(l), ...l.gallery.map(img)];
+const canCalc = !perMonth(l) && l.purpose !== "commercial";
+const on = S.saved().includes(l.id);
+const today = new Date(Date.now() + 864e5).toISOString().slice(0, 10);
+$("#root").innerHTML = `
+  <p class="crumbs muted small" style="margin-bottom:14px"><a href="properties.html">Properties</a> / <a href="properties.html?purpose=${l.purpose}&city=${l.city}">${esc(l.city)}</a> / ${esc(l.title)}</p>
+  <div class="pgal reveal">${photos.slice(0, 3).map((p, i) => `<button data-ph="${i}" aria-label="Open photo ${i + 1}"><img src="${p}" alt="${esc(l.title)} photo ${i + 1}">${i === 2 ? `<span class="more">View all ${photos.length} photos</span>` : ""}</button>`).join("")}</div>
+  <div class="pd">
+    <div>
+      <div style="display:flex;justify-content:space-between;gap:20px;align-items:flex-start">
+        <div><h1 data-blur>${esc(l.title)}</h1><p class="muted" style="margin:8px 0 0">Pakistan / ${esc(l.city)} / ${esc(l.area)}</p></div>
+        <button class="icon-btn${on ? " on" : ""}" data-save="${l.id}" aria-pressed="${on}" aria-label="Save" style="width:44px;height:44px">${icon.heart}</button>
+      </div>
+      <div class="pd-price">${priceLabel(l)}${l.status === "sold" ? ' <span class="lc-tag dark" style="position:static;margin-left:8px">Sold</span>' : l.status === "reserved" ? ' <span class="lc-tag dark" style="position:static;margin-left:8px">Reserved</span>' : ""}</div>
+      <div class="facts"><div><small>Size</small>${esc(l.size)}</div><div><small>Covered area</small>${l.sqft.toLocaleString("en-PK")} ft²</div><div><small>${l.beds ? "Bedrooms" : "Floors"}</small>${l.beds || l.floors}</div><div><small>Bathrooms</small>${l.baths}</div></div>
+      <h3 class="h3">About this property</h3><p style="margin-top:12px;max-width:640px">${esc(l.desc)}</p>
+      <h3 class="h3" style="margin-top:30px">Features</h3><div class="feat-list">${l.features.map((x) => `<span>${esc(x)}</span>`).join("")}<span>Built ${l.year}</span><span>${esc(l.type)}</span></div>
+      ${canCalc ? `<div class="panel" id="calc"><h3 class="h3">Installment plan</h3><p class="muted small" style="margin:6px 0 16px">Bank financing or builder installments. Rough guide only, at ${l.purpose === "new" ? "0% (builder plan)" : "a 14% yearly rate"}.</p>
+        <div class="form"><div class="field"><label for="down">Down payment: <b id="downV"></b></label><input class="range" type="range" id="down" min="20" max="70" step="5" value="${l.purpose === "new" ? 20 : 30}"></div>
+        <div class="field"><label for="yrs">Years: <b id="yrsV"></b></label><input class="range" type="range" id="yrs" min="1" max="20" step="1" value="${l.purpose === "new" ? 3 : 15}"></div></div>
+        <div class="calc-out"><div><small>Pay now</small><span id="cNow"></span></div><div><small>Monthly installment</small><span id="cMonth"></span></div></div></div>` : ""}
+    </div>
+    <aside class="aside">
+      <div class="panel" id="enq">
+        <div class="agent-mini"><img src="${img(a.id)}" alt=""><div><b>${esc(a.name)}</b><span class="muted small">${esc(a.role)} · ${a.rating.toFixed(1)} ★</span></div></div>
+        <div class="seg" id="kind"><button class="on" data-k="Viewing">Book a viewing</button><button data-k="Price question">Ask a question</button>${canCalc ? '<button data-k="Installment plan">Installments</button>' : ""}</div>
+        <form id="lf" class="form" style="margin-top:14px" novalidate>
+          <div class="field full"><label for="n">Name</label><input id="n" name="name" autocomplete="name" required></div>
+          <div class="field full"><label for="p">Phone (WhatsApp)</label><input id="p" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx" required></div>
+          <div class="field" data-view><label for="d">Date</label><input id="d" type="date" name="date" min="${today}" value="${today}"></div>
+          <div class="field" data-view><label for="t">Time</label><select id="t" name="time"><option>11:00 am</option><option>1:00 pm</option><option>3:00 pm</option><option>5:00 pm</option></select></div>
+          <div class="field full"><label for="m">Message (optional)</label><textarea id="m" name="message" placeholder="I'm interested in ${esc(l.title)}."></textarea></div>
+          <p id="err" class="small" style="color:#c0392b;margin:0;grid-column:1/-1"></p>
+          <button class="btn btn-block" style="grid-column:1/-1" id="send">Book a viewing</button>
+        </form>
+      </div>
+      <a class="btn btn-line btn-block" href="${BRAND.whatsapp}" target="_blank" rel="noopener">WhatsApp ${esc(a.name.split(" ")[0])}</a>
+    </aside>
+  </div>`;
+blurWords($("[data-blur]")); reveal();
+
+/* gallery lightbox */
+const lb = $("#lb"); let li = 0;
+const show = (i) => { li = (i + photos.length) % photos.length; const im = $("img", lb); im.style.opacity = 0; setTimeout(() => { im.src = photos[li]; im.style.opacity = 1; }, 150); $(".lb-count", lb).textContent = `${li + 1} / ${photos.length}`; };
+$$("[data-ph]").forEach((b) => b.addEventListener("click", () => { show(Number(b.dataset.ph)); lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); document.body.classList.add("lock"); }));
+const close = () => { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); document.body.classList.remove("lock"); };
+$(".lb-close", lb).onclick = close; $(".lb-prev", lb).onclick = () => show(li - 1); $(".lb-next", lb).onclick = () => show(li + 1);
+lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+addEventListener("keydown", (e) => { if (!lb.classList.contains("open")) return; if (e.key === "Escape") close(); if (e.key === "ArrowLeft") show(li - 1); if (e.key === "ArrowRight") show(li + 1); });
+
+/* installment calculator */
+if (canCalc) {
+  const rate = l.purpose === "new" ? 0 : 0.14 / 12;
+  const calc = () => {
+    const d = Number($("#down").value), y = Number($("#yrs").value), loan = l.price * (1 - d / 100), n = y * 12;
+    const m = rate ? (loan * rate) / (1 - Math.pow(1 + rate, -n)) : loan / n;
+    $("#downV").textContent = d + "%"; $("#yrsV").textContent = y + (y > 1 ? " years" : " year");
+    $("#cNow").textContent = pkr(l.price * d / 100); $("#cMonth").textContent = pkr(m);
+  };
+  $("#down").oninput = calc; $("#yrs").oninput = calc; calc();
+}
+
+/* enquiry form */
+let kind = "Viewing";
+$("#kind").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return; e.preventDefault(); kind = b.dataset.k;
+  $$("#kind button").forEach((x) => x.classList.toggle("on", x === b));
+  $$("[data-view]").forEach((x) => (x.hidden = kind !== "Viewing"));
+  $("#send").textContent = { Viewing: "Book a viewing", "Price question": "Send question", "Installment plan": "Get the payment plan" }[kind];
+});
+$("#lf").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || !/^[0-9+\-\s]{10,15}$/.test(d.phone.trim())) { $("#err").textContent = "Please add your name and a valid mobile number."; return; }
+  $("#send").disabled = true;
+  try {
+    const o = await S.sendLead({ listing: l.id, listingTitle: l.title, kind, name: d.name, phone: d.phone, email: "", date: kind === "Viewing" ? d.date : "", time: kind === "Viewing" ? d.time : "", message: d.message });
+    $("#lf").outerHTML = `<div class="ok"><div class="tick">${icon.check}</div><h3 class="h3">${kind === "Viewing" ? "Viewing requested" : "Message sent"}</h3><p class="muted small" style="margin-top:8px">${esc(a.name)} will call you on WhatsApp within the hour to confirm${kind === "Viewing" ? ` your visit on ${new Date(d.date).toLocaleDateString("en-GB", { day: "numeric", month: "long" })} at ${esc(d.time)}` : ""}. Reference ${esc(o.id || "")}.</p></div>`;
+    toast("Request sent to " + esc(a.name));
+  } catch (er) { $("#err").textContent = er.message; $("#send").disabled = false; }
+});
+$("#similar").innerHTML = S.visible().filter((x) => x.id !== l.id && (x.city === l.city || x.purpose === l.purpose)).slice(0, 3).map((x, i) => card(x, i)).join("");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Arz Estate</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-head" id="ph"></section>
+  <section class="sec-tight"><div class="wrap split" style="align-items:start">
+    <form class="panel reveal" id="cf" novalidate>
+      <h3 class="h3" style="margin-bottom:16px">Book a call</h3>
+      <div class="form">
+        <div class="field"><label for="n">Name</label><input id="n" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="p">Phone (WhatsApp)</label><input id="p" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx"></div>
+        <div class="field full"><label for="e">Email</label><input id="e" name="email" type="email" autocomplete="email"></div>
+        <div class="field full"><label for="t">I want to</label><select id="t" name="topic"><option>Buy a home</option><option>Rent a home</option><option>Sell my property</option><option>Invest</option><option>Commercial property</option><option>Something else</option></select></div>
+        <div class="field full"><label for="m">Message</label><textarea id="m" name="message" placeholder="Area, budget, number of bedrooms..."></textarea></div>
+      </div>
+      <p id="err" class="small" style="color:#c0392b;margin:10px 0 0"></p>
+      <button class="btn" style="margin-top:12px">Send</button>
+    </form>
+    <div class="ccards">
+      <a class="ccard reveal" style="--i:0" href="https://wa.me/923000000000" target="_blank" rel="noopener"><span><small>WhatsApp</small><b>+92 300 0000000</b></span><span>→</span></a>
+      <a class="ccard reveal" style="--i:1" href="mailto:sales@arzestate.example"><span><small>Email</small><b>sales@arzestate.example</b></span><span>→</span></a>
+      <div class="ccard reveal" style="--i:2"><span><small>Lahore head office</small><b>Y Block Commercial, DHA Phase 3</b></span></div>
+      <div class="ccard reveal" style="--i:3"><span><small>Islamabad</small><b>Blue Area, Jinnah Avenue</b></span></div>
+      <div class="ccard reveal" style="--i:4"><span><small>Karachi</small><b>Khayaban-e-Shahbaz, DHA Phase 6</b></span></div>
+      <div class="ccard reveal" style="--i:5"><span><small>Open</small><b>Mon to Sat, 10am to 7pm</b></span></div>
+    </div>
+  </div></section>
+  <section class="sec" id="faq"><div class="wrap">
+    <div class="sec-head"><h2 data-blur>Questions buyers ask</h2><p class="reveal">Short answers. Your agent will explain the rest over a cup of chai.</p></div>
+    <div class="faq">
+      <details class="reveal" open><summary>What is your commission?</summary><div class="ans"><p>1% from the buyer and 1% from the seller on a sale, and half a month's rent on a rental. No hidden charges.</p></div></details>
+      <details class="reveal"><summary>Do you check the property papers?</summary><div class="ans"><p>Yes. Our legal team checks the title, society NOC, dues and any bank charge before you pay a token.</p></div></details>
+      <details class="reveal"><summary>Can overseas Pakistanis buy through you?</summary><div class="ans"><p>Yes. We do video viewings, and a power of attorney lets a family member or our team complete the transfer for you.</p></div></details>
+      <details class="reveal"><summary>Do you help with home loans or installments?</summary><div class="ans"><p>We work with major banks for home finance, and our new projects come with builder installment plans of up to 3 years.</p></div></details>
+      <details class="reveal"><summary>Privacy</summary><div class="ans"><p>We only use your details to reply to you about property. We never sell or share them.</p></div></details>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, reveal, blurWords, icon } from "./js/layout.js";
+import { pageHead } from "./js/page.js";
+import * as S from "./js/store.js";
+await init("contact");
+pageHead($("#ph"), { crumb: "Contact", title: "Let's find your next address", text: "Tell us what you are looking for. An agent replies on WhatsApp within the hour during office time." });
+$$("[data-blur]").forEach(blurWords); reveal();
+$("#cf").addEventListener("submit", async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || (!/^[0-9+\-\s]{10,15}$/.test(d.phone.trim()) && !/^\S+@\S+\.\S+$/.test(d.email))) { $("#err").textContent = "Please add your name and a phone number or email."; return; }
+  try { await S.sendMessage(d); e.target.innerHTML = `<div class="ok"><div class="tick">${icon.check}</div><h3 class="h3">Thank you</h3><p class="muted small">An agent will contact you shortly.</p></div>`; }
+  catch (er) { $("#err").textContent = er.message; }
+});
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

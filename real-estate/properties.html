@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Properties for sale and rent · Arz Estate</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-head" id="ph"></section>
+  <section class="sec-tight"><div class="wrap">
+    <div class="search" id="search"></div>
+    <div class="row-head"><h3 class="h3" id="count">Properties</h3>
+      <label><span class="skip">Sort</span><select class="sel" id="sort" style="width:auto"><option value="new">Newest first</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="size">Largest first</option></select></label></div>
+    <div class="grid grid-3" id="grid"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, card, reveal } from "./js/layout.js";
+import { pageHead } from "./js/page.js";
+import { mountSearch, filter, readQuery, toQuery } from "./js/search.js";
+import * as S from "./js/store.js";
+await init("properties");
+pageHead($("#ph"), { crumb: "Properties", title: "Properties in Lahore, Islamabad and Karachi", text: "Every listing is visited and verified by our agents. Prices are in PKR and open to a fair offer." });
+const f = readQuery();
+$("#sort").value = f.sort;
+function draw() {
+  let list = filter(S.visible(), f);
+  if (f.sort === "low") list.sort((a, b) => a.price - b.price);
+  if (f.sort === "high") list.sort((a, b) => b.price - a.price);
+  if (f.sort === "size") list.sort((a, b) => b.sqft - a.sqft);
+  if (f.sort === "new") list.sort((a, b) => (a.status === "sold") - (b.status === "sold") || b.year - a.year);
+  const g = $("#grid"); g.classList.remove("grid-anim"); void g.offsetWidth;
+  g.innerHTML = list.map((l, i) => card(l, i)).join("") || `<div class="empty"><p class="h3">Nothing matches yet</p><p class="muted">Clear a filter, or tell us what you need and an agent will find it for you.</p><a class="btn" href="contact.html">Ask an agent</a></div>`;
+  g.classList.add("grid-anim");
+  $("#count").textContent = `${list.length} propert${list.length === 1 ? "y" : "ies"}`;
+  history.replaceState(null, "", "properties.html" + (toQuery(f) ? "?" + toQuery(f) : ""));
+}
+mountSearch($("#search"), f, { onChange: draw, onSubmit: draw });
+$("#sort").addEventListener("change", (e) => { f.sort = e.target.value; draw(); });
+addEventListener("store:change", draw);
+draw(); reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>
