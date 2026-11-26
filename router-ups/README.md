@@ -2,10 +2,12 @@
 
 A multi-page store for a mini UPS that keeps WiFi routers and fiber ONTs running through load-shedding. "Jugnu Power" is a placeholder brand; prices are in PKR and contact details are samples.
 
+## Design
+Light "studio" design by default (`css/light.css` on top of `css/style.css`). Add `?theme=dark` to the URL to see the dark version.
+
 ## Motion and depth
-- **Home:** a scroll story told with real full-screen photos.
-  - Each photo is a depth layer that zooms slowly, tilts in 3D with the mouse and crossfades into the next.
-  - The scenes are: an evening at the laptop, the power cut (flicker and blackout), a candle, Jugnu plugged in, and the WiFi still glowing in a dark room.
+- **Home:** a 3D scroll story built from real cut-outs of the Jugnu device, adapter and plug (one photo shoot) on a CSS 3D stage.
+  - Scenes: floating product hero, exploded view of the kit with callouts, the 9 pm load-shedding (room photo goes dark, Jugnu glows amber), WiFi still on in the dark, final product shot.
   - Live chips show mains on or off, WiFi online or offline, and the battery percentage with the time on battery.
 - **Product page:** a photo gallery that tilts and zooms with the pointer and can be swiped on phones. Its "Simulate load-shedding" switch dims the photo and adds an amber glow.
 - **Cards:** product cards tilt in 3D on hover, sections slide up on scroll, and the numbers count up.

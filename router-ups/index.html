@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jugnu Power · WiFi router UPS for load-shedding in Pakistan</title>
 <meta name="description" content="Jugnu mini UPS keeps your WiFi router and fiber ONT running through load-shedding for up to 11 hours. 0 ms switch-over, cash on delivery across Pakistan.">
-<meta name="theme-color" content="#07090c">
+<meta name="theme-color" content="#f3f3ef">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=7">
+<link rel="stylesheet" href="css/light.css?v=3" id="lightcss">
 </head>
 <body>
 <main id="main">
@@ -188,7 +189,7 @@ const hud = (h) => {
 const onBeat = (b) => beats.forEach((el) => el.classList.toggle("on", Number(el.dataset.b) === b));
 let ok = false;
 {
-  try { const { startStory } = await import("./js/story.js?v=6"); ok = startStory({ root: $("#photos"), section: story, onBeat, onHud: hud }); } catch (e) { console.warn(e); }
+  try { const { startStory } = await import("./js/story.js?v=7"); ok = startStory({ root: $("#photos"), section: story, onBeat, onHud: hud }); } catch (e) { console.warn(e); }
 }
 if (!ok) { document.documentElement.classList.add("no3d"); $$(".hud,.story-progress,#hint").forEach((e) => e.remove()); }
 </script>

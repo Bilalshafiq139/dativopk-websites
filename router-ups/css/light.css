@@ -67,3 +67,11 @@ body{background:var(--bg)}
 .toggle{color:#e9eef4}
 .viewer .chip{background:rgba(12,16,22,.66);color:#e9eef4}
 .viewer .chip b{color:#e9eef4}
+.stat b em,.range-row b,.res-line .hrs .lime,.stars{color:#4a7a00}
+.review p{color:#3c434c}
+.gstep .n{-webkit-text-stroke:1px rgba(74,122,0,.45)}
+body .kpi b{color:#4a7a00}
+body .chipx.on{color:#000}
+body .side .badge{color:#000}
+.free-bar b.lime{color:#4a7a00}
+.who-card .pill{color:var(--text)}
