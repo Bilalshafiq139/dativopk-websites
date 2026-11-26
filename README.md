@@ -15,6 +15,7 @@ Live demo websites built by DATIVOPK. Each folder is one static site (HTML/CSS/J
 | Zarine Handbags (online store) | `handbag-store/` |
 | Koya Matcha Bar (cafe & brand store) | `matcha-brand/` |
 | Arz Estate (real estate agency) | `real-estate/` |
+| Ismail Valley, Faisalabad (housing society concept) | `ismail-valley/` |
 
 On GitHub Pages the small Node APIs in each `api/` folder do not run, so forms and admin panels work in demo mode (saved in the browser only). Each site's own README explains running it with Docker.
 
