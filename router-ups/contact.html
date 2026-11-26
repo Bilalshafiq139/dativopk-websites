@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Jugnu Power</title>
+<meta name="description" content="Ask Jugnu Power which WiFi backup fits your router, dealer and wholesale enquiries, warranty help. WhatsApp, email or visit us in Gulberg, Lahore.">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Contact</p>
+    <span class="eyebrow">Real people, fast replies</span>
+    <h1 class="split-me">Send us your router's photo.</h1>
+    <p class="lead reveal">We'll tell you which Jugnu fits, which cable you need and how long it will last. Dealers and shops are welcome too.</p>
+  </div></section>
+  <section style="padding-bottom:110px"><div class="wrap contact">
+    <div class="reveal">
+      <div class="map"><iframe title="Map: Hafeez Centre, Gulberg, Lahore" loading="lazy" src="https://www.google.com/maps?q=Hafeez+Centre+Gulberg+Lahore&output=embed"></iframe></div>
+      <div class="info-list" id="info"></div>
+    </div>
+    <div class="panel reveal" style="--i:1">
+      <h2 style="font-size:32px;margin-bottom:20px">Write to us</h2>
+      <form id="cf" novalidate>
+        <div class="two"><div class="field"><label for="n">Name</label><input id="n" name="name" autocomplete="name"></div><div class="field"><label for="p">Mobile</label><input id="p" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx"></div></div>
+        <div class="field"><label for="e">Email</label><input id="e" name="email" type="email" autocomplete="email"></div>
+        <div class="field"><label for="t">About</label><select id="t" name="topic"><option>Which model?</option><option>Order help</option><option>Warranty</option><option>Wholesale / dealer</option><option>Other</option></select></div>
+        <div class="field"><label for="m">Message</label><textarea id="m" name="message" placeholder="My router is ..., load-shedding is ... hours"></textarea></div>
+        <p class="err" id="err"></p>
+        <button class="btn btn-lime btn-block">Send message</button>
+      </form>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, esc } from "./js/layout.js";
+import { BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+init("contact");
+$("#info").innerHTML = [["WhatsApp", BRAND.phone], ["Email", BRAND.email], ["Office", BRAND.address], ["Hours", BRAND.hours]].map(([a, b]) => `<div><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join("");
+$("#cf").onsubmit = async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || !/^\S+@\S+\.\S+$/.test(d.email.trim()) || d.message.trim().length < 3) { $("#err").textContent = "Please add your name, email and a message."; return; }
+  try { await S.sendMessage(d); e.target.innerHTML = '<div class="ok"><div class="tick">✓</div><h3 style="font-size:26px">Message sent</h3><p class="muted">We usually reply within an hour on WhatsApp or email.</p></div>'; }
+  catch (er) { $("#err").textContent = er.message; }
+};
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

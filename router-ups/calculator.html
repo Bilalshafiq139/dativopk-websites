@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backup calculator · How long will my WiFi last? · Jugnu Power</title>
+<meta name="description" content="Pick your router, fiber ONT and other devices and see how many hours each Jugnu unit will keep them running during load-shedding.">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Backup calculator</p>
+    <span class="eyebrow">Honest numbers</span>
+    <h1 class="split-me">How long will my WiFi last?</h1>
+    <p class="lead reveal">Tick what you plug in and set your longest load-shedding. We compare every Jugnu and mark the smallest one that covers you.</p>
+  </div></section>
+  <section style="padding-bottom:110px"><div class="wrap calc">
+    <div class="panel reveal">
+      <h3 style="font-size:22px">1. What will you plug in?</h3>
+      <div class="dev-list" id="devs"></div>
+      <h3 style="font-size:22px">2. Longest load-shedding in your area</h3>
+      <div class="range-row"><span class="muted">At a time</span><b id="hv">4 hours</b></div>
+      <input type="range" id="hrs" min="1" max="14" step="1" value="4" aria-label="Hours of load-shedding">
+      <div class="range-row" style="margin-top:22px"><span class="muted">Total load</span><b id="wv">13 W</b></div>
+      <p class="muted" style="font-size:13.5px">Wattage is a typical figure. The label under your router says its real input (for example 12V 1A = up to 12W, most routers use about half).</p>
+    </div>
+    <div class="panel reveal" style="--i:1">
+      <h3 style="font-size:22px;margin-bottom:6px">3. Your backup time</h3>
+      <p class="muted" id="summary" style="margin-bottom:20px"></p>
+      <div class="result" id="res"></div>
+    </div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, esc, img, addToCart } from "./js/layout.js";
+import { DEVICES, rs, backupHours } from "./js/data.js";
+import * as S from "./js/store.js";
+init("calculator");
+const on = new Set(["tplink", "ptcl"]);
+$("#devs").innerHTML = DEVICES.map((d) => `<button class="dev" data-d="${d.id}" aria-pressed="false"><span class="box"></span><span><b>${esc(d.name)}</b><small>${esc(d.v)} · about ${d.watts} W</small></span></button>`).join("");
+$("#devs").onclick = (e) => { const b = e.target.closest("[data-d]"); if (!b) return; on.has(b.dataset.d) ? on.delete(b.dataset.d) : on.add(b.dataset.d); draw(); };
+$("#hrs").oninput = draw;
+function draw() {
+  $$("#devs .dev").forEach((b) => { const k = on.has(b.dataset.d); b.classList.toggle("on", k); b.setAttribute("aria-pressed", k); });
+  const need = Number($("#hrs").value), r = $("#hrs");
+  r.style.setProperty("--v", ((need - 1) / 13) * 100 + "%");
+  const devs = DEVICES.filter((d) => on.has(d.id)), watts = devs.reduce((s, d) => s + d.watts, 0);
+  const laptop = on.has("laptop"), outs = devs.filter((d) => d.id !== "laptop").length;
+  $("#hv").textContent = need + (need === 1 ? " hour" : " hours"); $("#wv").textContent = watts + " W";
+  const units = S.visibleProducts().filter((p) => p.wh);
+  const rows = units.map((p) => {
+    const h = watts ? backupHours(p.wh, watts) : 0;
+    const dcOuts = p.outs.filter((o) => /12V|9V/.test(o) && !/AC/.test(o)).reduce((s, o) => s + (Number(o.match(/^(\d) ×/)?.[1]) || 1), 0) + (p.id === "station" ? 2 : 0);
+    const fits = (!laptop || /USB-C|AC/.test(p.outs.join())) && outs <= dcOuts + (p.id === "station" ? 4 : 0);
+    return { p, h, fits, ok: fits && h >= need };
+  }).sort((a, b) => a.p.price - b.p.price);
+  const best = rows.find((r) => r.ok);
+  $("#summary").innerHTML = !watts ? "Tick at least one device." : best ? `For ${need} h with ${devs.length} device${devs.length > 1 ? "s" : ""}, <b class="lime">${esc(best.p.name)}</b> is enough.` : "Nothing covers that in one charge. Station 300 comes closest, or add a second unit.";
+  const max = Math.max(need, ...rows.map((r) => Math.min(r.h, 40)));
+  $("#res").innerHTML = rows.map(({ p, h, fits, ok }) => `<div class="res-line ${p === best?.p ? "best" : ""} ${ok ? "" : "short"}">
+    <img src="${img("p-" + p.id)}" alt="">
+    <div><h4>${esc(p.name)}</h4><small>${fits ? esc(p.mah) + " · " + rs(p.price) : "Not enough outputs for this setup"}</small><div class="bar"><i style="width:${watts ? Math.min(100, (Math.min(h, 40) / max) * 100) : 0}%"></i></div></div>
+    <div class="hrs">${watts ? (h >= 40 ? "40+" : h.toFixed(1)) + " h" : "-"}<small>${p === best?.p ? `<button class="btn btn-lime btn-sm" data-buy="${p.id}" style="margin-top:6px">Add · ${rs(p.price)}</button>` : ok ? '<span class="lime">covers it</span>' : '<span class="amber">too short</span>'}</small></div>
+  </div>`).join("");
+}
+$("#res").onclick = (e) => { const b = e.target.closest("[data-buy]"); if (b) addToCart(b.dataset.buy); };
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

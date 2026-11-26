@@ -15,7 +15,8 @@
     "handbag-store": "Zarine (luxury handbag store)",
     "matcha-brand": "Koya Matcha Bar (matcha cafe and brand website)",
     "real-estate": "Arz Estate (real estate agency website)",
-    "salon": "Zeenat Salon & Studio (salon and bridal studio website)"
+    "salon": "Zeenat Salon & Studio (salon and bridal studio website)",
+    "router-ups": "Jugnu Power (3D online store for WiFi router UPS)"
   };
   var slug = (location.pathname.split("/").filter(Boolean)[0] || "").toLowerCase();
   var name = NAMES[slug] || "demo";

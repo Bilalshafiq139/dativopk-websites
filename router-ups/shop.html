@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop · Jugnu Power WiFi router UPS</title>
+<meta name="description" content="Shop Jugnu mini UPS for WiFi routers and fiber ONTs, the Station 300 power station and DC cables. Prices in PKR, cash on delivery across Pakistan.">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Shop</p>
+    <span class="eyebrow">Free delivery over Rs 6,000</span>
+    <h1 class="split-me">Backup for every router.</h1>
+    <p class="lead reveal">Every unit switches over in 0 ms and comes with the cables for 12V and 9V routers. Not sure which one? Try the <a class="lime" href="calculator.html">backup calculator</a>.</p>
+  </div></section>
+  <section style="padding-bottom:110px"><div class="wrap">
+    <div class="filters" id="filters" role="tablist"></div>
+    <div class="grid-p" id="grid"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, cardHtml, bindAdd, tilt, reveal } from "./js/layout.js";
+import { CATEGORIES } from "./js/data.js";
+import * as S from "./js/store.js";
+init("shop");
+let cat = new URLSearchParams(location.search).get("cat") || "all";
+const cats = [["all", "All"], ...CATEGORIES];
+function draw() {
+  $("#filters").innerHTML = cats.map(([k, t]) => `<button role="tab" aria-selected="${k === cat}" class="${k === cat ? "on" : ""}" data-c="${k}">${t}</button>`).join("");
+  const list = S.visibleProducts().filter((p) => cat === "all" || p.cat === cat);
+  $("#grid").innerHTML = list.map(cardHtml).join("");
+  reveal($("#grid")); tilt($("#grid"));
+}
+$("#filters").onclick = (e) => { const b = e.target.closest("[data-c]"); if (!b) return; cat = b.dataset.c; history.replaceState(null, "", cat === "all" ? "shop.html" : "?cat=" + cat); draw(); };
+bindAdd($("#grid"));
+draw(); addEventListener("store:change", draw);
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

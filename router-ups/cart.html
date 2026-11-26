@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your cart · Jugnu Power</title>
+<meta name="description" content="Your Jugnu Power cart.">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero" style="padding-bottom:30px"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Cart</p>
+    <h1>Your cart</h1>
+  </div></section>
+  <div class="wrap" id="root" style="padding-bottom:40px"></div>
+  <section class="sec" style="padding-top:40px"><div class="wrap">
+    <span class="eyebrow">Often added</span>
+    <h2 class="h2" style="margin:18px 0 40px">Cables & add-ons</h2>
+    <div class="grid-p" id="reco"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, esc, img, cardHtml, bindAdd, reveal } from "./js/layout.js";
+import { rs, BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+init("cart");
+function draw() {
+  const t = S.totals();
+  if (!t.lines.length) {
+    $("#root").innerHTML = `<div class="empty panel"><h2>Nothing here yet</h2><p class="muted">Tonight's load-shedding is a good reason to change that.</p><a class="btn btn-lime" href="shop.html" style="margin-top:24px">Shop Jugnu</a></div>`;
+  } else {
+    const pct = Math.min(100, (t.subtotal / BRAND.freeDeliveryOver) * 100);
+    $("#root").innerHTML = `<div class="cart">
+      <div class="panel">
+        <div class="free-bar">${t.toFree ? `Add <b class="lime">${rs(t.toFree)}</b> more for free delivery.` : '<b class="lime">Free delivery unlocked.</b>'}<div class="bar"><i style="width:${pct}%"></i></div></div>
+        ${t.lines.map((l) => `<div class="cline"><a href="product.html?id=${l.id}"><img src="${img("p-" + l.id)}" alt=""></a>
+          <div><h4>${esc(l.p.name)}</h4><small>${esc(l.p.line)}</small><br><button class="rm" data-rm="${l.id}">Remove</button></div>
+          <div style="text-align:right"><div class="qty" style="height:42px"><button data-q="${l.id}" data-d="-1" aria-label="Less">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="More">+</button></div><div style="font:600 17px/1 var(--display);margin-top:10px">${rs(l.unit * l.qty)}</div></div></div>`).join("")}
+      </div>
+      <aside class="panel sum">
+        <h3 style="font-size:22px;margin-bottom:10px">Summary</h3>
+        <div class="sum-row"><span>Subtotal</span><span>${rs(t.subtotal)}</span></div>
+        <div class="sum-row"><span>Delivery</span><span>${t.delivery ? rs(t.delivery) : "Free"}</span></div>
+        <div class="sum-row total"><span>Total</span><span>${rs(t.total)}</span></div>
+        <a class="btn btn-lime btn-block" href="checkout.html" style="margin-top:20px">Checkout</a>
+        <p class="muted" style="text-align:center;font-size:13px;margin-top:12px">Cash on delivery, card, Easypaisa or JazzCash</p>
+      </aside></div>`;
+  }
+  const inCart = new Set(t.lines.map((l) => l.id));
+  $("#reco").innerHTML = S.visibleProducts().filter((p) => !inCart.has(p.id) && (p.cat === "acc" || p.id === "pro")).slice(0, 3).map(cardHtml).join("");
+  reveal($("#reco"));
+}
+$("#root").onclick = (e) => {
+  const r = e.target.closest("[data-rm]"); if (r) return S.removeLine(r.dataset.rm);
+  const q = e.target.closest("[data-q]"); if (q) { const l = S.bag().find((x) => x.id === q.dataset.q); S.setQty(q.dataset.q, l.qty + Number(q.dataset.d)); }
+};
+bindAdd($("#reco"));
+addEventListener("store:change", draw); draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

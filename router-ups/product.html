@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product · Jugnu Power</title>
+<meta name="description" content="Jugnu WiFi router UPS: specs, backup time, what's in the box and a 3D view you can rotate.">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <div class="wrap">
+    <div class="pdp" id="pdp"></div>
+  </div>
+  <section class="sec"><div class="wrap">
+    <span class="eyebrow reveal">You may also need</span>
+    <h2 class="h2 split-me" style="margin:18px 0 40px">Complete the setup</h2>
+    <div class="grid-p" id="more"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, esc, img, cardHtml, bindAdd, addToCart, tilt, reveal, ICON } from "./js/layout.js";
+import { rs, DEVICES, backupHours } from "./js/data.js";
+import * as S from "./js/store.js";
+init("shop");
+const id = new URLSearchParams(location.search).get("id") || "mini";
+const p = S.productById(id) || S.productById("mini");
+document.title = p.name + " · " + p.line + " · Jugnu Power";
+const save = p.old ? Math.round((1 - p.price / p.old) * 100) : 0;
+const router = p.wh ? backupHours(p.wh, 7) : 0;
+const perkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+let qty = 1;
+$("#pdp").innerHTML = `
+  <div>
+    <div class="viewer" id="viewer">
+      <canvas id="vc" aria-label="3D view of ${esc(p.name)}"></canvas>
+      <img id="still" src="${img("p-" + p.id)}" alt="${esc(p.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%" hidden>
+      <span class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3a9 9 0 1 0 9 9"/><path d="m21 3-3 6-6-3"/></svg>Drag to rotate · 3D</span>
+      <div class="vtools">${p.cat !== "acc" ? `<button class="toggle" id="dark" aria-pressed="false"><i></i>Simulate load-shedding</button>` : "<span></span>"}<span class="chip" id="vstate"><i></i><b>Mains</b><span>charging</span></span></div>
+    </div>
+    <div class="thumbs" id="thumbs"><button data-v="3d" class="on" aria-label="3D view" style="font:600 15px/1 var(--display);color:var(--lime)">3D</button>${["", "-2", "-3"].map((s, i) => `<button data-v="${i}" aria-label="Photo ${i + 1}"><img src="${img("p-" + p.id + s)}" alt=""></button>`).join("")}</div>
+  </div>
+  <div class="pdp-info">
+    <p class="crumbs"><a href="index.html">Home</a> / <a href="shop.html">Shop</a> / ${esc(p.name)}</p>
+    ${p.tag ? `<span class="eyebrow">${esc(p.tag)}</span>` : ""}
+    <h1>${esc(p.name)}</h1>
+    <p class="line">${esc(p.line)}</p>
+    <div class="pdp-price">${rs(p.price)}${p.old ? `<s>${rs(p.old)}</s><span class="save">Save ${save}%</span>` : ""}</div>
+    <p class="muted">${esc(p.desc)}</p>
+    <div class="spec-table">
+      <div><small>BATTERY</small><b>${esc(p.mah)}</b></div>
+      <div><small>BACKUP (TYPICAL ROUTER)</small><b>${router ? "≈ " + router.toFixed(1) + " hours" : esc(p.hours)}</b></div>
+      <div><small>OUTPUTS</small><b>${p.outs.map(esc).join(" · ")}</b></div>
+      <div><small>SWITCH-OVER</small><b>${esc(p.switch)}</b></div>
+      <div><small>WEIGHT</small><b>${esc(p.weight)}</b></div>
+      <div><small>WARRANTY</small><b>1 year replacement</b></div>
+    </div>
+    <div class="buy-row">
+      <div class="qty"><button id="qm" aria-label="Less">−</button><span id="qv">1</span><button id="qp" aria-label="More">+</button></div>
+      <button class="btn btn-lime" id="add" ${p.status === "soldout" ? "disabled" : ""}>${p.status === "soldout" ? "Sold out" : "Add to cart · " + rs(p.price)}</button>
+    </div>
+    <a class="btn btn-ghost btn-block" style="margin-top:12px" href="https://wa.me/923000000000" target="_blank" rel="noopener">Ask if it fits my router</a>
+    <div class="perks">
+      <div class="perk">${perkIcon}Cash on delivery in every city</div><div class="perk">${perkIcon}Ships same day before 4pm</div>
+      <div class="perk">${perkIcon}7 day returns if it doesn't fit</div><div class="perk">${perkIcon}Overcharge & short-circuit protection</div>
+    </div>
+    <h3 style="font-size:20px;margin-top:34px">In the box</h3>
+    <ul class="box-list">${p.box.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
+    ${p.wh ? `<h3 style="font-size:20px;margin-top:34px">Backup time by device</h3>
+    <table class="table" style="margin-top:10px"><thead><tr><th>Device</th><th>Hours</th></tr></thead><tbody>
+    ${DEVICES.filter((d) => d.id !== "laptop" || /USB-C|AC/.test(p.outs.join())).map((d) => `<tr><td>${esc(d.name)}</td><td><b>${backupHours(p.wh, d.watts).toFixed(1)} h</b></td></tr>`).join("")}
+    </tbody></table><p class="muted" style="font-size:13px;margin-top:10px">Estimates at 85% usable capacity. Your router's label shows its real draw.</p>` : ""}
+  </div>`;
+$("#qm").onclick = () => { qty = Math.max(1, qty - 1); $("#qv").textContent = qty; };
+$("#qp").onclick = () => { qty = Math.min(10, qty + 1); $("#qv").textContent = qty; };
+$("#add").onclick = () => addToCart(p.id, qty);
+
+// 3D viewer, with the rendered photos as a fallback
+const still = $("#still"), canvas = $("#vc");
+let v = null;
+try { const { startViewer } = await import("./js/viewer.js"); v = startViewer(canvas, p.model); } catch (e) { console.warn(e); }
+const show = (k) => {
+  $$("#thumbs button").forEach((b) => b.classList.toggle("on", b.dataset.v === String(k)));
+  const is3d = k === "3d" && v;
+  if (is3d) { still.hidden = true; canvas.hidden = false; }
+  else { still.src = img("p-" + p.id + ["", "-2", "-3"][Number(k) || 0]); still.hidden = false; canvas.hidden = true; }
+  $(".viewer .hint").hidden = $(".vtools").hidden = !is3d;
+};
+$("#thumbs").onclick = (e) => { const b = e.target.closest("[data-v]"); if (b) show(b.dataset.v); };
+if (!v) $('#thumbs [data-v="3d"]').remove();
+show(v ? "3d" : 0);
+const dark = $("#dark");
+if (dark) dark.onclick = () => {
+  const on = dark.getAttribute("aria-pressed") !== "true";
+  dark.setAttribute("aria-pressed", on); v?.setDark(on); $("#viewer").classList.toggle("dark", on);
+  $("#vstate").className = "chip " + (on ? "bat" : ""); $("#vstate b").textContent = on ? "Load-shedding" : "Mains"; $("#vstate span").textContent = on ? "on battery · WiFi still on" : "charging";
+};
+else $("#vstate").hidden = true;
+
+const more = S.visibleProducts().filter((x) => x.id !== p.id && (p.cat === "acc" ? x.cat !== "acc" : x.cat === "acc" || x.id === (p.id === "mini" ? "pro" : "mini"))).slice(0, 3);
+$("#more").innerHTML = more.map(cardHtml).join(""); bindAdd($("#more")); reveal($("#more")); tilt($("#more"));
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

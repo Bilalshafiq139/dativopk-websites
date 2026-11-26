@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store admin · Jugnu Power</title>
+<meta name="description" content="Admin panel for Jugnu Power orders, products and messages.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<style>
+  .mono{font:600 11px/1.2 var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .small{font-size:12.5px}
+  .adm{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+  .side{background:#0b0e13;border-right:1px solid var(--line);padding:24px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+  .side .logo{margin:0 8px 28px}
+  .side button{text-align:left;padding:11px 12px;border-radius:10px;font-size:14.5px;display:flex;justify-content:space-between;color:#c3ccd7}
+  .side button.on,.side button:hover{background:rgba(200,255,61,.08);color:var(--lime)}
+  .side .badge{background:var(--lime);color:#000;border-radius:99px;font:700 11px/18px var(--display);padding:0 7px}
+  .side .bottom{margin-top:auto;display:grid;gap:6px;font-size:13px}
+  .side .bottom a{color:var(--muted);padding:6px 12px}
+  .content{padding:30px 34px 60px;min-width:0}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:14px;flex-wrap:wrap}
+  .top h1{font-size:42px}
+  .panel{padding:22px;border-radius:18px}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+  .kpi{background:var(--card);border-radius:16px;padding:18px 20px;border:1px solid var(--line)}
+  .kpi b{display:block;font:600 clamp(22px,2.4vw,32px)/1.1 var(--display);color:var(--lime);letter-spacing:-.02em;margin-top:8px}
+  .two{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:170px;padding-top:10px}
+  .bars div{flex:1;background:linear-gradient(var(--lime),#7fae18);border-radius:6px 6px 2px 2px;min-height:3px;position:relative;opacity:.85}
+  .bars div:hover{opacity:1}
+  .bars div span{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted)}
+  .hbar{display:grid;grid-template-columns:130px 1fr 40px;gap:10px;align-items:center;font-size:13px;margin:10px 0}
+  .hbar .t{height:8px;background:rgba(255,255,255,.07);border-radius:8px;overflow:hidden}
+  .hbar .t span{display:block;height:100%;background:var(--lime);border-radius:8px}
+  .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+  table.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+  .tbl th{text-align:left;font:600 10.5px/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:12px 10px;border-bottom:1px solid var(--line)}
+  .tbl td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  .tbl tr.click{cursor:pointer}
+  .tbl tr.click:hover td{background:rgba(255,255,255,.03)}
+  .st{display:inline-block;padding:4px 10px;border-radius:99px;font:600 11.5px/1.2 var(--display);background:rgba(255,255,255,.07);white-space:nowrap;text-transform:capitalize}
+  .st-new{background:rgba(200,255,61,.15);color:var(--lime)}.st-confirmed{background:rgba(70,212,255,.14);color:var(--cyan)}.st-packed{background:rgba(255,176,46,.14);color:var(--amber)}
+  .st-shipped{background:rgba(160,140,255,.16);color:#b9a8ff}.st-delivered{background:rgba(61,255,138,.12);color:#5ff0a0}.st-returned{background:rgba(255,90,90,.12);color:var(--red)}.st-cancelled{color:var(--dim);text-decoration:line-through}
+  .st-replied{background:rgba(70,212,255,.14);color:var(--cyan)}.st-closed{color:var(--dim)}
+  .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .search{height:38px;border-radius:99px;border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--text);padding:0 16px;min-width:220px;outline:none}
+  .search:focus{border-color:var(--lime)}
+  .detail{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:#0e1318;border-left:1px solid var(--line);z-index:80;box-shadow:-30px 0 60px -30px rgba(0,0,0,.7);padding:26px;overflow:auto;transform:translateX(100%);transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  .detail.open{transform:none}
+  .detail h2{font-size:34px}
+  .sum-total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);margin-top:8px;padding:14px 0 6px;font:600 20px/1 var(--display)}
+  .thumb{width:52px;height:44px;border-radius:8px;object-fit:contain}
+  .num,.sel{height:38px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.03);color:var(--text);padding:0 10px;outline:none}
+  .num{width:120px}.sel option{background:#11161d}
+  .login{min-height:100vh;display:grid;place-items:center;padding:20px}
+  .login form{width:min(420px,100%)}
+  .demo-flag{background:rgba(255,176,46,.14);color:var(--amber);padding:6px 12px;border-radius:99px;font-size:12px}
+  .chipx{height:36px;padding:0 14px;border-radius:99px;border:1px solid var(--line2);font-size:13px;text-transform:capitalize;color:#c3ccd7}
+  .chipx.on{background:var(--lime);color:#000;border-color:var(--lime)}
+  .chipx sup{margin-left:4px;font-size:10px}
+  .btn-dark{background:var(--lime);color:#000;height:46px;border-radius:99px;padding:0 22px;font-weight:600}
+  .btn-dark.btn-block{width:100%}
+  @media (max-width:900px){
+    .adm{grid-template-columns:1fr}
+    .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:12px;border-right:0;border-bottom:1px solid var(--line)}
+    .side .logo{margin:4px 8px 10px;width:100%}
+    .side .bottom{display:none}
+    .kpis{grid-template-columns:1fr 1fr}
+    .two{grid-template-columns:1fr}
+    .content{padding:20px 16px 50px}
+    .hide-m{display:none}
+    .top h1{font-size:32px}
+  }
+</style>
+<div id="app"></div>
+<script type="module">
+import { PRODUCTS, rs as money, CATEGORIES } from "./js/data.js";
+const img = (n) => `assets/img/${n}.webp`;
+const catName = (c) => (CATEGORIES.find((x) => x[0] === c) || [c, c])[1];
+import * as S from "./js/store.js";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const stCls = (s) => "st st-" + String(s).split(" ")[0];
+const bagImg = (p) => img("p-" + p.id);
+const dt = (iso) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+const demo = await S.isDemo();
+let data = { orders: [], messages: [] }, view = "overview", filter = "all", search = "";
+
+function loginView(err = "") {
+  $("#app").innerHTML = `<div class="login"><form class="panel" id="lf">
+    <a class="logo" href="index.html"><i></i>jugnu<small>admin</small></a>
+    <h1 style="font-size:40px;margin:18px 0 6px">Store admin</h1>
+    <p class="muted">Orders, products and messages.</p>
+    <div class="field" style="margin-top:20px"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" autofocus></div>
+    <p style="color:var(--clay);font-size:13px;min-height:18px;margin:8px 0">${esc(err)}</p>
+    <button class="btn btn-dark btn-block">Sign in</button>
+    ${demo ? `<p class="muted small" style="margin-top:14px;text-align:center">Demo password: <b>admin123</b></p>` : ""}
+  </form></div>`;
+  $("#lf").addEventListener("submit", async (e) => { e.preventDefault(); try { await S.login($("#pw").value); await load(); } catch (er) { loginView(er.message); } });
+}
+
+async function load() {
+  try { data = await S.adminData(); } catch (e) { S.logout(); return loginView(e.message); }
+  await S.loadOverrides();
+  shell();
+}
+
+function shell() {
+  const newOrders = data.orders.filter((o) => o.status === "new").length;
+  const newMsgs = data.messages.filter((m) => m.status === "new").length;
+  $("#app").innerHTML = `<div class="adm">
+    <nav class="side" aria-label="Admin">
+      <a class="logo" href="index.html"><i></i>jugnu<small>admin</small></a>
+      ${[["overview", "Overview", 0], ["orders", "Orders", newOrders], ["products", "Products", 0], ["messages", "Messages", newMsgs]].map(([id, l, n]) => `<button data-view="${id}" class="${view === id ? "on" : ""}">${l}${n ? `<span class="badge">${n}</span>` : ""}</button>`).join("")}
+      <div class="bottom">${demo ? `<button id="reset" style="padding:6px 12px">Reset demo data</button>` : ""}<a href="index.html">← View store</a><button id="out" style="padding:6px 12px">Sign out</button></div>
+    </nav>
+    <section class="content" id="content"></section>
+  </div><aside class="detail" id="detail" aria-label="Order detail"></aside>`;
+  draw();
+}
+
+function draw() {
+  const c = $("#content");
+  const head = (t, extra = "") => `<div class="top"><h1>${t}</h1><div style="display:flex;gap:10px;align-items:center">${demo ? '<span class="demo-flag">Demo mode · saved in this browser</span>' : ""}${extra}</div></div>`;
+  const live = data.orders.filter((o) => o.status !== "cancelled");
+  if (view === "overview") {
+    const month = live.filter((o) => Date.now() - new Date(o.createdAt) < 30 * 864e5);
+    const rev = month.reduce((s, o) => s + o.total, 0);
+    const open = data.orders.filter((o) => ["new", "confirmed", "packed", "shipped"].includes(o.status)).length;
+    const days = [...Array(14)].map((_, i) => { const d = new Date(Date.now() - (13 - i) * 864e5); const key = d.toDateString(); return { l: d.getDate(), v: live.filter((o) => new Date(o.createdAt).toDateString() === key).reduce((s, o) => s + o.total, 0) }; });
+    const maxD = Math.max(1, ...days.map((d) => d.v));
+    const prod = {}; live.forEach((o) => o.items.forEach((i) => (prod[i.name] = (prod[i.name] || 0) + i.qty)));
+    const top = Object.entries(prod).sort((a, b) => b[1] - a[1]).slice(0, 6); const maxP = Math.max(1, ...top.map((t) => t[1]));
+    const HEX = { ups: "#c8ff3d", station: "#46d4ff", acc: "#ffb02e" };
+    const cols = {}; live.forEach((o) => o.items.forEach((i) => { const p = PRODUCTS.find((x) => x.id === i.id); const k = p ? catName(p.cat) + "|" + HEX[p.cat] : "Other|#ccc"; cols[k] = (cols[k] || 0) + i.qty; }));
+    const colTot = Object.values(cols).reduce((a, b) => a + b, 0) || 1;
+    c.innerHTML = head("Overview") + `
+      <div class="kpis">
+        <div class="kpi"><span class="mono">Sales, 30 days</span><b>${money(rev)}</b></div>
+        <div class="kpi"><span class="mono">Orders, 30 days</span><b>${month.length}</b></div>
+        <div class="kpi"><span class="mono">Average order</span><b>${money(month.length ? rev / month.length : 0)}</b></div>
+        <div class="kpi"><span class="mono">Open orders</span><b>${open}</b></div>
+      </div>
+      <div class="two">
+        <div class="panel"><span class="mono">Sales by day, last 14 days</span><div class="bars" style="margin-bottom:24px">${days.map((d) => `<div style="height:${(d.v / maxD) * 100}%" title="${money(d.v)}"><span>${d.l}</span></div>`).join("")}</div></div>
+        <div class="panel"><span class="mono">Items sold by category</span>${Object.entries(cols).sort((a, b) => b[1] - a[1]).slice(0, 7).map(([k, n]) => { const [name, hex] = k.split("|"); return `<div class="hbar"><span><i class="sw" style="background:${hex}"></i> ${esc(name)}</span><div class="t"><span style="width:${(n / colTot) * 100}%;background:${hex}"></span></div><span>${Math.round((n / colTot) * 100)}%</span></div>`; }).join("")}</div>
+      </div>
+      <div class="two" style="margin-top:14px">
+        <div class="panel"><span class="mono">Latest orders</span><table class="tbl" style="margin-top:8px"><tbody>${data.orders.slice(0, 5).map((o) => `<tr class="click" data-order="${o.id}"><td><b>${o.id}</b><br><span class="muted small">${dt(o.createdAt)}</span></td><td>${esc(o.name)}<br><span class="muted small">${esc(o.city)}</span></td><td>${money(o.total)}</td><td><span class="${stCls(o.status)}">${o.status}</span></td></tr>`).join("")}</tbody></table></div>
+        <div class="panel"><span class="mono">Best sellers</span>${top.map(([n, q]) => `<div class="hbar"><span>${esc(n)}</span><div class="t"><span style="width:${(q / maxP) * 100}%"></span></div><span>${q}</span></div>`).join("")}</div>
+      </div>`;
+  }
+  if (view === "orders") {
+    const list = data.orders.filter((o) => (filter === "all" || o.status === filter) && (!search || (o.id + o.name + o.city + o.phone).toLowerCase().includes(search.toLowerCase())));
+    c.innerHTML = head("Orders") + `
+      <div class="filters"><input class="search" id="q" placeholder="Search order, name, city" value="${esc(search)}">
+        ${["all", ...S.STATUSES].map((s) => `<button class="chipx ${filter === s ? "on" : ""}" data-filter="${s}">${s}<sup>${s === "all" ? data.orders.length : data.orders.filter((o) => o.status === s).length}</sup></button>`).join("")}</div>
+      <div class="panel" style="padding:8px 14px;overflow:auto"><table class="tbl"><thead><tr><th>Order</th><th>Customer</th><th class="hide-m">Items</th><th>Total</th><th>Status</th></tr></thead><tbody>
+      ${list.map((o) => `<tr class="click" data-order="${o.id}"><td><b>${o.id}</b><br><span class="muted small">${dt(o.createdAt)}</span></td><td>${esc(o.name)}<br><span class="muted small">${esc(o.city)} · ${esc(o.phone)}</span></td><td class="hide-m">${o.items.map((i) => `${i.qty}× ${esc(i.name)}`).join("<br>")}</td><td>${money(o.total)}</td><td><span class="${stCls(o.status)}">${o.status}</span></td></tr>`).join("") || `<tr><td colspan="5" class="muted" style="text-align:center;padding:40px">No orders match.</td></tr>`}
+      </tbody></table></div>`;
+    $("#q").addEventListener("input", (e) => { search = e.target.value; const pos = e.target.selectionStart; draw(); $("#q").focus(); $("#q").setSelectionRange(pos, pos); });
+  }
+  if (view === "products") {
+    const ps = S.products();
+    c.innerHTML = head("Products", `<span class="muted small">Changes show on the store right away.</span>`) + `
+      <div class="panel" style="padding:8px 14px;overflow:auto"><table class="tbl"><thead><tr><th></th><th>Item</th><th>Price (Rs)</th><th class="hide-m">Was</th><th>Status</th><th>Featured</th></tr></thead><tbody>
+      ${ps.map((p) => `<tr data-prod="${p.id}"><td><img class="thumb" src="${bagImg(p)}" alt="" style="object-fit:contain;background:#1a212b"></td><td><b>${esc(p.name)}</b><br><span class="muted small">${esc(catName(p.cat))} · ${esc(p.mah)}</span></td>
+        <td><input class="num" type="number" step="50" min="100" value="${p.price}" data-price aria-label="Price for ${esc(p.name)}"></td><td class="hide-m">${p.old ? money(p.old) : "<span class=muted>none</span>"}</td>
+        <td><select class="sel" data-status aria-label="Status"><option value="active" ${p.status === "active" ? "selected" : ""}>In stock</option><option value="soldout" ${p.status === "soldout" ? "selected" : ""}>Sold out</option><option value="paused" ${p.status === "paused" ? "selected" : ""}>Hidden</option></select></td>
+        <td><input type="checkbox" data-feat ${p.featured ? "checked" : ""} aria-label="Featured" style="width:18px;height:18px;accent-color:var(--lime)"></td></tr>`).join("")}
+      </tbody></table></div>`;
+  }
+  if (view === "messages") {
+    c.innerHTML = head("Messages") + `<div style="display:grid;gap:12px">${data.messages.map((m) => `<article class="panel" data-msg="${m.id}">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><b>${esc(m.name)}</b> <span class="muted small">· ${esc(m.topic)} · ${dt(m.createdAt)}</span><br><span class="muted small">${esc(m.email)}${m.phone ? " · " + esc(m.phone) : ""}</span></div>
+      <select class="sel" data-mstatus aria-label="Status">${S.MSG_STATUSES.map((s) => `<option ${m.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+      <p style="margin:12px 0 0">${esc(m.message)}</p></article>`).join("") || '<p class="muted">No messages yet.</p>'}</div>`;
+  }
+}
+
+function openOrder(id) {
+  const o = data.orders.find((x) => x.id === id); if (!o) return;
+  const d = $("#detail");
+  d.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><span class="mono">${o.id} · ${new Date(o.createdAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" })}</span><button class="btn btn-ghost btn-sm" id="dClose" aria-label="Close">✕</button></div>
+    <h2 style="font-size:40px;margin:16px 0 4px">${esc(o.name)}</h2>
+    <p class="muted">${esc(o.phone)} · ${esc(o.email)}<br>${esc(o.address)}, ${esc(o.city)}</p>
+    <div class="field" style="margin:18px 0"><label for="dSt">Status</label><select id="dSt">${S.STATUSES.map((s) => `<option ${o.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+    <div class="panel" style="padding:16px">${o.items.map((i) => `<div class="sum-row"><span>${i.qty} × <b>${esc(i.name)}</b> </span><span>${money(i.price * i.qty)}</span></div>`).join("")}
+      <div class="sum-row"><span>Delivery</span><span>${o.delivery ? money(o.delivery) : "Free"}</span></div>
+      <div class="sum-total"><span>Total</span><b>${money(o.total)}</b></div><p class="muted small" style="margin:0">${esc(o.payment)}</p></div>
+    <div class="field" style="margin-top:16px"><label for="dNotes">Internal notes</label><textarea id="dNotes">${esc(o.notes)}</textarea></div>
+    <div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-dark" id="dSave">Save</button><a class="btn btn-ghost" target="_blank" rel="noopener" href="https://wa.me/92${esc(String(o.phone).replace(/\D/g, "").replace(/^0/, ""))}">WhatsApp customer</a></div>`;
+  d.classList.add("open");
+  $("#dClose").onclick = () => d.classList.remove("open");
+  $("#dSave").onclick = async () => { Object.assign(o, await S.updateOrder(o.id, { status: $("#dSt").value, notes: $("#dNotes").value })); d.classList.remove("open"); shell(); };
+}
+
+document.addEventListener("click", async (e) => {
+  const v = e.target.closest("[data-view]"); if (v) { view = v.dataset.view; shell(); return; }
+  const f = e.target.closest("[data-filter]"); if (f) { filter = f.dataset.filter; draw(); return; }
+  const r = e.target.closest("[data-order]"); if (r) { openOrder(r.dataset.order); return; }
+  if (e.target.closest("#out")) { S.logout(); loginView(); }
+  if (e.target.closest("#reset") && confirm("Reset all demo orders, messages and product edits?")) { S.resetDemo(); await load(); }
+});
+document.addEventListener("change", async (e) => {
+  const row = e.target.closest("[data-prod]");
+  if (row) {
+    const id = row.dataset.prod;
+    if (e.target.matches("[data-price]")) await S.updateProduct(id, { price: Math.max(100, Number(e.target.value) || PRODUCTS.find((p) => p.id === id).price) });
+    if (e.target.matches("[data-status]")) await S.updateProduct(id, { status: e.target.value });
+    if (e.target.matches("[data-feat]")) await S.updateProduct(id, { featured: e.target.checked });
+    e.target.style.outline = "2px solid #c8ff3d"; setTimeout(() => (e.target.style.outline = ""), 900);
+  }
+  const m = e.target.closest("[data-msg]");
+  if (m && e.target.matches("[data-mstatus]")) { const res = await S.updateMessage(m.dataset.msg, { status: e.target.value }); Object.assign(data.messages.find((x) => x.id === m.dataset.msg), res); }
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("#detail")?.classList.remove("open"); });
+
+S.loggedIn() ? load() : loginView();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

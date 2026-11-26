@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Install guide, voltage check & FAQ · Jugnu Power</title>
+<meta name="description" content="How to connect Jugnu to your WiFi router or fiber ONT in two minutes, how to check your router's voltage, and answers to common questions.">
+<meta name="theme-color" content="#07090c">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><div class="wrap">
+    <p class="crumbs"><a href="index.html">Home</a> / Install guide</p>
+    <span class="eyebrow">No tools, no technician</span>
+    <h1 class="split-me">Set it up in two minutes.</h1>
+    <p class="lead reveal">If you can charge a phone, you can install Jugnu. Here's exactly what goes where.</p>
+  </div></section>
+  <section style="padding-bottom:40px"><div class="wrap guide" id="steps"></div></section>
+
+  <section class="sec"><div class="wrap volt">
+    <div>
+      <span class="eyebrow reveal">Step zero</span>
+      <h2 class="h2 split-me" style="margin:18px 0 20px">Check your router's label.</h2>
+      <p class="lead reveal">Turn the router over. Near the barcode you'll see its input. Match that voltage with Jugnu's output and you're done.</p>
+      <table class="table reveal" style="margin-top:26px">
+        <thead><tr><th>Label says</th><th>Use this output</th></tr></thead>
+        <tbody>
+          <tr><td>12V ⎓ 0.5A to 2A</td><td><b class="lime">12V</b> (every Jugnu)</td></tr>
+          <tr><td>9V ⎓ 0.6A to 1A</td><td><b class="lime">9V</b> (every Jugnu)</td></tr>
+          <tr><td>5V ⎓ 2A (USB)</td><td><b class="lime">5V USB</b> (Mini, Pro, Max)</td></tr>
+          <tr><td>19V or 24V, or a PoE injector</td><td><span class="amber">Ask us on WhatsApp first</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="reveal" style="display:grid;gap:22px;justify-items:center">
+      <div class="label-demo">
+        <b>WIRELESS ROUTER · MODEL AX3000</b>
+        Input: <span class="hl">12V ⎓ 1.5A</span><br>
+        S/N 22314500981 · MAC 9C:A2:F4:00:1B:7E<br>
+        Made in China · PTA approved
+      </div>
+      <img src="assets/img/p-mini-3.webp" alt="Jugnu Mini front with 12V, 9V and USB outputs" style="width:min(100%,520px)" loading="lazy">
+    </div>
+  </div></section>
+
+  <section class="sec" style="padding-top:20px"><div class="wrap how">
+    <div class="how-img reveal"><img src="assets/img/r-switch.webp" alt="Network switch with cables connected" loading="lazy"></div>
+    <div>
+      <span class="eyebrow reveal">Fiber homes</span>
+      <h2 class="h2 split-me" style="margin:18px 0 20px">Got two boxes?</h2>
+      <p class="lead reveal">PTCL Flash Fiber, Nayatel and StormFiber give you an ONT (the fiber box) plus a WiFi router. Both need power or the internet stops. Use Jugnu Pro Duo, which has two 12V outputs, or a Y-splitter on Mini or Max if both boxes together draw under 2A.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px" class="reveal"><a class="btn btn-lime" href="product.html?id=pro">Jugnu Pro Duo</a><a class="btn btn-ghost" href="product.html?id=split">Y-splitter cable</a></div>
+    </div>
+  </div></section>
+
+  <section class="sec" id="faq" style="padding-top:20px"><div class="wrap">
+    <div style="text-align:center"><span class="eyebrow reveal">FAQ & warranty</span><h2 class="h2 split-me" style="margin-top:18px">Good to know</h2></div>
+    <div class="faq" id="faqList"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, esc, reveal } from "./js/layout.js";
+import { STEPS, FAQ } from "./js/data.js";
+init("guide");
+$("#steps").innerHTML = STEPS.map(([h, p], i) => `<div class="gstep reveal" style="--i:${i}"><div class="n">0${i + 1}</div><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join("");
+$("#faqList").innerHTML = FAQ.map(([q, a], i) => `<details class="reveal" ${i ? "" : "open"}><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join("");
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>
