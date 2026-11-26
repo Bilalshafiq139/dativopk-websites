@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bridal Packages · Zeenat Salon & Studio</title>
+<meta name="description" content="Zeenat Salon & Studio, a ladies salon in Gulberg, Lahore: haircuts, colour, keratin, bridal and party makeup, facials, nails and mehndi. Book online.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><img src="assets/img/b-4.webp" alt="" style="object-position:center 20%"><div class="wrap"><h1><span class="line-in"><span style="animation-delay:.15s">Your <em>wedding</em> look,</span></span><span class="line-in"><span style="animation-delay:.27s">done beautifully</span></span></h1><p class="fade-in" style="animation-delay:.5s">Nikah, mehndi, barat and walima looks by our senior artists. Long-lasting, camera-ready and true to you.</p></div></section>
+  <section class="sec">
+    <div class="wrap">
+      <h2 class="sec-title reveal">Bridal <em>packages</em></h2>
+      <p class="sec-sub reveal muted">Every package includes a consultation, dupatta setting and a touch-up kit. Book 2 to 3 months ahead.</p>
+      <div class="pkgs" id="pkgs"></div>
+    </div>
+  </section>
+  <section class="sec dark">
+    <div class="wrap">
+      <h2 class="sec-title reveal">Our <em>brides</em></h2>
+      <p class="sec-sub reveal">A few of the brides who trusted us with their big day.</p>
+      <div class="masonry" id="brides"></div>
+    </div>
+  </section>
+  <section class="sec"><div class="wrap"><h2 class="sec-title reveal">Bridal <em>questions</em></h2><div id="faq" style="margin-top:40px"></div></div></section>
+  <section class="sec-tight" style="padding-top:0"><div class="wrap" id="cb"></div></section>
+</main>
+<div class="lightbox" id="lb"><img alt=""></div>
+<script type="module">
+import { init, $, esc, faqHtml, callbackHtml } from "./js/layout.js";
+import { BRIDAL, img, rs } from "./js/data.js";
+$("#pkgs").innerHTML = BRIDAL.map((p, i) => `<div class="pkg reveal${p.best ? " best" : ""}" style="--i:${i}">${p.best ? '<span class="tag">Most booked</span>' : ""}<h3>${esc(p.name)}</h3><div class="p">${rs(p.price)}</div><ul>${p.items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><a class="btn ${p.best ? "" : "btn-dark"}" href="book.html?service=bridal-package&pkg=${p.id}">Book this package</a></div>`).join("");
+$("#brides").innerHTML = ["b-1", "b-3", "b-2", "b-6", "b-5", "b-7", "b-8", "b-4"].map((f, i) => `<button class="reveal" style="--i:${i % 4}" data-src="${img(f)}" aria-label="Open photo"><img src="${img(f)}" alt="Bride styled at Zeenat" loading="lazy"></button>`).join("");
+$("#faq").innerHTML = faqHtml([["When should I book my trial?", "About two weeks before your first event, so we can fine-tune the look with your outfit and jewellery."], ["Can you come to my home or venue?", "Yes, anywhere in Lahore. On-location service is included in the Full Wedding package and available as an add-on for others."], ["How much advance is needed?", "30% advance confirms your date. The rest is paid on the day. Bank transfer, JazzCash and Easypaisa are accepted."], ["Do you do makeup for the bride's family too?", "Yes. Family and guest makeup can be added to any package at a special rate."]]);
+$("#cb").innerHTML = callbackHtml();
+init("bridal");
+const lb = $("#lb");
+$("#brides").addEventListener("click", (e) => { const b = e.target.closest("[data-src]"); if (!b) return; $("img", lb).src = b.dataset.src; lb.classList.add("open"); });
+lb.onclick = () => lb.classList.remove("open");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

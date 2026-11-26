@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gallery · Zeenat Salon & Studio</title>
+<meta name="description" content="Zeenat Salon & Studio, a ladies salon in Gulberg, Lahore: haircuts, colour, keratin, bridal and party makeup, facials, nails and mehndi. Book online.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><img src="assets/img/wash.webp" alt=""><div class="wrap"><h1><span class="line-in"><span style="animation-delay:.15s">Our <em>work</em></span></span></h1><p class="fade-in" style="animation-delay:.45s">Hair, bridal, skin and mehndi, straight from our studio.</p></div></section>
+  <section class="sec-tight"><div class="wrap"><div class="tabs" id="tabs"></div><div class="masonry" id="g"></div></div></section>
+</main>
+<div class="lightbox" id="lb"><img alt=""></div>
+<script type="module">
+import { init, $, $$, reveal } from "./js/layout.js";
+import { img } from "./js/data.js";
+init("gallery");
+const P = [["r-1", "hair"], ["b-1", "bridal"], ["s-colour", "hair"], ["b-3", "bridal"], ["s-mehndi", "mehndi"], ["r-3", "hair"], ["s-facial", "skin"], ["b-6", "bridal"], ["r-4", "hair"], ["b-7", "mehndi"], ["s-nails", "mehndi"], ["b-2", "bridal"], ["r-2", "hair"], ["s-party", "bridal"], ["r-5", "hair"], ["b-8", "bridal"], ["r-6", "hair"], ["s-keratin", "hair"], ["b-5", "bridal"], ["interior2", "studio"], ["hero", "studio"], ["wash", "studio"]];
+let cat = "";
+$("#tabs").innerHTML = [["", "All"], ["hair", "Hair"], ["bridal", "Bridal"], ["mehndi", "Mehndi & nails"], ["skin", "Skin"], ["studio", "Studio"]].map(([c, n]) => `<button class="tab${c === cat ? " on" : ""}" data-c="${c}">${n}</button>`).join("");
+const draw = () => { $("#g").innerHTML = P.filter((p) => !cat || p[1] === cat).map(([f], i) => `<button class="reveal" style="--i:${i % 4}" data-src="${img(f)}" aria-label="Open photo"><img src="${img(f)}" alt="" loading="lazy"></button>`).join(""); reveal($("#g")); };
+$("#tabs").addEventListener("click", (e) => { const b = e.target.closest("[data-c]"); if (!b) return; cat = b.dataset.c; $$("#tabs .tab").forEach((x) => x.classList.toggle("on", x === b)); draw(); });
+const lb = $("#lb");
+$("#g").addEventListener("click", (e) => { const b = e.target.closest("[data-src]"); if (!b) return; $("img", lb).src = b.dataset.src; lb.classList.add("open"); });
+lb.onclick = () => lb.classList.remove("open");
+draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

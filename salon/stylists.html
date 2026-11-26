@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Team · Zeenat Salon & Studio</title>
+<meta name="description" content="Zeenat Salon & Studio, a ladies salon in Gulberg, Lahore: haircuts, colour, keratin, bridal and party makeup, facials, nails and mehndi. Book online.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main">
+  <section class="page-hero"><img src="assets/img/about.webp" alt=""><div class="wrap"><h1><span class="line-in"><span style="animation-delay:.15s">Meet our <em>team</em></span></span></h1><p class="fade-in" style="animation-delay:.45s">Six senior artists, each with a speciality. Choose your favourite when you book.</p></div></section>
+  <section class="sec"><div class="wrap"><div class="pkgs" id="team" style="grid-template-columns:repeat(3,1fr)"></div></div></section>
+  <section class="sec-tight" style="padding-top:0"><div class="wrap" id="cb"></div></section>
+</main>
+<script type="module">
+import { init, $, esc, callbackHtml } from "./js/layout.js";
+import { STYLISTS, img } from "./js/data.js";
+$("#team").innerHTML = STYLISTS.map((s, i) => `<article class="stylist reveal" style="--i:${i % 3};flex:none"><div class="ph"><img src="${img(s.id)}" alt="${esc(s.name)}" loading="lazy"></div><div class="t"><b>${esc(s.name)}</b><span>${esc(s.role)}</span><small>${esc(s.skill)}</small><a class="btn btn-sm" style="margin-top:14px" href="book.html?stylist=${encodeURIComponent(s.name)}">Book with ${esc(s.name.split(" ")[0])}</a></div></article>`).join("");
+$("#cb").innerHTML = callbackHtml();
+init("stylists");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

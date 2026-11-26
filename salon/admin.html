@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salon dashboard · Zeenat</title>
+<meta name="description" content="Zeenat Salon & Studio, a ladies salon in Gulberg, Lahore: haircuts, colour, keratin, bridal and party makeup, facials, nails and mehndi. Book online.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<style>
+  body { background: var(--cream-2); }
+  .adm { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+  .nav { background: var(--dark); padding: 22px 14px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; }
+  .nav .logo { margin: 0 8px 26px; }
+  .nav button { text-align: left; background: none; border: 0; color: rgba(255,255,255,.7); padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; justify-content: space-between; }
+  .nav button.on, .nav button:hover { background: var(--dark-2); color: #fff; }
+  .nav .badge { background: var(--rose); color: #fff; border-radius: 99px; font-size: 11px; padding: 0 8px; }
+  .nav .bottom { margin-top: auto; display: grid; gap: 2px; }
+  .content { padding: 28px 30px 60px; min-width: 0; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .top h1 { font-size: 38px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+  .kpi { background: #fff; border-radius: 18px; padding: 18px; }
+  .kpi small { color: var(--muted); } .kpi b { display: block; font-size: 30px; font-weight: 400; color: var(--ink); }
+  .grid2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; border-radius: 18px; overflow: hidden; }
+  th { text-align: left; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 12px 14px; background: #efe6d8; }
+  td { padding: 12px 14px; border-top: 1px solid var(--line); }
+  tr.click { cursor: pointer; } tr.click:hover td { background: #fbf6ee; }
+  .st { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 12px; background: #eee; text-transform: capitalize; }
+  .st-new { background: var(--dark); color: #fff; } .st-confirmed { background: #dcefe3; color: #1d6b3a; } .st-completed { background: #e5e1db; color: #5e574f; } .st-no-show, .st-cancelled { background: #f3dddd; color: #8a2b2b; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .chip { height: 34px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 13px; text-transform: capitalize; }
+  .chip.on { background: var(--dark); color: #fff; border-color: var(--dark); }
+  .bar { display: grid; grid-template-columns: 130px 1fr 60px; gap: 10px; align-items: center; margin: 10px 0; font-size: 13px; }
+  .bar .t { height: 8px; background: #efe6d8; border-radius: 8px; overflow: hidden; } .bar .t span { display: block; height: 100%; background: var(--rose); }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100%); background: #fff; z-index: 90; padding: 26px; overflow: auto; transform: translateX(100%); transition: transform .45s var(--ease); box-shadow: -30px 0 60px -30px rgba(0,0,0,.35); }
+  .drawer.open { transform: none; }
+  .login { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--dark); }
+  .demo { background: #fbecd6; color: #7a4b15; padding: 4px 12px; border-radius: 99px; font-size: 12px; }
+  @media (max-width: 900px) { .adm { grid-template-columns: 1fr; } .nav { position: static; height: auto; flex-direction: row; flex-wrap: wrap; } .nav .bottom { display: none; } .kpis, .grid2 { grid-template-columns: 1fr 1fr; } .content { padding: 18px 14px; } }
+</style>
+<div id="app"></div>
+<script type="module">
+import { SERVICES, rs } from "./js/data.js";
+import * as S from "./js/store.js";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const when = (i) => new Date(i).toLocaleString("en-GB", { weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+const sName = (id) => (SERVICES.find((s) => s.id === id) || { name: id === "bridal-package" ? "Bridal package" : id }).name;
+const LOGO = '<span class="logo"><b style="font-size:24px">Zeenat</b><small>Dashboard</small></span>';
+const demo = await S.isDemo();
+let data = { appointments: [], messages: [] }, view = "today", f = "all";
+function login(err = "") {
+  $("#app").innerHTML = `<div class="login"><form class="card" id="lf" style="width:min(380px,100%)"><h1 style="font-size:32px">Staff login</h1><p class="muted small">Appointments and call-backs.</p>
+    <div class="field" style="margin-top:16px"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" autofocus></div><p class="err">${esc(err)}</p>
+    <button class="btn btn-dark" style="width:100%">Sign in</button>${demo ? '<p class="muted small" style="text-align:center;margin-top:12px">Demo password: <b>admin123</b></p>' : ""}</form></div>`;
+  $("#lf").onsubmit = async (e) => { e.preventDefault(); try { await S.login($("#pw").value); await load(); } catch (er) { login(er.message); } };
+}
+async function load() { try { data = await S.adminData(); } catch (e) { S.logout(); return login(e.message); } shell(); }
+function shell() {
+  const na = data.appointments.filter((x) => x.status === "new").length, nm = data.messages.filter((x) => x.status === "new").length;
+  $("#app").innerHTML = `<div class="adm"><nav class="nav">${LOGO}${[["today", "Today & upcoming", 0], ["all", "All appointments", na], ["messages", "Call-backs", nm]].map(([id, l, n]) => `<button data-v="${id}" class="${view === id ? "on" : ""}">${l}${n ? `<span class="badge">${n}</span>` : ""}</button>`).join("")}
+    <div class="bottom">${demo ? '<button id="reset">Reset demo data</button>' : ""}<button onclick="location.href='index.html'">← View website</button><button id="out">Sign out</button></div></nav><section class="content" id="c"></section></div><aside class="drawer" id="dr"></aside>`;
+  draw();
+}
+const head = (t) => `<div class="top"><h1>${t}</h1>${demo ? '<span class="demo">Demo mode · saved in this browser</span>' : ""}</div>`;
+const row = (x) => `<tr class="click" data-a="${x.id}"><td><b>${when(x.date)}</b><br><span class="muted small">${x.id}</span></td><td>${esc(x.name)}<br><span class="muted small">${esc(x.phone)}</span></td><td>${esc(x.sub || sName(x.service))}<br><span class="muted small">${esc(x.stylist)}</span></td><td>${rs(x.price)}</td><td><span class="st st-${x.status.split(" ")[0]}">${x.status}</span></td></tr>`;
+function draw() {
+  const c = $("#c"), A = data.appointments, now = new Date(), today = now.toDateString();
+  if (view === "today") {
+    const up = A.filter((x) => new Date(x.date) >= new Date(today) && !["cancelled"].includes(x.status)).sort((a, b) => new Date(a.date) - new Date(b.date));
+    const tdy = up.filter((x) => new Date(x.date).toDateString() === today);
+    const month = A.filter((x) => x.status === "completed" && now - new Date(x.date) < 30 * 864e5);
+    const bySvc = {}; A.filter((x) => x.status !== "cancelled").forEach((x) => (bySvc[sName(x.service)] = (bySvc[sName(x.service)] || 0) + x.price)); const mx = Math.max(1, ...Object.values(bySvc));
+    c.innerHTML = head("Today & upcoming") + `<div class="kpis"><div class="kpi"><small>Today</small><b>${tdy.length} appointments</b></div><div class="kpi"><small>New requests</small><b>${A.filter((x) => x.status === "new").length}</b></div><div class="kpi"><small>Upcoming value</small><b>${rs(up.reduce((s, x) => s + x.price, 0))}</b></div><div class="kpi"><small>Completed, 30 days</small><b>${rs(month.reduce((s, x) => s + x.price, 0))}</b></div></div>
+      <div class="grid2"><div style="overflow:auto"><table><thead><tr><th>When</th><th>Client</th><th>Service</th><th>Price</th><th>Status</th></tr></thead><tbody>${up.map(row).join("") || '<tr><td colspan="5" class="muted">Nothing booked.</td></tr>'}</tbody></table></div>
+      <div class="card"><small class="muted">Revenue by service</small>${Object.entries(bySvc).sort((a, b) => b[1] - a[1]).map(([n, v]) => `<div class="bar"><span>${esc(n)}</span><div class="t"><span style="width:${(v / mx) * 100}%"></span></div><span>${Math.round(v / 1000)}k</span></div>`).join("")}</div></div>`;
+  }
+  if (view === "all") {
+    const l = A.filter((x) => f === "all" || x.status === f).sort((a, b) => new Date(b.date) - new Date(a.date));
+    c.innerHTML = head("All appointments") + `<div class="chips">${["all", ...S.APPT_STATUSES].map((s) => `<button class="chip${f === s ? " on" : ""}" data-f="${s}">${s}</button>`).join("")}</div><div style="overflow:auto"><table><thead><tr><th>When</th><th>Client</th><th>Service</th><th>Price</th><th>Status</th></tr></thead><tbody>${l.map(row).join("")}</tbody></table></div>`;
+  }
+  if (view === "messages") {
+    c.innerHTML = head("Call-back requests") + `<div style="display:grid;gap:10px">${data.messages.map((m) => `<div class="card" style="padding:18px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><b>${esc(m.name)}</b> <span class="muted small">· ${esc(m.topic)} · ${when(m.createdAt)}</span><br><a href="https://wa.me/92${esc(String(m.phone).replace(/\D/g, "").replace(/^0/, ""))}" target="_blank" rel="noopener" style="color:var(--rose-2)">${esc(m.phone)} · WhatsApp</a></div><select data-m="${m.id}" style="height:38px;border-radius:10px;border:1px solid var(--line);padding:0 10px">${S.MSG_STATUSES.map((s) => `<option ${m.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>${m.message ? `<p style="margin:10px 0 0">${esc(m.message)}</p>` : ""}</div>`).join("")}</div>`;
+  }
+}
+function openA(id) {
+  const x = data.appointments.find((a) => a.id === id), d = $("#dr");
+  d.innerHTML = `<button class="btn btn-sm btn-line" id="dx" style="float:right">Close</button><p class="muted small">${x.id}</p><h2 style="font-size:30px;margin:6px 0">${esc(x.name)}</h2><p class="muted">${esc(x.phone)}</p>
+    <div class="card" style="padding:16px;margin:14px 0;background:#fbf6ee"><b>${esc(x.sub || sName(x.service))}</b><br><span class="small">${when(x.date)} · ${esc(x.stylist)} · ${rs(x.price)}</span>${x.message ? `<p class="small" style="margin:8px 0 0">${esc(x.message)}</p>` : ""}</div>
+    <div class="field"><label for="ds">Status</label><select id="ds">${S.APPT_STATUSES.map((s) => `<option ${x.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+    <div class="field"><label for="dn">Notes</label><textarea id="dn">${esc(x.notes)}</textarea></div>
+    <div style="display:flex;gap:8px"><button class="btn btn-dark" id="dsv">Save</button><a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/92${esc(String(x.phone).replace(/\D/g, "").replace(/^0/, ""))}">WhatsApp client</a></div>`;
+  d.classList.add("open"); $("#dx").onclick = () => d.classList.remove("open");
+  $("#dsv").onclick = async () => { Object.assign(x, await S.update("appointments", x.id, { status: $("#ds").value, notes: $("#dn").value })); d.classList.remove("open"); shell(); };
+}
+document.addEventListener("click", async (e) => {
+  const v = e.target.closest("[data-v]"); if (v) { view = v.dataset.v; shell(); return; }
+  const ff = e.target.closest("[data-f]"); if (ff) { f = ff.dataset.f; draw(); return; }
+  const a = e.target.closest("[data-a]"); if (a) { openA(a.dataset.a); return; }
+  if (e.target.closest("#out")) { S.logout(); login(); }
+  if (e.target.closest("#reset") && confirm("Reset demo appointments and call-backs?")) { S.resetDemo(); await load(); }
+});
+document.addEventListener("change", async (e) => { if (e.target.matches("[data-m]")) Object.assign(data.messages.find((m) => m.id === e.target.dataset.m), await S.update("messages", e.target.dataset.m, { status: e.target.value })); });
+S.loggedIn() ? load() : login();
+</script>
+</body>
+</html>
