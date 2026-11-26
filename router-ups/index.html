@@ -188,7 +188,7 @@ const hud = (h) => {
 const onBeat = (b) => beats.forEach((el) => el.classList.toggle("on", Number(el.dataset.b) === b));
 let ok = false;
 {
-  try { const { startStory } = await import("./js/story.js"); ok = startStory({ root: $("#photos"), section: story, onBeat, onHud: hud }); } catch (e) { console.warn(e); }
+  try { const { startStory } = await import("./js/story.js?v=4"); ok = startStory({ root: $("#photos"), section: story, onBeat, onHud: hud }); } catch (e) { console.warn(e); }
 }
 if (!ok) { document.documentElement.classList.add("no3d"); $$(".hud,.story-progress,#hint").forEach((e) => e.remove()); }
 </script>
