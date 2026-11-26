@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About & Management · Ismail Valley</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main" class="page-top">
+  <section class="page-hero"><img src="assets/img/real/gate-1.webp" alt=""><div class="wrap"><p class="crumbs">Home / About</p><h1 class="rise">About Ismail Valley</h1><p class="rise" style="animation-delay:.15s">A private residential society on Main Daewoo Road, Faisalabad, developed by Mehar Estate Developers.</p></div></section>
+  <section class="sec"><div class="wrap split">
+    <div>
+      <span class="eyebrow reveal">Our vision</span>
+      <h2 class="reveal" style="font-size:clamp(34px,4vw,52px)">Affordable, planned living for Faisalabad families</h2>
+      <p class="reveal" style="margin-top:18px">Ismail Valley offers residential plots from 3 marla to 1 kanal and commercial plots on the main boulevard, with possession in the developed blocks and easy installments in the New Extension.</p>
+      <p class="muted reveal">This text is a placeholder for the society's own story: when it was launched, approvals, how many families already live there, and what is being developed next.</p>
+      <div class="card reveal" style="margin-top:20px;background:#fbf6e8;border-color:#ecdcb0"><b style="color:var(--green)">Approval & NOC</b><p class="small" style="margin:6px 0 0">Add the society's approval status and NOC number here once confirmed by the developer. Buyers in Faisalabad always ask for it first.</p></div>
+    </div>
+    <div class="frame reveal"><img src="assets/img/real/house-2.webp" alt="House in Ismail Valley"></div>
+  </div></section>
+  <section class="sec dark"><div class="wrap">
+    <div class="head"><div><span class="eyebrow reveal">Management</span><h2 class="reveal">The team behind Ismail Valley</h2></div><p class="reveal">Names and photos of the management team are not published online, so we will add them from the developer.</p></div>
+    <div class="team" id="team"></div>
+  </div></section>
+  <section class="sec" id="amenities"><div class="wrap">
+    <div class="head"><div><span class="eyebrow reveal">Facilities</span><h2 class="reveal">What the society offers</h2></div></div>
+    <div class="blocks" id="amen"></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, esc, parallax, reveal } from "./js/layout.js";
+import { TEAM, AMENITIES } from "./js/data.js";
+await init("about");
+$("#team").innerHTML = TEAM.map((t, i) => `<div class="member reveal" style="--i:${i}"><div class="ph">${t.initials}<small>Photo to be added</small></div><div class="t"><span>${esc(t.role)}</span><b>${esc(t.name)}</b></div></div>`).join("");
+$("#amen").innerHTML = AMENITIES.map(([a, d], i) => `<div class="block reveal" style="--c:#c9a24b;--i:${i % 4}"><h3 style="margin-top:0">${esc(a)}</h3><p class="muted small" style="margin:8px 0 0">${esc(d)}</p></div>`).join("");
+parallax(); reveal();
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment Plan · Ismail Valley</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main" class="page-top">
+  <section class="page-hero"><img src="assets/img/aerial3.webp" alt=""><div class="wrap"><p class="crumbs">Home / Payment plan</p><h1 class="rise">Easy 18-month payment plan</h1><p class="rise" style="animation-delay:.15s">Pay 25% at booking, then 18 equal monthly installments. Use the calculator to see your exact schedule. Figures are illustrative until the society confirms its plan.</p></div></section>
+  <section class="sec-tight"><div class="wrap calc">
+    <div class="card reveal">
+      <div class="field"><label>Block</label><div class="seg" id="cBlock"></div></div>
+      <div class="field"><label>Plot size</label><div class="seg" id="cSize"></div></div>
+      <div class="field"><label>Payment</label><div class="seg" id="cMode"><button class="on" data-m="inst">Installments</button><button data-m="cash">Full payment</button></div></div>
+      <div class="field"><label><input type="checkbox" id="cCorner" style="width:auto;height:auto;accent-color:#0f3d2e"> Corner or park-facing plot (+10%)</label></div>
+      <button class="btn btn-green" data-book style="width:100%;margin-top:6px">Book this plot size</button>
+    </div>
+    <div class="card reveal" style="--i:1">
+      <small class="muted">Total price</small><div class="big" id="total">Rs 0</div>
+      <div class="sum" id="sum"></div>
+      <div class="sched"><table class="tbl" style="border-radius:0"><thead><tr><th>#</th><th>Due</th><th>Amount</th></tr></thead><tbody id="sched"></tbody></table></div>
+    </div>
+  </div></section>
+  <section class="sec" style="padding-top:20px"><div class="wrap">
+    <div class="head"><div><span class="eyebrow reveal">Rates per marla</span><h2 class="reveal">Current price list</h2></div><p class="muted reveal">Block C rate is from a public listing; other rates are placeholders to be confirmed by Mehar Estate Developers.</p></div>
+    <div style="overflow:auto"><table class="tbl reveal"><thead><tr><th>Size</th><th id="th"></th></tr></thead><tbody id="price"></tbody></table></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, reveal } from "./js/layout.js";
+import { BLOCKS, SIZES, sizeLabel, pkr, rs } from "./js/data.js";
+await init("plan");
+const q = new URLSearchParams(location.search);
+let block = q.get("block") && BLOCKS.some((b) => b.id === q.get("block")) ? q.get("block") : "C", size = Number(q.get("size")) || 5, mode = "inst";
+$("#cBlock").innerHTML = BLOCKS.map((b) => `<button data-v="${b.id}" class="${b.id === block ? "on" : ""}">${b.id === "M" ? "Comm." : "Block " + b.id}</button>`).join("");
+$("#cSize").innerHTML = SIZES.map((s) => `<button data-v="${s}" class="${s === size ? "on" : ""}">${s === 20 ? "1 K" : s + " M"}</button>`).join("");
+const seg = (id, fn) => $(id).addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; $$(id + " button").forEach((x) => x.classList.toggle("on", x === b)); fn(b); calc(); });
+seg("#cBlock", (b) => (block = b.dataset.v)); seg("#cSize", (b) => (size = Number(b.dataset.v))); seg("#cMode", (b) => (mode = b.dataset.m));
+$("#cCorner").onchange = calc;
+function animateNum(el, to) { const from = Number(el.dataset.v || 0), t0 = performance.now(); el.dataset.v = to; const tick = (t) => { const k = Math.min(1, (t - t0) / 600); el.textContent = rs(from + (to - from) * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(tick); }; requestAnimationFrame(tick); }
+function calc() {
+  const b = BLOCKS.find((x) => x.id === block), total = b.rate * size * ($("#cCorner").checked ? 1.1 : 1);
+  animateNum($("#total"), total);
+  const months = [];
+  if (mode === "inst") {
+    const down = total * 0.25, conf = total * 0.05, rest = total - down - conf, m = rest / 18;
+    $("#sum").innerHTML = `<div><small>At booking (25%)</small><b>${pkr(down)}</b></div><div><small>Confirmation (5%)</small><b>${pkr(conf)}</b></div><div><small>18 monthly installments</small><b>${pkr(m)}</b></div><div><small>Possession</small><b>${b.status === "Possession" ? "Immediate" : "After final installment"}</b></div>`;
+    const d = new Date(); months.push(["Booking", "Today", down], ["Confirmation", "Within 30 days", conf]);
+    for (let i = 1; i <= 18; i++) { const x = new Date(d.getFullYear(), d.getMonth() + i, 10); months.push([i, x.toLocaleDateString("en-GB", { month: "short", year: "numeric" }), m]); }
+  } else {
+    $("#sum").innerHTML = `<div><small>Token</small><b>${pkr(Math.min(500000, total * 0.1))}</b></div><div><small>Balance within 30 days</small><b>${pkr(total - Math.min(500000, total * 0.1))}</b></div><div><small>Cash discount</small><b>Ask sales team</b></div><div><small>Possession</small><b>${b.status === "Possession" ? "Immediate" : "On development"}</b></div>`;
+    months.push(["Token", "Today", Math.min(500000, total * 0.1)], ["Balance", "Within 30 days", total - Math.min(500000, total * 0.1)]);
+  }
+  $("#sched").innerHTML = months.map(([a, b2, c]) => `<tr><td>${a}</td><td>${b2}</td><td>${rs(c)}</td></tr>`).join("");
+  document.querySelector("[data-book]").textContent = `Book a ${sizeLabel(size)} plot`;
+}
+$("#th").outerHTML = BLOCKS.map((b) => `<th>${b.name}</th>`).join("");
+$("#price").innerHTML = SIZES.map((s) => `<tr><td><b>${sizeLabel(s)}</b></td>${BLOCKS.map((b) => `<td>${pkr(b.rate * s)}</td>`).join("")}</tr>`).join("");
+calc(); reveal();
+</script>
+</body>
+</html>

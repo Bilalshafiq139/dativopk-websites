@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: ismail-valley-web
+    ports:
+      - "8091:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: ismail-valley-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - store-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  store-data:

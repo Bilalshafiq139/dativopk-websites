@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gallery · Ismail Valley</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main" class="page-top">
+  <section class="page-hero"><img src="assets/img/real/street.webp" alt=""><div class="wrap"><p class="crumbs">Home / Gallery</p><h1 class="rise">Gallery</h1><p class="rise" style="animation-delay:.15s">The main gate, built houses and interiors inside Ismail Valley, plus a few illustrative photos of planned amenities.</p></div></section>
+  <section class="sec-tight"><div class="wrap">
+    <div class="filters" id="gf"></div>
+    <div class="gallery" id="g"></div>
+  </div></section>
+</main>
+<div class="lightbox" id="lb"><img alt=""><button aria-label="Close">✕</button></div>
+<script type="module">
+import { init, $, $$, reveal } from "./js/layout.js";
+import { img } from "./js/data.js";
+await init("gallery");
+const R = ["gate-1","house-1","house-2","house-3","house-4","house-5","house-6","street","int-1","int-2","int-3","int-4","int-5","kitchen"].map((f)=>["real/"+f, f.startsWith("int")||f==="kitchen" ? "Interior" : f==="gate-1" ? "Main gate" : f==="street" ? "Street" : "Built house", f.startsWith("int")||f==="kitchen" ? "inside" : "real"]);
+const P = [...R, ["boulevard", "Boulevard", "amenities"], ["park", "Jogging track", "amenities"], ["play", "Play area", "amenities"], ["mosque", "Mosque (illustrative)", "amenities"]];
+let cat = "real";
+$("#gf").innerHTML = [["real", "Ismail Valley"], ["inside", "Interiors"], ["amenities", "Amenities (illustrative)"], ["", "All"]].map(([c, n]) => `<button class="chip${c === cat ? " on" : ""}" data-c="${c}">${n}</button>`).join("");
+const draw = () => { $("#g").innerHTML = P.filter((p) => !cat || p[2] === cat).map(([f, t], i) => `<button class="reveal" style="--i:${i % 3}" data-src="${img(f)}" aria-label="${t}"><img src="${img(f)}" alt="${t}" loading="lazy"></button>`).join(""); reveal($("#g")); };
+$("#gf").addEventListener("click", (e) => { const b = e.target.closest("[data-c]"); if (!b) return; cat = b.dataset.c; $$("#gf .chip").forEach((x) => x.classList.toggle("on", x === b)); draw(); });
+const lb = $("#lb");
+$("#g").addEventListener("click", (e) => { const b = e.target.closest("[data-src]"); if (!b) return; $("img", lb).src = b.dataset.src; lb.classList.add("open"); });
+lb.addEventListener("click", () => lb.classList.remove("open"));
+draw();
+</script>
+</body>
+</html>

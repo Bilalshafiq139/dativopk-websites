@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ismail Valley · Daewoo Road, Faisalabad (concept website)</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main" class="page-top">
+  <section class="hero">
+    <div class="hero-bg"><img src="assets/img/real/gate-1.webp" alt="Ismail Valley main gate on Daewoo Road"></div>
+    <div class="wrap">
+      <span class="eyebrow rise" style="animation-delay:.1s;color:var(--gold)">Daewoo Road · Faisalabad</span>
+      <h1 class="rise" style="animation-delay:.25s">A planned, peaceful <em>valley</em> to build your family home</h1>
+      <p class="lead rise" style="animation-delay:.45s">Residential and commercial plots on Main Daewoo Road by Mehar Estate Developers. Carpeted roads, parks, a jamia mosque and easy installments.</p>
+      <div class="btns rise" style="animation-delay:.6s"><a class="btn" href="plots.html">See available plots</a><a class="btn btn-ghost" href="payment-plan.html">Payment plan</a></div>
+      <div class="hero-stats rise" style="animation-delay:.8s" id="hstats">
+        <div><b data-count="4">0</b><span>Blocks incl. New Extension</span></div>
+        <div><b data-count="3" data-suffix=" to 20">0</b><span>Marla plot sizes</span></div>
+        <div><b data-count="18" data-suffix=" months">0</b><span>Installment plan</span></div>
+        <div><b data-count="10" data-suffix=" min">0</b><span>From M-4 Motorway</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="head"><div><span class="eyebrow reveal">Blocks & rates</span><h2 class="reveal">Choose your block</h2></div><p class="muted reveal">Developed blocks with possession, and Block C (New Extension) open for booking on installments. Rates are per marla.</p></div>
+      <div class="blocks" id="blocks"></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:20px">
+    <div class="wrap split">
+      <div class="frame reveal"><img src="assets/img/real/house-1.webp" alt="A newly built house in Ismail Valley"><div class="frame-badge"><b>Built</b><span class="small">Families already living<br>in Ismail Valley</span></div></div>
+      <div>
+        <span class="eyebrow reveal">Why Ismail Valley</span>
+        <h2 class="reveal" style="font-size:clamp(34px,4vw,54px)">Everything a family needs, right at the gate</h2>
+        <ul class="ticks reveal">
+          <li>Direct access from Main Daewoo Road, minutes from the M-4 motorway</li>
+          <li>Wide carpeted roads, street lights and underground utilities</li>
+          <li>Jamia mosque, parks, a jogging track and a commercial market</li>
+          <li>Secure boundary wall with a guarded main gate</li>
+          <li>Plots from 3 marla to 1 kanal, on cash or 18-month installments</li>
+        </ul>
+        <div class="reveal" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-green" href="#" data-book>Book a plot</a><a class="btn btn-line" href="about.html">About the society</a></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="sec" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head"><div><span class="eyebrow reveal">Real homes, real people</span><h2 class="reveal">Houses already built in Ismail Valley</h2></div><p class="muted reveal">Photos of houses inside the society, from recent property listings. Modern elevations, marble floors and wooden kitchens.</p></div>
+      <div class="homes" id="homes"></div>
+    </div>
+  </section>
+  <section class="sec dark" id="amenities">
+    <div class="wrap">
+      <div class="head"><div><span class="eyebrow reveal">Amenities</span><h2 class="reveal">Planned for comfortable living</h2></div><p class="reveal">Facilities shown here are the usual plan for a society of this kind. Replace with the society's confirmed list.</p></div>
+      <div class="amen" id="amen"></div>
+      <div class="photo-strip reveal"><div><img src="assets/img/park.webp" alt="Jogging track (stock photo)" loading="lazy"><span>Jogging track</span></div><div><img src="assets/img/mosque.webp" alt="Mosque (stock photo)" loading="lazy"><span>Jamia mosque</span></div><div><img src="assets/img/play.webp" alt="Children's play area (stock photo)" loading="lazy"><span>Kids play area</span></div></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="head"><div><span class="eyebrow reveal">Master plan</span><h2 class="reveal">Pick a plot on the map</h2></div><p class="muted reveal">Green plots are available. Tap one to see its price and request it. Illustrative layout until the approved map is added.</p></div>
+      <div class="mplan reveal" id="miniPlan"></div>
+      <div class="legend"><span><i style="background:#3f9b6c"></i>Available</span><span><i style="background:#d7a83f"></i>Booked</span><span><i style="background:#b9b2a2"></i>Sold</span><a class="btn btn-sm btn-line" href="plots.html" style="margin-left:auto">Open full plot list</a></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:20px">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow reveal">Location</span>
+        <h2 class="reveal" style="font-size:clamp(34px,4vw,54px)">On Main Daewoo Road, connected to everything</h2>
+        <div class="dist" id="dist" style="margin-top:24px"></div>
+      </div>
+      <div class="map reveal"><iframe title="Map of Ismail Valley, Faisalabad" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=Ismail%20Valley%20Daewoo%20Road%20Faisalabad&z=13&output=embed"></iframe></div>
+    </div>
+  </section>
+
+  <section class="sec-tight">
+    <div class="wrap"><div class="cta reveal"><div><span class="eyebrow" style="color:var(--gold)">Limited plots in Block C</span><h2>Book today with 25% down, pay the rest in 18 months</h2></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end"><a class="btn" href="#" data-book>Book a plot</a><a class="btn btn-ghost" href="payment-plan.html">Calculate installments</a></div></div></div>
+  </section>
+</main>
+<script type="module">
+import { init, $, $$, esc, onVisible, countUp, parallax, openBooking } from "./js/layout.js";
+import { BLOCKS, AMENITIES, DISTANCES, pkr } from "./js/data.js";
+import { planSvg } from "./js/plan.js";
+import * as S from "./js/store.js";
+await init("home");
+$("#blocks").innerHTML = BLOCKS.map((b, i) => { const n = S.plots().filter((p) => p.block === b.id && p.status === "available").length;
+  return `<a class="block reveal" style="--c:${b.color};--i:${i}" href="plots.html?block=${b.id}"><div class="letter">${b.id}</div><h3>${esc(b.name)}</h3><span class="tag">${esc(b.status)}</span><p class="muted small">${esc(b.note)} · ${n} plots available</p><div class="rate">${pkr(b.rate)} <small>per marla</small></div></a>`; }).join("");
+$("#homes").innerHTML = [["house-1","Designer house"],["house-2","Modern elevation"],["int-1","Lounge"],["house-3","Double storey"],["kitchen","Kitchen"],["house-5","Corner house"],["int-3","Entrance"],["house-6","Family home"]].map(([f,t],i)=>`<a class="home reveal" style="--i:${i%4}" href="gallery.html"><img src="assets/img/real/${f}.webp" alt="${t} in Ismail Valley" loading="lazy"><span>${t}</span></a>`).join("");
+$("#amen").innerHTML = AMENITIES.map(([t, d], i) => `<div class="reveal" style="--i:${i % 4}"><i>0${i + 1}</i><h3>${esc(t)}</h3><p>${esc(d)}</p></div>`).join("");
+$("#dist").innerHTML = DISTANCES.map(([p, t], i) => `<div class="reveal" style="--i:${i}"><span>${esc(p)}</span><b>${t}</b></div>`).join("");
+const mini = $("#miniPlan");
+const drawPlan = () => (mini.innerHTML = planSvg(S.plots()));
+onVisible(mini, drawPlan);
+mini.addEventListener("click", (e) => { const r = e.target.closest("[data-plot]"); if (r) openBooking(r.dataset.plot); });
+addEventListener("store:change", () => mini.innerHTML && drawPlan());
+setTimeout(() => $$("#hstats [data-count]").forEach(countUp), 900);
+parallax();
+import("./js/layout.js").then((m) => m.reveal());
+</script>
+</body>
+</html>

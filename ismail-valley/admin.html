@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sales dashboard · Ismail Valley</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<style>
+  body { background: #efe9db; }
+  .adm { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+  .nav { background: var(--green); padding: 22px 14px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; }
+  .nav .logo { margin: 0 6px 24px; }
+  .nav button { text-align: left; background: none; border: 0; color: rgba(255,255,255,.75); padding: 10px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; display: flex; justify-content: space-between; }
+  .nav button.on, .nav button:hover { background: var(--green-2); color: #fff; }
+  .nav .badge { background: var(--gold); color: var(--green); border-radius: 99px; font-size: 11px; padding: 0 8px; }
+  .nav .bottom { margin-top: auto; display: grid; gap: 2px; }
+  .content { padding: 28px 30px 60px; min-width: 0; }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
+  .top h1 { font-size: 38px; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+  .kpi { background: #fff; border-radius: 18px; padding: 18px; }
+  .kpi small { color: var(--muted); } .kpi b { display: block; font-family: var(--serif); font-size: 32px; color: var(--green); font-weight: 500; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .bar { display: grid; grid-template-columns: 130px 1fr 60px; gap: 10px; align-items: center; margin: 10px 0; font-size: 13px; }
+  .bar .t { height: 10px; background: #efe9db; border-radius: 10px; overflow: hidden; display: flex; }
+  .demo { background: #fbf0cf; color: #7a5b00; padding: 4px 12px; border-radius: 99px; font-size: 12px; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100%); background: #fff; z-index: 90; padding: 24px; overflow: auto; transform: translateX(100%); transition: transform .45s var(--ease); box-shadow: -30px 0 60px -30px rgba(0,0,0,.35); }
+  .drawer.open { transform: none; }
+  .login { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--green); }
+  .login form { width: min(380px, 100%); }
+  @media (max-width: 900px) { .adm { grid-template-columns: 1fr; } .nav { position: static; height: auto; flex-direction: row; flex-wrap: wrap; } .nav .bottom { display: none; } .kpis, .two { grid-template-columns: 1fr 1fr; } .content { padding: 18px 14px; } }
+</style>
+<div id="app"></div>
+<script type="module">
+import { BLOCKS, sizeLabel, plotPrice, pkr, blockById } from "./js/data.js";
+import * as S from "./js/store.js";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const dt = (i) => new Date(i).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+const LOGO = '<span class="logo"><span><b>Ismail Valley</b><small>Sales dashboard</small></span></span>';
+const demo = await S.isDemo();
+let data = { bookings: [], messages: [] }, view = "overview", fb = "all", pf = "C";
+function login(err = "") {
+  $("#app").innerHTML = `<div class="login"><form class="card" id="lf"><h1 style="font-size:32px">Staff login</h1><p class="muted small">Bookings, plots and messages.</p>
+    <div class="field" style="margin-top:16px"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" autofocus></div>
+    <p style="color:#b3261e;min-height:18px;font-size:13px;margin:4px 0">${esc(err)}</p><button class="btn btn-green" style="width:100%">Sign in</button>${demo ? '<p class="muted small" style="text-align:center;margin-top:12px">Demo password: <b>admin123</b></p>' : ""}</form></div>`;
+  $("#lf").onsubmit = async (e) => { e.preventDefault(); try { await S.login($("#pw").value); await load(); } catch (er) { login(er.message); } };
+}
+async function load() { try { data = await S.adminData(); } catch (e) { S.logout(); return login(e.message); } await S.loadOverrides(); shell(); }
+function shell() {
+  const nb = data.bookings.filter((x) => x.status === "new").length, nm = data.messages.filter((x) => x.status === "new").length;
+  $("#app").innerHTML = `<div class="adm"><nav class="nav">${LOGO}${[["overview", "Overview", 0], ["bookings", "Booking requests", nb], ["plots", "Plot inventory", 0], ["messages", "Messages", nm]].map(([id, l, n]) => `<button data-v="${id}" class="${view === id ? "on" : ""}">${l}${n ? `<span class="badge">${n}</span>` : ""}</button>`).join("")}
+    <div class="bottom">${demo ? '<button id="reset">Reset demo data</button>' : ""}<button onclick="location.href='index.html'">← View website</button><button id="out">Sign out</button></div></nav><section class="content" id="c"></section></div><aside class="drawer" id="dr"></aside>`;
+  draw();
+}
+const head = (t) => `<div class="top"><h1>${t}</h1>${demo ? '<span class="demo">Demo mode · saved in this browser</span>' : ""}</div>`;
+function draw() {
+  const c = $("#c"), plots = S.plots();
+  if (view === "overview") {
+    const av = plots.filter((p) => p.status === "available"), sold = plots.filter((p) => p.status !== "available");
+    c.innerHTML = head("Overview") + `<div class="kpis"><div class="kpi"><small>New requests</small><b>${data.bookings.filter((x) => x.status === "new").length}</b></div><div class="kpi"><small>Site visits planned</small><b>${data.bookings.filter((x) => x.status === "site visit" || (x.visit && x.status === "new")).length}</b></div><div class="kpi"><small>Plots available</small><b>${av.length} / ${plots.length}</b></div><div class="kpi"><small>Value booked / sold</small><b>${pkr(sold.reduce((s, p) => s + plotPrice(p), 0)).replace("Rs ", "")}</b></div></div>
+      <div class="two"><div class="card"><small class="muted">Inventory by block</small>${BLOCKS.map((b) => { const l = plots.filter((p) => p.block === b.id), n = l.length; const k = (s) => (l.filter((p) => p.status === s).length / n) * 100; return `<div class="bar"><span>${esc(b.name)}</span><div class="t"><span style="width:${k("sold")}%;background:#b9b2a2"></span><span style="width:${k("booked")}%;background:#d7a83f"></span><span style="width:${k("available")}%;background:#3f9b6c"></span></div><span>${l.filter((p) => p.status === "available").length} free</span></div>`; }).join("")}</div>
+      <div class="card"><small class="muted">Latest requests</small><table class="tbl" style="margin-top:8px"><tbody>${data.bookings.slice(0, 5).map((x) => `<tr class="click" data-b="${x.id}"><td><b>${x.id}</b><br><span class="muted small">${dt(x.createdAt)}</span></td><td>${esc(x.name)}<br><span class="muted small">${x.plot || sizeLabel(x.size)}</span></td><td><span class="status booked">${x.status}</span></td></tr>`).join("")}</tbody></table></div></div>`;
+  }
+  if (view === "bookings") {
+    const l = data.bookings.filter((x) => fb === "all" || x.status === fb);
+    c.innerHTML = head("Booking requests") + `<div class="filters">${["all", ...S.BOOK_STATUSES].map((s) => `<button class="chip${fb === s ? " on" : ""}" data-f="${s}" style="text-transform:capitalize">${s}</button>`).join("")}</div>
+      <div style="overflow:auto"><table class="tbl"><thead><tr><th>Ref</th><th>Client</th><th>Plot</th><th>Plan</th><th>Status</th></tr></thead><tbody>${l.map((x) => `<tr class="click" data-b="${x.id}"><td><b>${x.id}</b><br><span class="muted small">${dt(x.createdAt)}</span></td><td>${esc(x.name)}<br><span class="muted small">${esc(x.phone)} · ${esc(x.city)}</span></td><td>${x.plot ? esc(x.plot) : "Any"} · ${sizeLabel(x.size)}${x.visit ? `<br><span class="muted small">Visit: ${esc(x.visit)}</span>` : ""}</td><td>${esc(x.plan)}</td><td><span class="status booked" style="text-transform:capitalize">${x.status}</span></td></tr>`).join("") || '<tr><td colspan="5" class="muted">Nothing here.</td></tr>'}</tbody></table></div>`;
+  }
+  if (view === "plots") {
+    c.innerHTML = head("Plot inventory") + `<div class="filters">${BLOCKS.map((b) => `<button class="chip${pf === b.id ? " on" : ""}" data-p="${b.id}">${esc(b.name)}</button>`).join("")}<span class="muted small">Change a status and the website map updates right away.</span></div>
+      <div style="overflow:auto"><table class="tbl"><thead><tr><th>Plot</th><th>Size</th><th>Location</th><th>Price</th><th>Status</th></tr></thead><tbody>${plots.filter((p) => p.block === pf).map((p) => `<tr><td><b>${p.id}</b></td><td>${sizeLabel(p.size)}</td><td>${p.corner ? "Corner" : p.park ? "Park facing" : "Standard"}</td><td>${pkr(plotPrice(p))}</td><td><select class="sel" data-ps="${p.id}">${["available", "booked", "sold"].map((s) => `<option ${p.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("")}</tbody></table></div>`;
+  }
+  if (view === "messages") {
+    c.innerHTML = head("Messages") + `<div style="display:grid;gap:10px">${data.messages.map((m) => `<div class="card" style="padding:18px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><b>${esc(m.name)}</b> <span class="muted small">· ${esc(m.topic)} · ${dt(m.createdAt)} · ${esc(m.phone)}</span></div><select class="sel" data-ms="${m.id}">${S.MSG_STATUSES.map((s) => `<option ${m.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div><p style="margin:10px 0 0">${esc(m.message)}</p></div>`).join("") || '<p class="muted">No messages.</p>'}</div>`;
+  }
+}
+function openB(id) {
+  const x = data.bookings.find((b) => b.id === id), d = $("#dr"), p = x.plot && S.plotById(x.plot);
+  d.innerHTML = `<button class="x" id="dx" aria-label="Close">✕</button><p class="eyebrow">${x.id} · ${dt(x.createdAt)}</p><h2 style="font-size:30px">${esc(x.name)}</h2><p class="muted">${esc(x.phone)} · ${esc(x.city)}</p>
+    <div class="kv"><div><small>Plot</small>${x.plot || "Any"}</div><div><small>Size</small>${sizeLabel(x.size)}</div><div><small>Plan</small>${esc(x.plan)}</div><div><small>Price</small>${p ? pkr(plotPrice(p)) : "-"}</div></div>
+    ${x.message ? `<p>${esc(x.message)}</p>` : ""}${x.visit ? `<p><b>Site visit:</b> ${esc(x.visit)}</p>` : ""}
+    <div class="field"><label for="ds">Status</label><select id="ds">${S.BOOK_STATUSES.map((s) => `<option ${x.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></div>
+    <div class="field"><label for="dn">Notes</label><textarea id="dn">${esc(x.notes)}</textarea></div>
+    ${p && p.status === "available" ? '<label class="small" style="display:block;margin-bottom:12px"><input type="checkbox" id="dmark" style="accent-color:#0f3d2e"> Mark plot as booked on the map</label>' : ""}
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-green" id="dsv">Save</button><a class="btn btn-line" target="_blank" rel="noopener" href="https://wa.me/92${esc(String(x.phone).replace(/\D/g, "").replace(/^0/, ""))}">WhatsApp</a></div>`;
+  d.classList.add("open"); $("#dx").onclick = () => d.classList.remove("open");
+  $("#dsv").onclick = async () => { Object.assign(x, await S.updateItem("bookings", x.id, { status: $("#ds").value, notes: $("#dn").value })); if ($("#dmark")?.checked) await S.setPlot(x.plot, "booked"); d.classList.remove("open"); shell(); };
+}
+document.addEventListener("click", async (e) => {
+  const v = e.target.closest("[data-v]"); if (v) { view = v.dataset.v; shell(); return; }
+  const f = e.target.closest("[data-f]"); if (f) { fb = f.dataset.f; draw(); return; }
+  const p = e.target.closest("[data-p]"); if (p) { pf = p.dataset.p; draw(); return; }
+  const b = e.target.closest("[data-b]"); if (b) { openB(b.dataset.b); return; }
+  if (e.target.closest("#out")) { S.logout(); login(); }
+  if (e.target.closest("#reset") && confirm("Reset demo bookings, messages and plot changes?")) { S.resetDemo(); await load(); }
+});
+document.addEventListener("change", async (e) => {
+  if (e.target.matches("[data-ps]")) { await S.setPlot(e.target.dataset.ps, e.target.value); e.target.style.outline = "2px solid #3f9b6c"; setTimeout(() => (e.target.style.outline = ""), 800); }
+  if (e.target.matches("[data-ms]")) Object.assign(data.messages.find((m) => m.id === e.target.dataset.ms), await S.updateItem("messages", e.target.dataset.ms, { status: e.target.value }));
+});
+S.loggedIn() ? load() : login();
+</script>
+</body>
+</html>

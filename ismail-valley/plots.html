@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plots & Master Plan · Ismail Valley</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+<main id="main" class="page-top">
+  <section class="page-hero"><img src="assets/img/plan-aerial.webp" alt=""><div class="wrap"><p class="crumbs">Home / Plots</p><h1 class="rise">Plots & master plan</h1><p class="rise" style="animation-delay:.15s">Filter by block, size and status, then tap a plot on the map or in the list to request it. Layout and plot numbers are illustrative.</p></div></section>
+  <section class="sec-tight" id="map"><div class="wrap">
+    <div class="filters">
+      <div id="fBlock" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <select class="sel" id="fSize" aria-label="Size"><option value="">All sizes</option></select>
+      <select class="sel" id="fStatus" aria-label="Status"><option value="">Any status</option><option value="available" selected>Available</option><option value="booked">Booked</option><option value="sold">Sold</option></select>
+      <span class="muted small" id="count" style="margin-left:auto"></span>
+    </div>
+    <div class="plan-wrap">
+      <div><div class="mplan" id="plan"></div><div class="legend"><span><i style="background:#3f9b6c"></i>Available</span><span><i style="background:#d7a83f"></i>Booked</span><span><i style="background:#b9b2a2"></i>Sold</span><span class="muted">Faded plots do not match your filters</span></div></div>
+      <aside class="side" id="side"><h3>Select a plot</h3><p class="muted small" style="margin-top:8px">Tap any green plot on the map to see its size, price and location.</p></aside>
+    </div>
+    <h2 style="font-size:34px;margin:56px 0 18px">Plot list</h2>
+    <div style="overflow:auto"><table class="tbl"><thead><tr><th>Plot</th><th>Block</th><th>Size</th><th class="hide-m">Location</th><th>Price</th><th>Status</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+  </div></section>
+</main>
+<script type="module">
+import { init, $, $$, esc, openBooking, reveal } from "./js/layout.js";
+import { BLOCKS, SIZES, sizeLabel, plotPrice, pkr, blockById } from "./js/data.js";
+import { planSvg } from "./js/plan.js";
+import * as S from "./js/store.js";
+await init("plots");
+const q = new URLSearchParams(location.search);
+const f = { block: q.get("block") || "", size: "", status: "available" };
+$("#fBlock").innerHTML = [["", "All blocks"], ...BLOCKS.map((b) => [b.id, b.name])].map(([id, n]) => `<button class="chip${f.block === id ? " on" : ""}" data-b="${id}">${esc(n)}</button>`).join("");
+$("#fSize").innerHTML += SIZES.map((s) => `<option value="${s}">${sizeLabel(s)}</option>`).join("");
+const match = (p) => (!f.block || p.block === f.block) && (!f.size || p.size === Number(f.size)) && (!f.status || p.status === f.status);
+let first = true, selected = "";
+function draw() {
+  const all = S.plots(), list = all.filter(match);
+  $("#plan").innerHTML = planSvg(all, { animate: first }); first = false;
+  $$("#plan [data-plot]").forEach((r) => { const p = all.find((x) => x.id === r.dataset.plot); r.classList.toggle("dim", !match(p)); r.classList.toggle("sel", p.id === selected); });
+  $("#count").textContent = `${list.length} plot${list.length === 1 ? "" : "s"} match`;
+  $("#rows").innerHTML = list.map((p) => `<tr class="click" data-row="${p.id}"><td><b>${p.id}</b></td><td>${esc(blockById(p.block).name)}</td><td>${sizeLabel(p.size)}</td><td class="hide-m">${p.corner ? "Corner" : p.park ? "Park facing" : "Standard"}</td><td>${pkr(plotPrice(p))}</td><td><span class="status ${p.status}">${p.status}</span></td><td>${p.status === "available" ? `<button class="btn btn-sm btn-green" data-book="${p.id}">Request</button>` : ""}</td></tr>`).join("") || `<tr><td colspan="7" class="muted" style="text-align:center;padding:30px">No plots match. Try another block or size.</td></tr>`;
+}
+function pick(id) {
+  selected = id; const p = S.plotById(id), b = blockById(p.block);
+  $("#side").innerHTML = `<p class="eyebrow">Plot ${esc(p.id)}</p><h3>${sizeLabel(p.size)} ${p.type.toLowerCase()} plot</h3><p class="muted small" style="margin-top:6px">${esc(b.name)} · ${esc(b.note)}</p>
+    <div class="kv"><div><small>Price</small>${pkr(plotPrice(p))}</div><div><small>Status</small><span class="status ${p.status}">${p.status}</span></div><div><small>Location</small>${p.corner ? "Corner (+10%)" : p.park ? "Park facing (+10%)" : "Standard"}</div><div><small>Rate</small>${pkr(b.rate)} / marla</div></div>
+    ${p.status === "available" ? `<button class="btn btn-green" style="width:100%" data-book="${p.id}">Request this plot</button><a class="btn btn-line" style="width:100%;margin-top:8px" href="payment-plan.html?size=${p.size}&block=${p.block}">See installments</a>` : `<p class="muted small">This plot is ${p.status}. Pick a green plot, or ask us about the waiting list.</p><button class="btn btn-line" style="width:100%" data-book>Ask about similar plots</button>`}`;
+  $("#side").animate && $("#side").animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }], { duration: 400, easing: "ease-out" });
+  $$("#plan [data-plot]").forEach((r) => r.classList.toggle("sel", r.dataset.plot === id));
+}
+$("#plan").addEventListener("click", (e) => { const r = e.target.closest("[data-plot]"); if (r) pick(r.dataset.plot); });
+$("#rows").addEventListener("click", (e) => { if (e.target.closest("[data-book]")) return; const r = e.target.closest("[data-row]"); if (r) { pick(r.dataset.row); $("#map").scrollIntoView({ behavior: "smooth" }); } });
+$("#fBlock").addEventListener("click", (e) => { const b = e.target.closest("[data-b]"); if (!b) return; f.block = b.dataset.b; $$("#fBlock .chip").forEach((x) => x.classList.toggle("on", x === b)); draw(); });
+$("#fSize").onchange = (e) => { f.size = e.target.value; draw(); };
+$("#fStatus").onchange = (e) => { f.status = e.target.value; draw(); };
+addEventListener("store:change", draw);
+draw(); reveal();
+</script>
+</body>
+</html>
