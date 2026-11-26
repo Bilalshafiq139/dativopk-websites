@@ -118,6 +118,18 @@ export function bindAdd(root = document) {
   root.addEventListener("click", (e) => { const b = e.target.closest("[data-add]"); if (b) { e.preventDefault(); addToCart(b.dataset.add); } });
 }
 
+// Theme preview: ?theme=light loads css/light.css and keeps it while browsing (this tab only).
+export function applyTheme() {
+  const q = new URLSearchParams(location.search).get("theme");
+  try { if (q) sessionStorage.setItem("jg-theme", q); } catch {}
+  let t = q; try { t = q || sessionStorage.getItem("jg-theme"); } catch {}
+  if (t === "light" && !document.getElementById("lightcss")) {
+    const l = document.createElement("link"); l.rel = "stylesheet"; l.id = "lightcss"; l.href = "css/light.css?v=1"; document.head.append(l);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", "#f3f3ef");
+  }
+}
+applyTheme();
+
 export function init(page) {
   document.documentElement.classList.add("js-reveal");
   document.body.insertAdjacentHTML("afterbegin", header(page));

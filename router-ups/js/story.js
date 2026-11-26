@@ -92,6 +92,7 @@ export function startStory({ root, section, onBeat, onHud }) {
     [0, 1].forEach((i) => { ph[i].style.transform = `scale(${(1.08 - 0.06 * range(p, i ? 0.58 : 0.42, i ? 0.85 : 0.62)).toFixed(4)}) translate3d(${(-tx * 18).toFixed(1)}px, ${(-ty * 12).toFixed(1)}px, 0)`; });
     black.style.opacity = (cut * (1 - range(p, 0.58, 0.62)) * 0.45).toFixed(3);
     root.classList.toggle("dark", p > 0.42 && p < 0.85);
+    section.classList.toggle("is-dark", p > 0.44 && p < 0.83);
 
     // 3D objects
     const float = reduce ? 0 : Math.sin(sec * 1.1) * 8;
