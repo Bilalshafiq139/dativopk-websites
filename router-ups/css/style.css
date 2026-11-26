@@ -410,3 +410,10 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
   .stat{padding:26px 20px}
   .wa{width:52px;height:52px;right:16px;bottom:16px}
 }
+/* size switch on the product page */
+.sizes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:22px 0 4px}
+.sizes a{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border-radius:14px;border:1px solid var(--line2);transition:border-color .2s,background .2s}
+.sizes a:hover{border-color:var(--lime)}
+.sizes a.on{border-color:var(--lime);background:rgba(200,255,61,.06)}
+.sizes b{font:600 17px/1 var(--display)}
+.sizes small{color:var(--muted);font-size:13px}

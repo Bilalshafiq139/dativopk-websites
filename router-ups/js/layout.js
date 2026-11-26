@@ -35,7 +35,7 @@ function footer() {
     <div class="ftr-grid">
       <div><a class="logo" href="index.html"><i></i>jugnu<small>power</small></a>
         <p class="muted" style="margin-top:18px;max-width:300px">Mini UPS and backup power for WiFi routers, made for Pakistani load-shedding. Cash on delivery across Pakistan.</p></div>
-      <div><h4>Shop</h4><a href="product.html?id=mini">Jugnu Mini</a><a href="product.html?id=pro">Jugnu Pro Duo</a><a href="product.html?id=max">Jugnu Max</a><a href="product.html?id=station">Station 300</a></div>
+      <div><h4>Shop</h4><a href="product.html?id=j10">Jugnu 10,400 mAh</a><a href="product.html?id=j20">Jugnu 20,000 mAh</a><a href="product.html?id=kit">Load-shedding kit</a><a href="shop.html?cat=acc">Accessories</a></div>
       <div><h4>Help</h4><a href="calculator.html">Backup calculator</a><a href="guide.html">Install guide</a><a href="guide.html#faq">FAQ & warranty</a><a href="contact.html">Contact</a></div>
       <div><h4>Talk to us</h4><a href="${BRAND.whatsapp}" target="_blank" rel="noopener">WhatsApp ${BRAND.phone}</a><a href="mailto:${BRAND.email}">${BRAND.email}</a><p class="muted" style="margin-top:8px">${BRAND.address}<br>${BRAND.hours}</p></div>
     </div>
@@ -102,14 +102,14 @@ export function tilt(root = document) {
 
 export function cardHtml(p, i = 0) {
   const sold = p.status === "soldout";
-  const specs = p.cat === "acc" ? [p.outs[0]] : [p.mah, p.hours.split(" (")[0]];
+  const specs = p.cat === "acc" ? [] : [p.mah, p.hours];
   return `<article class="pcard reveal" style="--i:${i % 3}">
     <a class="pcard-img" href="product.html?id=${p.id}">${p.tag ? `<span class="pill"><i></i>${esc(p.tag)}</span>` : ""}${sold ? '<span class="pill sold">Sold out</span>' : ""}
       <img src="${img("p-" + p.id)}" alt="${esc(p.name)}" loading="lazy" width="900" height="740"></a>
     <div class="pcard-body">
       <a href="product.html?id=${p.id}"><h3>${esc(p.name)}</h3></a>
       <p class="line">${esc(p.line)}</p>
-      <div class="specs">${specs.map((s, k) => `<span class="spec">${k === 1 ? "<b>⚡</b> " : ""}${esc(s)}</span>`).join("")}</div>
+      ${specs.length ? "" : ""}<div class="specs">${specs.map((s, k) => `<span class="spec">${k === 1 ? "<b>⚡</b> " : ""}${esc(s)}</span>`).join("")}</div>
       <div class="price-row"><span class="price">${rs(p.price)}${p.old ? `<s>${rs(p.old)}</s>` : ""}</span>
         <button class="add" data-add="${p.id}" aria-label="Add ${esc(p.name)} to cart" ${sold ? "disabled" : ""}>${ICON.plus}</button></div>
     </div></article>`;

@@ -17,7 +17,7 @@
     <p class="crumbs"><a href="index.html">Home</a> / Backup calculator</p>
     <span class="eyebrow">Honest numbers</span>
     <h1 class="split-me">How long will my WiFi last?</h1>
-    <p class="lead reveal">Tick what you plug in and set your longest load-shedding. We compare every Jugnu and mark the smallest one that covers you.</p>
+    <p class="lead reveal">Tick what you plug in and set your longest load-shedding. We compare both Jugnu sizes and mark the one that covers you.</p>
   </div></section>
   <section style="padding-bottom:110px"><div class="wrap calc">
     <div class="panel reveal">
@@ -50,21 +50,20 @@ function draw() {
   const need = Number($("#hrs").value), r = $("#hrs");
   r.style.setProperty("--v", ((need - 1) / 13) * 100 + "%");
   const devs = DEVICES.filter((d) => on.has(d.id)), watts = devs.reduce((s, d) => s + d.watts, 0);
-  const laptop = on.has("laptop"), outs = devs.filter((d) => d.id !== "laptop").length;
+  const outs = devs.length;
   $("#hv").textContent = need + (need === 1 ? " hour" : " hours"); $("#wv").textContent = watts + " W";
-  const units = S.visibleProducts().filter((p) => p.wh);
+  const units = S.visibleProducts().filter((p) => p.wh && p.id !== "kit");
   const rows = units.map((p) => {
     const h = watts ? backupHours(p.wh, watts) : 0;
-    const dcOuts = p.outs.filter((o) => /12V|9V/.test(o) && !/AC/.test(o)).reduce((s, o) => s + (Number(o.match(/^(\d) ×/)?.[1]) || 1), 0) + (p.id === "station" ? 2 : 0);
-    const fits = (!laptop || /USB-C|AC/.test(p.outs.join())) && outs <= dcOuts + (p.id === "station" ? 4 : 0);
+        const fits = outs <= 3;
     return { p, h, fits, ok: fits && h >= need };
   }).sort((a, b) => a.p.price - b.p.price);
   const best = rows.find((r) => r.ok);
-  $("#summary").innerHTML = !watts ? "Tick at least one device." : best ? `For ${need} h with ${devs.length} device${devs.length > 1 ? "s" : ""}, <b class="lime">${esc(best.p.name)}</b> is enough.` : "Nothing covers that in one charge. Station 300 comes closest, or add a second unit.";
+  $("#summary").innerHTML = !watts ? "Tick at least one device." : best ? `For ${need} h with ${devs.length} device${devs.length > 1 ? "s" : ""}, <b class="lime">Jugnu ${esc(best.p.size)}</b> is enough.` : "One charge won't cover that. Take the 20,000 mAh and a second Jugnu, or WhatsApp us for a bigger setup.";
   const max = Math.max(need, ...rows.map((r) => Math.min(r.h, 40)));
   $("#res").innerHTML = rows.map(({ p, h, fits, ok }) => `<div class="res-line ${p === best?.p ? "best" : ""} ${ok ? "" : "short"}">
     <img src="${img("p-" + p.id)}" alt="">
-    <div><h4>${esc(p.name)}</h4><small>${fits ? esc(p.mah) + " · " + rs(p.price) : "Not enough outputs for this setup"}</small><div class="bar"><i style="width:${watts ? Math.min(100, (Math.min(h, 40) / max) * 100) : 0}%"></i></div></div>
+    <div><h4>Jugnu ${esc(p.size)}</h4><small>${fits ? rs(p.price) : "Too many devices for one unit"}</small><div class="bar"><i style="width:${watts ? Math.min(100, (Math.min(h, 40) / max) * 100) : 0}%"></i></div></div>
     <div class="hrs">${watts ? (h >= 40 ? "40+" : h.toFixed(1)) + " h" : "-"}<small>${p === best?.p ? `<button class="btn btn-lime btn-sm" data-buy="${p.id}" style="margin-top:6px">Add · ${rs(p.price)}</button>` : ok ? '<span class="lime">covers it</span>' : '<span class="amber">too short</span>'}</small></div>
   </div>`).join("");
 }

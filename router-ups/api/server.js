@@ -13,7 +13,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "admin123";
 const SECRET = process.env.SESSION_SECRET || crypto.randomBytes(32).toString("hex");
 
 // Prices must match js/data.js. Product edits in admin override these.
-const BASE = { mini: 4499, pro: 7499, max: 11999, lite: 2999, station: 64999, boost: 799, split: 549 };
+const BASE = { j10: 4499, j20: 6999, kit: 8299, adapter: 999, plug: 299, cable: 449 };
 const SOLD_OUT = new Set([]); // default stock state, admin can change it
 const FREE_OVER = 6000, DELIVERY = 250;
 

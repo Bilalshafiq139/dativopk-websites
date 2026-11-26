@@ -20,7 +20,7 @@
   <div class="wrap" id="root" style="padding-bottom:40px"></div>
   <section class="sec" style="padding-top:40px"><div class="wrap">
     <span class="eyebrow">Often added</span>
-    <h2 class="h2" style="margin:18px 0 40px">Cables & add-ons</h2>
+    <h2 class="h2" style="margin:18px 0 40px">Jugnu accessories</h2>
     <div class="grid-p" id="reco"></div>
   </div></section>
 </main>
@@ -52,7 +52,7 @@ function draw() {
       </aside></div>`;
   }
   const inCart = new Set(t.lines.map((l) => l.id));
-  $("#reco").innerHTML = S.visibleProducts().filter((p) => !inCart.has(p.id) && (p.cat === "acc" || p.id === "pro")).slice(0, 3).map(cardHtml).join("");
+  $("#reco").innerHTML = S.visibleProducts().filter((p) => !inCart.has(p.id) && p.cat === "acc").slice(0, 3).map(cardHtml).join("");
   reveal($("#reco"));
 }
 $("#root").onclick = (e) => {

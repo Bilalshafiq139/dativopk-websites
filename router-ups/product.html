@@ -24,11 +24,12 @@
 </main>
 <script type="module">
 import { init, $, $$, esc, img, cardHtml, bindAdd, addToCart, tilt, reveal, ICON } from "./js/layout.js";
-import { rs, DEVICES, backupHours } from "./js/data.js";
+import { rs, DEVICES, SPEC, backupHours } from "./js/data.js";
 import * as S from "./js/store.js";
 init("shop");
-const id = new URLSearchParams(location.search).get("id") || "mini";
-const p = S.productById(id) || S.productById("mini");
+const id = new URLSearchParams(location.search).get("id") || "j10";
+const p = S.productById(id) || S.productById("j10");
+const sizes = p.group ? S.products().filter((x) => x.group === p.group) : [];
 document.title = p.name + " · " + p.line + " · Jugnu Power";
 const save = p.old ? Math.round((1 - p.price / p.old) * 100) : 0;
 const router = p.wh ? backupHours(p.wh, 7) : 0;
@@ -47,16 +48,17 @@ $("#pdp").innerHTML = `
     ${p.tag ? `<span class="eyebrow">${esc(p.tag)}</span>` : ""}
     <h1>${esc(p.name)}</h1>
     <p class="line">${esc(p.line)}</p>
+    ${sizes.length ? `<div class="sizes" role="radiogroup" aria-label="Battery size">${sizes.map((x) => `<a role="radio" aria-checked="${x.id === p.id}" class="${x.id === p.id ? "on" : ""}" href="product.html?id=${x.id}"><b>${esc(x.size)}</b><small>${esc(x.hours)} · ${rs(x.price)}</small></a>`).join("")}</div>` : ""}
     <div class="pdp-price">${rs(p.price)}${p.old ? `<s>${rs(p.old)}</s><span class="save">Save ${save}%</span>` : ""}</div>
     <p class="muted">${esc(p.desc)}</p>
-    <div class="spec-table">
+    ${p.wh ? `<div class="spec-table">
       <div><small>BATTERY</small><b>${esc(p.mah)}</b></div>
-      <div><small>BACKUP (TYPICAL ROUTER)</small><b>${router ? "≈ " + router.toFixed(1) + " hours" : esc(p.hours)}</b></div>
-      <div><small>OUTPUTS</small><b>${p.outs.map(esc).join(" · ")}</b></div>
-      <div><small>SWITCH-OVER</small><b>${esc(p.switch)}</b></div>
-      <div><small>WEIGHT</small><b>${esc(p.weight)}</b></div>
+      <div><small>BACKUP (TYPICAL ROUTER)</small><b>≈ ${router.toFixed(1)} hours</b></div>
+      <div><small>OUTPUTS</small><b>${SPEC.outs.map(esc).join(" · ")}</b></div>
+      <div><small>SWITCH-OVER</small><b>${esc(SPEC.switch)}</b></div>
+      <div><small>BODY</small><b>${esc(SPEC.body)}</b></div>
       <div><small>WARRANTY</small><b>1 year replacement</b></div>
-    </div>
+    </div>` : `<div class="spec-table"><div><small>WORKS WITH</small><b>Jugnu Mini UPS (both sizes)</b></div><div><small>WARRANTY</small><b>6 months replacement</b></div></div>`}
     <div class="buy-row">
       <div class="qty"><button id="qm" aria-label="Less">−</button><span id="qv">1</span><button id="qp" aria-label="More">+</button></div>
       <button class="btn btn-lime" id="add" ${p.status === "soldout" ? "disabled" : ""}>${p.status === "soldout" ? "Sold out" : "Add to cart · " + rs(p.price)}</button>
@@ -70,7 +72,7 @@ $("#pdp").innerHTML = `
     <ul class="box-list">${p.box.map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
     ${p.wh ? `<h3 style="font-size:20px;margin-top:34px">Backup time by device</h3>
     <table class="table" style="margin-top:10px"><thead><tr><th>Device</th><th>Hours</th></tr></thead><tbody>
-    ${DEVICES.filter((d) => d.id !== "laptop" || /USB-C|AC/.test(p.outs.join())).map((d) => `<tr><td>${esc(d.name)}</td><td><b>${backupHours(p.wh, d.watts).toFixed(1)} h</b></td></tr>`).join("")}
+    ${DEVICES.map((d) => `<tr><td>${esc(d.name)}</td><td><b>${backupHours(p.wh, d.watts).toFixed(1)} h</b></td></tr>`).join("")}
     </tbody></table><p class="muted" style="font-size:13px;margin-top:10px">Estimates at 85% usable capacity. Your router's label shows its real draw.</p>` : ""}
   </div>`;
 $("#qm").onclick = () => { qty = Math.max(1, qty - 1); $("#qv").textContent = qty; };
@@ -103,7 +105,7 @@ if (dark) dark.onclick = () => {
 };
 else $("#vstate").hidden = true;
 
-const more = S.visibleProducts().filter((x) => x.id !== p.id && (p.cat === "acc" ? x.cat !== "acc" : x.cat === "acc" || x.id === (p.id === "mini" ? "pro" : "mini"))).slice(0, 3);
+const more = S.visibleProducts().filter((x) => x.id !== p.id && (p.cat === "acc" ? true : x.cat === "acc")).slice(0, 3);
 $("#more").innerHTML = more.map(cardHtml).join(""); bindAdd($("#more")); reveal($("#more")); tilt($("#more"));
 </script>
 <script src="../dativo-lead.js" defer></script>
