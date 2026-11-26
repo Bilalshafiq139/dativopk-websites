@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="stylesheet" href="css/style.css?v=4">
 </head>
 <body>
 <main id="main">
@@ -33,18 +33,18 @@
           <div class="ctas"><a class="btn btn-lime" href="shop.html">Shop from Rs 4,499</a><a class="btn btn-ghost" href="#lineup">See the range</a></div>
         </div>
         <div class="beat" data-b="1">
-          <span class="eyebrow" style="color:var(--red)">9:00 pm · load-shedding</span>
-          <h2>Light gone.<br>Internet gone.</h2>
-          <p>The router dies with the power. The client call drops, the online class freezes, the match disconnects. Every single evening.</p>
+          <span class="eyebrow">What's in the box</span>
+          <h2>Small box.<br><span class="glow-text">Big backup.</span></h2>
+          <p>A graphite aluminium UPS the size of a phone, its own 12V adapter and a 3-pin plug for Pakistani sockets. Cables for 12V and 9V routers included.</p>
+          <div class="specs" style="margin-top:22px"><span class="spec"><b>⚡</b> 12V · 9V · USB</span><span class="spec">10,400 / 20,000 mAh</span><span class="spec">from Rs 4,499</span></div>
         </div>
         <div class="beat" data-b="2">
-          <span class="eyebrow">Meet Jugnu</span>
-          <h2>Plug it in<br><span class="glow-text">once.</span></h2>
-          <p>Jugnu sits between the wall adapter and your router. While the power is on it quietly charges. Setup takes two minutes and no tools.</p>
-          <div class="specs" style="margin-top:22px"><span class="spec"><b>⚡</b> 12V · 9V · USB</span><span class="spec">10,400 mAh</span><span class="spec">Rs 4,499</span></div>
+          <span class="eyebrow" style="color:var(--amber)">9:00 pm · load-shedding</span>
+          <h2>Light gone.<br><span class="amber-text">WiFi still on.</span></h2>
+          <p>Jugnu sits between the wall adapter and your router. The moment the power goes, it takes over. The client call, the online class and the match carry on.</p>
         </div>
         <div class="beat" data-b="3">
-          <span class="eyebrow" style="color:var(--amber)">Load-shedding again</span>
+          <span class="eyebrow" style="color:var(--amber)">11:40 pm · still dark</span>
           <h2><span class="amber-text">0 ms.</span><br>The router didn't notice.</h2>
           <p>The room goes dark, but the WiFi stays on. No restart, no reconnect. Up to 11 hours on a single charge.</p>
         </div>
@@ -175,7 +175,7 @@ const hud = (h) => {
   $("#storyBg").style.filter = `brightness(${(0.35 + 0.65 * h.room).toFixed(3)})`;
   $("#flash").style.opacity = (h.flash * 0.18).toFixed(3);
   $("#hint").style.opacity = h.p > 0.02 ? 0 : 1;
-  bars.forEach((b, i) => { const a = [0, 0.15, 0.36, 0.56, 0.8, 1][i], z = [0, 0.15, 0.36, 0.56, 0.8, 1][i + 1]; b.style.width = Math.max(0, Math.min(1, (h.p - a) / (z - a))) * 100 + "%"; });
+  bars.forEach((b, i) => { const a = [0, 0.16, 0.42, 0.6, 0.8, 1][i], z = [0, 0.16, 0.42, 0.6, 0.8, 1][i + 1]; b.style.width = Math.max(0, Math.min(1, (h.p - a) / (z - a))) * 100 + "%"; });
   const pct = Math.round(h.battery ? 100 - h.drain * 42 : h.p > 0.8 ? 58 + (h.p - 0.8) * 210 : 100);
   const mins = Math.round(h.drain * 200);
   const key = [h.power, h.routerOn, h.hasUps, h.battery, pct, mins].join();
