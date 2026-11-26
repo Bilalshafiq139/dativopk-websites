@@ -1,6 +1,6 @@
 // Catalogue for "Jugnu Power" (placeholder brand: WiFi router backup / mini UPS, Lahore).
-// Product pictures are rendered from the 3D models in js/model.js (see studio.html).
-// Lifestyle photos: Pexels. Keep prices in step with api/server.js.
+// Product and lifestyle photos: Pexels (free licence), stored in assets/img.
+// Keep prices in step with api/server.js.
 export const BRAND = {
   name: "Jugnu",
   full: "Jugnu Power",
@@ -28,50 +28,41 @@ export const DEVICES = [
   { id: "laptop", name: "Laptop (USB-C)", v: "USB-C PD", watts: 30 },
 ];
 
-// Shared model looks for the 3D renders.
-const GRAPHITE = 0x1b1e23, WHITE = 0xeef0f2, NAVY = 0x18202c;
 
 // wh = usable battery energy. outs = output sockets. sold: true shows "Sold out".
 export const PRODUCTS = [
   { id: "mini", name: "Jugnu Mini", line: "10,400 mAh router UPS", cat: "ups", price: 4499, old: 4999, tag: "Best Seller",
     wh: 38, mah: "10,400 mAh", outs: ["12V 2A", "9V 2A", "5V USB"], hours: "4 to 6 hours", weight: "230 g", switch: "0 ms",
-    model: { kind: "ups", w: 1.7, h: 0.42, d: 1.12, color: GRAPHITE, ports: ["12V", "9V", "USB"], sub: "MINI · 10400mAh" },
     blurb: "The one most homes need. Router keeps running for up to 6 hours of load-shedding.",
     desc: "Plug it between the wall and your router. When the light goes, Jugnu switches over in 0 milliseconds, so your router never restarts, your Zoom call never drops and your game never disconnects. It recharges by itself once the power is back.",
     box: ["Jugnu Mini", "12V DC cable", "9V DC cable", "Wall adapter 12V 2A", "User guide in Urdu & English"] },
   { id: "pro", name: "Jugnu Pro Duo", line: "Router + fiber ONT, two 12V outputs", cat: "ups", price: 7499, old: 0, tag: "For fiber",
     wh: 67, mah: "18,000 mAh", outs: ["12V 2A", "12V 2A", "9V 2A", "5V USB"], hours: "5 to 8 hours (both devices)", weight: "380 g", switch: "0 ms",
-    model: { kind: "ups", w: 1.95, h: 0.48, d: 1.22, color: WHITE, text: "#22262d", ports: ["12V", "12V", "9V", "USB"], sub: "PRO DUO · 18000mAh" },
     blurb: "Two 12V outputs for PTCL Flash Fiber, Nayatel and StormFiber homes: ONT and router on one unit.",
     desc: "Fiber homes have two boxes: the ONT from your ISP and your WiFi router. Pro Duo powers both from one battery, with two full 12V 2A outputs, so the internet line and the WiFi stay up together.",
     box: ["Jugnu Pro Duo", "2 × 12V DC cables", "9V DC cable", "Wall adapter 12V 3A", "Wall mount screws"] },
   { id: "max", name: "Jugnu Max", line: "30,000 mAh, all-night backup + USB-C", cat: "ups", price: 11999, old: 13499, tag: "Longest backup",
     wh: 111, mah: "30,000 mAh", outs: ["12V 3A", "9V 2A", "USB-C PD 65W", "5V USB"], hours: "10 to 14 hours", weight: "640 g", switch: "0 ms",
-    model: { kind: "ups", w: 2.1, h: 0.58, d: 1.3, color: NAVY, ports: ["12V", "9V", "USB-C", "USB"], sub: "MAX · 30000mAh" },
     blurb: "For long outages and night shifts: router all night, and a 65W USB-C port for your phone or laptop.",
     desc: "Max is for the 8 to 12 hour days and for freelancers on night shifts. The 12V 3A output runs a router or mesh node all night, and the USB-C PD port charges a phone or a USB-C laptop at the same time.",
     box: ["Jugnu Max", "12V & 9V DC cables", "USB-C to USB-C cable", "Wall adapter 12V 3A", "Carry pouch"] },
   { id: "lite", name: "Jugnu Lite", line: "6,000 mAh, for 9V & 12V routers", cat: "ups", price: 2999, old: 0, tag: "Budget",
     wh: 22, mah: "6,000 mAh", outs: ["12V 1.5A", "9V 1.5A"], hours: "2 to 3 hours", weight: "160 g", switch: "0 ms",
-    model: { kind: "ups", w: 1.45, h: 0.38, d: 1.0, color: 0x2a2f36, leds: 3, ports: ["12V", "9V"], sub: "LITE · 6000mAh" },
     blurb: "Covers one round of load-shedding for a single router. Small enough to stick behind it.",
     desc: "If your area has one or two hours of load-shedding at a time, Lite is enough. It is the size of a deck of cards and comes with a 3M pad to stick it on the back of the router.",
     box: ["Jugnu Lite", "12V DC cable", "9V DC cable", "3M mounting pad"] },
   { id: "station", name: "Jugnu Station 300", line: "300 Wh LiFePO4 power station", cat: "station", price: 64999, old: 72000, tag: "Home office",
     wh: 288, mah: "307 Wh LiFePO4", outs: ["2 × AC 300W", "12V DC", "2 × USB-A", "USB-C 100W"], hours: "30+ hours for a router", weight: "3.6 kg", switch: "15 ms (UPS mode)",
-    model: { kind: "station", color: 0x262a31 },
     blurb: "Router, laptop, LED light and a fan for a full work day without UPS or generator noise.",
     desc: "A silent, battery-only power station for the work-from-home desk. LiFePO4 cells last 3000+ cycles. Run the router for more than a day, or the router, a laptop and a 30W DC fan through a full outage. Charge it from the wall or from a solar panel.",
     box: ["Jugnu Station 300", "AC charging cable", "Car charging cable", "Solar input cable (MC4)"] },
   { id: "boost", name: "USB to 12V boost cable", line: "Run a router from any power bank", cat: "acc", price: 799, old: 0, tag: "",
     wh: 0, mah: "-", outs: ["12V 1A"], hours: "Depends on your power bank", weight: "40 g", switch: "-",
-    model: { kind: "cable", label: "5V→12V" },
     blurb: "Already have a power bank? This cable steps 5V up to 12V for your router.",
     desc: "A 1 metre cable with a small boost circuit inside. Plug the USB end into any 2A power bank and the DC end into your router. Comes with 5.5×2.1 and 5.5×2.5 tips.",
     box: ["Boost cable 5V→12V", "2 DC tips"] },
   { id: "split", name: "DC Y-splitter cable", line: "One 12V output to two devices", cat: "acc", price: 549, old: 0, tag: "",
     wh: 0, mah: "-", outs: ["2 × 12V"], hours: "-", weight: "30 g", switch: "-",
-    model: { kind: "cable", split: true, accent: 0x46d4ff },
     blurb: "Power your ONT and router from one 12V port (Mini and Max).",
     desc: "Pure copper 5.5×2.1 Y cable, 60 cm. Use it when your ONT and router together draw less than 2A, which is true for most fiber setups.",
     box: ["Y-splitter cable"] },

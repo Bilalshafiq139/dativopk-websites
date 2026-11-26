@@ -16,7 +16,8 @@
   <section class="story" id="story" aria-label="How Jugnu keeps your WiFi on">
     <div class="story-stick">
       <div class="story-bg" id="storyBg"></div>
-      <canvas id="scene" aria-hidden="true"></canvas>
+      <div class="photos" id="photos" aria-hidden="true"></div>
+      <div class="story-shade"></div>
       <div class="story-vignette"></div>
       <div class="story-flash" id="flash"></div>
       <div class="hud" aria-hidden="true">
@@ -40,6 +41,7 @@
           <span class="eyebrow">Meet Jugnu</span>
           <h2>Plug it in<br><span class="glow-text">once.</span></h2>
           <p>Jugnu sits between the wall adapter and your router. While the power is on it quietly charges. Setup takes two minutes and no tools.</p>
+          <div class="specs" style="margin-top:22px"><span class="spec"><b>⚡</b> 12V · 9V · USB</span><span class="spec">10,400 mAh</span><span class="spec">Rs 4,499</span></div>
         </div>
         <div class="beat" data-b="3">
           <span class="eyebrow" style="color:var(--amber)">Load-shedding again</span>
@@ -185,10 +187,10 @@ const hud = (h) => {
 };
 const onBeat = (b) => beats.forEach((el) => el.classList.toggle("on", Number(el.dataset.b) === b));
 let ok = false;
-if (!matchMedia("(prefers-reduced-motion:reduce)").matches) {
-  try { const { startStory } = await import("./js/scene.js"); ok = startStory({ canvas: $("#scene"), section: story, onBeat, onHud: hud }); } catch (e) { console.warn(e); }
+{
+  try { const { startStory } = await import("./js/story.js"); ok = startStory({ root: $("#photos"), section: story, onBeat, onHud: hud }); } catch (e) { console.warn(e); }
 }
-if (!ok) { document.documentElement.classList.add("no3d"); $("#scene").remove(); $$(".hud,.story-progress,#hint").forEach((e) => e.remove()); }
+if (!ok) { document.documentElement.classList.add("no3d"); $$(".hud,.story-progress,#hint").forEach((e) => e.remove()); }
 </script>
 <script src="../dativo-lead.js" defer></script>
 </body>

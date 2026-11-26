@@ -17,7 +17,7 @@ Live demo websites built by DATIVOPK. Each folder is one static site (HTML/CSS/J
 | Arz Estate (real estate agency) | `real-estate/` |
 | Ismail Valley, Faisalabad (housing society concept) | `ismail-valley/` |
 | Zeenat Salon & Studio (ladies salon) | `salon/` |
-| Jugnu Power (3D WiFi router UPS store) | `router-ups/` |
+| Jugnu Power (WiFi router UPS store) | `router-ups/` |
 
 On GitHub Pages the small Node APIs in each `api/` folder do not run, so forms and admin panels work in demo mode (saved in the browser only). Each site's own README explains running it with Docker.
 
