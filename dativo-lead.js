@@ -16,7 +16,8 @@
     "matcha-brand": "Koya Matcha Bar (matcha cafe and brand website)",
     "real-estate": "Arz Estate (real estate agency website)",
     "salon": "Zeenat Salon & Studio (salon and bridal studio website)",
-    "router-ups": "Jugnu Power (online store for WiFi router UPS)"
+    "router-ups": "Jugnu Power (online store for WiFi router UPS)",
+    "leather-bag": "Chamra Leather Co. (single-product leather bag store)"
   };
   var slug = (location.pathname.split("/").filter(Boolean)[0] || "").toLowerCase();
   var name = NAMES[slug] || "demo";

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visit & contact · Chamra Leather Co.</title>
+<meta name="description" content="Visit the Chamra studio in Gulberg, Lahore to see the Sialkot Briefcase in tan and black, or message us about orders, repairs and corporate gifting.">
+<meta name="theme-color" content="#e6e2da">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="phero wrap">
+    <p class="crumbs reveal"><a href="index.html">Home</a> / Visit & contact</p>
+    <h1 class="split-me">Come and feel the leather.</h1>
+    <p class="reveal">Both colours are at our Gulberg studio. Or write to us about an order, a repair or gifts for your team.</p>
+  </section>
+  <section class="wrap contact">
+    <div class="reveal">
+      <div class="map"><iframe title="Map: MM Alam Road, Gulberg, Lahore" loading="lazy" src="https://www.google.com/maps?q=MM+Alam+Road+Gulberg+Lahore&output=embed"></iframe></div>
+      <div class="info-list" id="info"></div>
+    </div>
+    <div class="panel reveal" style="--i:1">
+      <h2 style="font-size:34px;margin-bottom:22px">Write to us</h2>
+      <form id="cf" novalidate>
+        <div class="two"><div class="field"><label for="n">Name</label><input id="n" name="name" autocomplete="name"></div><div class="field"><label for="p">Mobile</label><input id="p" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx"></div></div>
+        <div class="field"><label for="e">Email</label><input id="e" name="email" type="email" autocomplete="email"></div>
+        <div class="field"><label for="t">About</label><select id="t" name="topic"><option>Product question</option><option>Visit the studio</option><option>Order help</option><option>Repair</option><option>Corporate gifting</option></select></div>
+        <div class="field"><label for="m">Message</label><textarea id="m" name="message"></textarea></div>
+        <p class="err" id="err"></p>
+        <button class="btn btn-dark btn-block">Send message</button>
+      </form>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, esc } from "./js/layout.js";
+import { BRAND } from "./js/data.js";
+import * as S from "./js/store.js";
+init("contact");
+$("#info").innerHTML = [["Studio", BRAND.address.replace("Studio: ", "")], ["Workshop", BRAND.workshop.replace("Workshop: ", "")], ["Hours", BRAND.hours], ["WhatsApp", BRAND.phone], ["Email", BRAND.email]].map(([a, b]) => `<div><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join("");
+$("#cf").onsubmit = async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || !/^\S+@\S+\.\S+$/.test(d.email.trim()) || d.message.trim().length < 3) { $("#err").textContent = "Please add your name, email and a message."; return; }
+  try { await S.sendMessage(d); e.target.innerHTML = '<div class="ok"><div class="tick">✓</div><h3 style="font-size:28px">Thank you</h3><p class="muted">We reply within a working day, usually on WhatsApp.</p></div>'; }
+  catch (er) { $("#err").textContent = er.message; }
+};
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

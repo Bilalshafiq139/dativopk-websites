@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your cart · Chamra Leather Co.</title>
+<meta name="description" content="Your Chamra Leather Co. cart.">
+<meta name="theme-color" content="#e6e2da">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="phero wrap" style="padding-bottom:30px"><p class="crumbs"><a href="index.html">Home</a> / Cart</p><h1>Your cart</h1></section>
+  <div class="wrap" id="root"></div>
+</main>
+<script type="module">
+import { init, $, esc, img, addToCart } from "./js/layout.js";
+import { rs } from "./js/data.js";
+import * as S from "./js/store.js";
+init("cart");
+function draw() {
+  const t = S.totals();
+  if (!t.lines.length) { $("#root").innerHTML = `<div class="panel" style="text-align:center;padding:70px 20px;margin-bottom:110px"><h2 style="font-size:40px;margin-bottom:12px">Nothing here yet</h2><p class="muted">The briefcase is waiting for you.</p><a class="btn btn-dark" href="index.html#buy" style="margin-top:26px">Shop the briefcase</a></div>`; return; }
+  const inCart = new Set(t.lines.map((l) => l.id));
+  const extras = S.visibleProducts().filter((p) => p.cat === "addon" && !inCart.has(p.id) && p.status === "active");
+  $("#root").innerHTML = `<div class="cart">
+    <div>
+      ${t.lines.map((l) => `<div class="cline"><img src="${img(l.p.imgs[0])}" alt="">
+        <div><h4>${esc(l.p.name)}</h4><small>${rs(l.unit)}</small><br><button class="rm" data-rm="${l.id}">Remove</button></div>
+        <div style="text-align:right"><div class="qty" style="height:42px"><button data-q="${l.id}" data-d="-1" aria-label="Less">−</button><span>${l.qty}</span><button data-q="${l.id}" data-d="1" aria-label="More">+</button></div><div style="font:500 18px/1 var(--serif);margin-top:10px">${rs(l.unit * l.qty)}</div></div></div>`).join("")}
+      ${extras.length ? `<h3 style="font-size:24px;margin:40px 0 16px">Add to your order</h3><div style="display:grid;gap:12px">${extras.map((p) => `<div class="cline" style="padding:12px 0"><img src="${img(p.imgs[0])}" alt="" style="width:70px"><div><b>${esc(p.name)}</b><br><small>${esc(p.line)}</small></div><button class="btn btn-line" style="height:42px;padding:0 18px" data-add="${p.id}">Add · ${rs(p.price)}</button></div>`).join("")}</div>` : ""}
+    </div>
+    <aside class="panel sum">
+      <h3 style="font-size:26px;margin-bottom:10px">Summary</h3>
+      <div class="sum-row"><span>Subtotal</span><span>${rs(t.subtotal)}</span></div>
+      <div class="sum-row"><span>Delivery</span><span>${t.delivery ? rs(t.delivery) : "Free"}</span></div>
+      <div class="sum-row total"><span>Total</span><span>${rs(t.total)}</span></div>
+      <a class="btn btn-dark btn-block" href="checkout.html" style="margin-top:22px">Checkout</a>
+      <p class="muted" style="text-align:center;font-size:13.5px;margin-top:12px">Cash on delivery, card or bank transfer</p>
+    </aside></div>`;
+}
+$("#root").onclick = (e) => {
+  const r = e.target.closest("[data-rm]"); if (r) return S.removeLine(r.dataset.rm);
+  const a = e.target.closest("[data-add]"); if (a) return addToCart(a.dataset.add);
+  const q = e.target.closest("[data-q]"); if (q) { const l = S.bag().find((x) => x.id === q.dataset.q); S.setQty(q.dataset.q, l.qty + Number(q.dataset.d)); }
+};
+addEventListener("store:change", draw); draw();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

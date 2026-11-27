@@ -18,6 +18,7 @@ Live demo websites built by DATIVOPK. Each folder is one static site (HTML/CSS/J
 | Ismail Valley, Faisalabad (housing society concept) | `ismail-valley/` |
 | Zeenat Salon & Studio (ladies salon) | `salon/` |
 | Jugnu Power (WiFi router UPS store) | `router-ups/` |
+| Chamra Leather Co. (single-product leather bag store) | `leather-bag/` |
 
 On GitHub Pages the small Node APIs in each `api/` folder do not run, so forms and admin panels work in demo mode (saved in the browser only). Each site's own README explains running it with Docker.
 

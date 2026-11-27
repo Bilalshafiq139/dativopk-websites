@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout · Chamra Leather Co.</title>
+<meta name="description" content="Checkout for your Chamra Leather Co. order. Free delivery across Pakistan, cash on delivery.">
+<meta name="theme-color" content="#e6e2da">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main"><div class="wrap" style="padding:60px 0 110px" id="root"></div></main>
+<script type="module">
+import { init, esc, $, img } from "./js/layout.js";
+import { BRAND, rs } from "./js/data.js";
+import * as S from "./js/store.js";
+init("cart");
+const CITIES = ["Lahore", "Karachi", "Islamabad", "Rawalpindi", "Faisalabad", "Multan", "Peshawar", "Sialkot", "Gujranwala", "Quetta", "Hyderabad", "Bahawalpur", "Other"];
+const demo = await S.isDemo();
+function form() {
+  const t = S.totals();
+  if (!t.lines.length) { $("#root").innerHTML = `<div class="panel" style="text-align:center;padding:70px 20px"><h2 style="font-size:40px;margin-bottom:12px">Your cart is empty</h2><a class="btn btn-dark" href="index.html#buy" style="margin-top:20px">Shop the briefcase</a></div>`; return; }
+  $("#root").innerHTML = `
+  <p class="crumbs"><a href="cart.html">Cart</a> / Details / Done</p>
+  <h1 style="font-size:clamp(46px,6vw,80px);margin:10px 0 34px">Checkout</h1>
+  <div class="cart" style="padding-bottom:0">
+    <form class="panel" id="co" novalidate>
+      <h3 style="font-size:24px;margin-bottom:18px">Delivery details</h3>
+      <div class="two"><div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name"></div><div class="field"><label for="phone">Mobile (WhatsApp)</label><input id="phone" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx"></div></div>
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email"></div>
+      <div class="two"><div class="field"><label for="city">City</label><select id="city" name="city"><option value="">Choose city</option>${CITIES.map((c) => `<option>${c}</option>`).join("")}</select></div><div class="field"><label for="initials">Initials to stamp (if added)</label><input id="initials" name="initials" maxlength="3" placeholder="e.g. A.K."></div></div>
+      <div class="field"><label for="address">Address</label><input id="address" name="address" autocomplete="street-address" placeholder="House, street, area"></div>
+      <div class="field"><label for="notes">Note or gift message (optional)</label><textarea id="notes" name="notes" rows="3"></textarea></div>
+      <h3 style="font-size:24px;margin:22px 0 14px">Payment</h3>
+      <div class="pay"><label><input type="radio" name="payment" value="Cash on delivery" checked>Cash on delivery</label><label><input type="radio" name="payment" value="Card">Debit or credit card (secure link by SMS)</label><label><input type="radio" name="payment" value="Bank transfer">Bank transfer</label></div>
+      <p class="err" id="err"></p>
+      <button class="btn btn-dark btn-block" id="place">Place order · ${rs(t.total)}</button>
+      ${demo ? `<p class="muted" style="text-align:center;font-size:13px;margin-top:12px">Demo store: no payment is taken and nothing is shipped.</p>` : ""}
+    </form>
+    <aside class="panel sum">
+      <h3 style="font-size:24px;margin-bottom:8px">Your order</h3>
+      ${t.lines.map((l) => `<div class="cline" style="grid-template-columns:60px 1fr auto;padding:12px 0"><img src="${img(l.p.imgs[0])}" alt="" style="width:60px"><div><b>${esc(l.p.name)}</b><br><small>Qty ${l.qty}</small></div><span>${rs(l.unit * l.qty)}</span></div>`).join("")}
+      <div class="sum-row" style="margin-top:8px"><span>Subtotal</span><span>${rs(t.subtotal)}</span></div>
+      <div class="sum-row"><span>Delivery</span><span>${t.delivery ? rs(t.delivery) : "Free"}</span></div>
+      <div class="sum-row total"><span>Total</span><span>${rs(t.total)}</span></div>
+    </aside>
+  </div>`;
+  $("#co").addEventListener("submit", submit);
+}
+async function submit(e) {
+  e.preventDefault();
+  const f = e.target, d = Object.fromEntries(new FormData(f)), bad = [];
+  if (d.name.trim().length < 2) bad.push("name");
+  if (!/^[0-9+\-\s]{10,15}$/.test(d.phone.trim())) bad.push("phone");
+  if (!/^\S+@\S+\.\S+$/.test(d.email.trim())) bad.push("email");
+  if (!d.city) bad.push("city");
+  if (d.address.trim().length < 6) bad.push("address");
+  [...f.elements].forEach((el) => el.style && (el.style.borderColor = bad.includes(el.name) ? "#a3321c" : ""));
+  if (bad.length) { $("#err").textContent = "Please check: " + bad.join(", ") + "."; f.elements[bad[0]].focus(); return; }
+  $("#place").disabled = true; $("#place").textContent = "Placing order…";
+  try {
+    const o = await S.placeOrder({ name: d.name, phone: d.phone, email: d.email, city: d.city, address: d.address,
+      notes: [d.initials ? "Initials: " + d.initials : "", d.notes].filter(Boolean).join(". "), payment: d.payment });
+    done(o); scrollTo(0, 0);
+  } catch (er) { $("#err").textContent = er.message; $("#place").disabled = false; $("#place").textContent = "Try again"; }
+}
+function done(o) {
+  $("#root").innerHTML = `<div class="panel ok" style="max-width:640px;margin:0 auto;padding:48px 32px">
+    <div class="tick">✓</div><span class="eyebrow">Order ${esc(o.id)}</span>
+    <h1 style="font-size:clamp(38px,5vw,56px);margin:14px 0">Shukriya, ${esc(String(o.name).split(" ")[0])}.</h1>
+    <p class="muted">We'll confirm on WhatsApp today. Your bag is checked by its maker before it ships: Lahore in a day, other cities in 2 to 4 days${o.payment === "Cash on delivery" ? ". Please keep the cash ready for the rider." : "."}</p>
+    <div style="text-align:left;margin-top:26px">${o.items.map((i) => `<div class="sum-row"><span>${i.qty} × ${esc(i.name)}</span><span>${rs(i.price * i.qty)}</span></div>`).join("")}
+      <div class="sum-row"><span>Delivery</span><span>${o.delivery ? rs(o.delivery) : "Free"}</span></div><div class="sum-row total"><span>Total · ${esc(o.payment)}</span><span>${rs(o.total)}</span></div></div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:28px;flex-wrap:wrap"><a class="btn btn-dark" href="craft.html">See how it's made</a><a class="btn btn-line" href="${BRAND.whatsapp}" target="_blank" rel="noopener">WhatsApp us</a></div></div>`;
+}
+form();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>
