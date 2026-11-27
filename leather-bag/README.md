@@ -5,7 +5,8 @@ A one-product store for a handmade leather briefcase from Sialkot, in the style 
 ## Pages
 | Page | What it does |
 |---|---|
-| `index.html` | The product: photo gallery (zoom, swipe, arrows, thumbnails), Tan / Black colour switch that swaps the whole gallery, add to cart or order on WhatsApp, details accordion, statement, detail photos with parallax, features, lifestyle photos, reviews, workshop story, add-ons, FAQ, sticky add-to-cart bar |
+| `index.html` | Home: full-screen lifestyle hero with slow zoom, ticker, brand statement, Tan / Black colour cards, detail photos with parallax, key numbers, reviews, workshop story, add-ons, closing call to action |
+| `product.html?c=tan` | The product: photo gallery (zoom, swipe, arrows, thumbnails), Tan / Black colour switch that swaps the whole gallery, add to cart or order on WhatsApp, details accordion, statement, detail photos with parallax, features, lifestyle photos, reviews, workshop story, add-ons, FAQ, sticky add-to-cart bar |
 | `craft.html` | How it's made in 4 steps, repair promise, studio photos, corporate gifting |
 | `contact.html` | Studio map, hours, contact form (saved to admin) |
 | `cart.html`, `checkout.html` | Cart with add-on suggestions, checkout with initials and gift note, COD / card / bank transfer |

@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=1">
+<link rel="stylesheet" href="css/style.css?v=2">
 </head>
 <body>
 <main id="main"><div class="wrap" style="padding:60px 0 110px" id="root"></div></main>
@@ -22,7 +22,7 @@ const CITIES = ["Lahore", "Karachi", "Islamabad", "Rawalpindi", "Faisalabad", "M
 const demo = await S.isDemo();
 function form() {
   const t = S.totals();
-  if (!t.lines.length) { $("#root").innerHTML = `<div class="panel" style="text-align:center;padding:70px 20px"><h2 style="font-size:40px;margin-bottom:12px">Your cart is empty</h2><a class="btn btn-dark" href="index.html#buy" style="margin-top:20px">Shop the briefcase</a></div>`; return; }
+  if (!t.lines.length) { $("#root").innerHTML = `<div class="panel" style="text-align:center;padding:70px 20px"><h2 style="font-size:40px;margin-bottom:12px">Your cart is empty</h2><a class="btn btn-dark" href="product.html" style="margin-top:20px">Shop the briefcase</a></div>`; return; }
   $("#root").innerHTML = `
   <p class="crumbs"><a href="cart.html">Cart</a> / Details / Done</p>
   <h1 style="font-size:clamp(46px,6vw,80px);margin:10px 0 34px">Checkout</h1>

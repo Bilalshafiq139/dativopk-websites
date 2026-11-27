@@ -15,7 +15,7 @@ export const ICON = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
 };
 
-const NAV = [["shop", "Shop", "index.html#buy"], ["craft", "Our craft", "craft.html"], ["addons", "Add-ons", "index.html#addons"], ["contact", "Visit & contact", "contact.html"]];
+const NAV = [["shop", "Shop", "product.html"], ["craft", "Our craft", "craft.html"], ["addons", "Add-ons", "index.html#addons"], ["contact", "Visit & contact", "contact.html"]];
 const ANN = ["Free delivery across Pakistan", "Cash on delivery · 14 day returns", "Made by hand in Sialkot · 1 year free repairs"];
 
 function header(page) {
@@ -31,14 +31,14 @@ function header(page) {
     </div>
   </div></header>
   <div class="mobile-menu" id="mm" hidden><button class="icon-btn close" id="mmClose" aria-label="Close">${ICON.close}</button>
-    <a href="index.html">The briefcase</a>${NAV.slice(1).map(([, t, h]) => `<a href="${h}">${t}</a>`).join("")}<a href="cart.html">Cart</a></div>`;
+    <a href="index.html">Home</a><a href="product.html">The briefcase</a>${NAV.slice(1).map(([, t, h]) => `<a href="${h}">${t}</a>`).join("")}<a href="cart.html">Cart</a></div>`;
 }
 function footer() {
   return `<footer class="ftr"><div class="wrap">
     <div class="ftr-grid">
       <div><a class="logo" href="index.html">Chamra</a><p class="muted" style="margin-top:14px;max-width:300px">One leather briefcase, cut and stitched by hand in Sialkot. Delivered free across Pakistan.</p></div>
-      <div><h4>Shop</h4><a href="index.html?c=tan#buy">Briefcase · Tan</a><a href="index.html?c=black#buy">Briefcase · Black</a><a href="index.html#addons">Wallet & add-ons</a><a href="cart.html">Cart</a></div>
-      <div><h4>About</h4><a href="craft.html">Our craft</a><a href="index.html#faq">FAQ</a><a href="contact.html">Visit the studio</a><a href="contact.html">Corporate gifting</a></div>
+      <div><h4>Shop</h4><a href="product.html?c=tan">Briefcase · Tan</a><a href="product.html?c=black">Briefcase · Black</a><a href="index.html#addons">Wallet & add-ons</a><a href="cart.html">Cart</a></div>
+      <div><h4>About</h4><a href="craft.html">Our craft</a><a href="product.html#faq">FAQ</a><a href="contact.html">Visit the studio</a><a href="contact.html">Corporate gifting</a></div>
       <div><h4>Talk to us</h4><a href="${BRAND.whatsapp}" target="_blank" rel="noopener">WhatsApp ${BRAND.phone}</a><a href="mailto:${BRAND.email}">${BRAND.email}</a><p class="muted" style="margin-top:8px;font-size:14px">${BRAND.address}<br>${BRAND.workshop}<br>${BRAND.hours}</p></div>
     </div>
     <div class="ftr-low"><span>© ${new Date().getFullYear()} ${BRAND.full}. Demo store.</span><span>Prices in PKR · COD available</span><a href="admin.html">Admin</a></div>
