@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coaches · Fajr Athletic Club Lahore</title>
+<meta name="description" content="Meet the coaches at Fajr Athletic Club, Lahore: strength, conditioning, ladies programme, mobility, bodyweight and 1-to-1 coaching.">
+<meta name="theme-color" content="#0b0e11">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="phero"><img src="assets/img/silhouette.webp" alt="A coach standing in the misty gym" style="object-position:50% 30%"><div class="wrap"><span class="kicker">Starring</span><h1>The coaches.</h1><p>Six full-time coaches, all certified, all training here themselves. They know your name by the second class.</p></div></section>
+  <section class="sec" style="padding-top:60px"><div class="wrap"><div class="cast" id="cast"></div></div></section>
+  <section class="final wrap"><span class="kicker reveal">Train with them</span><h2 class="reveal">Pick a coach.<br>Pick a <em>morning.</em></h2><a class="btn btn-amber reveal" href="trial.html">Book a free trial</a></section>
+</main>
+<script type="module">
+import { init, $, esc, img, reveal } from "./js/layout.js";
+import { COACHES } from "./js/data.js";
+init("coaches");
+$("#cast").innerHTML = COACHES.map((c, i) => `<article class="actor reveal" style="--i:${i % 3}"><figure><img src="${img(c.img)}" alt="${esc(c.name)}" loading="lazy"></figure><span class="role">${esc(c.role)} · ${c.years} yrs</span><h3>${esc(c.name)}</h3><p>“${esc(c.quote)}”</p></article>`).join("");
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

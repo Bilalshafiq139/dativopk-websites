@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programs & timetable · Fajr Athletic Club Lahore</title>
+<meta name="description" content="Strength, conditioning, bodyweight and climb, mobility, ladies-only strength and 1-to-1 coaching at Fajr Athletic Club, Lahore. Weekly class timetable from 5 am.">
+<meta name="theme-color" content="#0b0e11">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="phero"><img src="assets/img/wide.webp" alt="The misty warehouse training floor"><div class="wrap"><span class="kicker">Programs</span><h1>Six ways to train.</h1><p>Every class is coached, capped at twelve people and logged, so you can see yourself getting stronger week by week.</p></div></section>
+  <section class="sec" style="padding-top:60px">
+    <div class="wrap" id="list"></div>
+  </section>
+  <section class="sec" style="padding-top:20px" id="timetable">
+    <div class="wrap">
+      <div class="head"><div><span class="kicker reveal">Timetable</span><h2 class="reveal">This week at Fajr.</h2></div><a class="btn btn-amber reveal" href="trial.html">Try a class free</a></div>
+      <div class="days" id="days" role="tablist"></div>
+      <div class="slots" id="slots"></div>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, $$, esc, img, reveal } from "./js/layout.js";
+import { PROGRAMS, DAYS, SCHEDULE, programById, coachById } from "./js/data.js";
+init("programs");
+$("#list").innerHTML = PROGRAMS.map((p, i) => `<article id="${p.id}" class="split reveal" style="margin-bottom:90px;align-items:center;${i % 2 ? "direction:rtl" : ""}">
+  <figure style="margin:0;aspect-ratio:4/3;overflow:hidden;direction:ltr"><img src="${img(p.img)}" alt="${esc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:saturate(.85)"></figure>
+  <div style="direction:ltr"><span class="kicker">${String(i + 1).padStart(2, "0")} · ${esc(p.len)} · ${esc(p.level)}</span><h2 style="font-size:clamp(48px,5vw,76px);font-style:italic;margin:16px 0 18px">${esc(p.name)}</h2><p class="muted" style="font-size:18px;max-width:460px">${esc(p.text)}</p>
+  <a class="btn btn-line" style="margin-top:28px" href="trial.html?program=${p.id}">Book a free ${esc(p.name.toLowerCase())} class</a></div></article>`).join("");
+const today = DAYS[(new Date().getDay() + 6) % 7];
+let day = today;
+const draw = () => {
+  $("#days").innerHTML = DAYS.map((d) => `<button role="tab" class="${d === day ? "on" : ""}" data-d="${d}">${d}${d === today ? " · today" : ""}</button>`).join("");
+  $("#slots").innerHTML = SCHEDULE[day].map(([t, pid, cid]) => { const p = programById(pid), c = coachById(cid); return `<div class="slot"><time>${t}</time><h4>${esc(p.name)}</h4><span>with ${esc(c.name)} · ${esc(p.len)}</span><span><a class="btn btn-line btn-sm" href="trial.html?program=${pid}&time=${t}">Try free</a></span></div>`; }).join("");
+};
+$("#days").onclick = (e) => { const b = e.target.closest("[data-d]"); if (b) { day = b.dataset.d; draw(); } };
+draw(); reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

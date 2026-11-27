@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Membership plans & prices · Fajr Athletic Club Lahore</title>
+<meta name="description" content="Fajr Athletic Club membership prices in PKR: day pass, monthly, quarterly and annual. Unlimited coached classes from 5 am in Lahore. Sign up online.">
+<meta name="theme-color" content="#0b0e11">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="phero"><img src="assets/img/dumbbells.webp" alt="Rows of dumbbells in the gym" style="object-position:50% 60%"><div class="wrap"><span class="kicker">Tickets</span><h1>Membership.</h1><p>No joining fee, no contract, freeze when you travel. Prices in rupees, paid at the desk, by card, transfer or JazzCash.</p></div></section>
+  <section class="sec" style="padding-top:60px"><div class="wrap"><div class="tickets" id="tickets"></div></div></section>
+  <section class="sec" style="padding-top:0" id="join">
+    <div class="wrap split">
+      <div><span class="kicker reveal">Sign up</span><h2 class="reveal" style="font-size:clamp(44px,5vw,76px);margin:16px 0 20px">Reserve your spot.</h2><p class="muted reveal" style="font-size:18px;max-width:440px">Fill this in and a coach calls you within a day to book your first session and a free body scan. You pay on your first visit.</p>
+        <img class="reveal" src="assets/img/balls.webp" alt="Medicine balls on shelves" loading="lazy" style="margin-top:34px;aspect-ratio:4/3;object-fit:cover;width:100%;filter:saturate(.8)"></div>
+      <form class="panel reveal" id="jf" novalidate>
+        <div class="field"><label for="plan">Plan</label><select id="plan" name="plan"></select></div>
+        <div class="two"><div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name"></div><div class="field"><label for="phone">Mobile</label><input id="phone" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx"></div></div>
+        <div class="field"><label for="payment">Pay by</label><select id="payment" name="payment"><option>Cash at the desk</option><option>Card</option><option>Bank transfer</option><option>JazzCash</option><option>Easypaisa</option></select></div>
+        <p class="err" id="err"></p>
+        <button class="btn btn-amber btn-block">Reserve my spot</button>
+      </form>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, esc, reveal } from "./js/layout.js";
+import { PLANS, rs } from "./js/data.js";
+import * as S from "./js/store.js";
+init("membership");
+const pick = new URLSearchParams(location.search).get("plan") || "monthly";
+$("#tickets").innerHTML = PLANS.map((p, i) => `<article class="ticket reveal ${p.id === pick ? "hot" : ""}" style="--i:${i}"><span class="t-tag">${esc(p.tag)}</span><h3>${esc(p.name)}</h3><div class="price">${rs(p.price)} <small>/ ${esc(p.per)}</small></div><ul>${p.perks.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><div class="stub"><a class="btn" href="#join" data-plan="${p.id}">Choose</a></div></article>`).join("");
+$("#plan").innerHTML = PLANS.map((p) => `<option value="${p.id}" ${p.id === pick ? "selected" : ""}>${esc(p.name)} · ${rs(p.price)} / ${esc(p.per)}</option>`).join("");
+$("#tickets").onclick = (e) => { const b = e.target.closest("[data-plan]"); if (b) $("#plan").value = b.dataset.plan; };
+$("#jf").onsubmit = async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || !/^[0-9+\-\s]{10,16}$/.test(d.phone.trim())) { $("#err").textContent = "Please add your name and mobile number."; return; }
+  try { const r = await S.submit("joins", d); const p = PLANS.find((x) => x.id === d.plan);
+    e.target.innerHTML = `<div class="ok"><div class="tick">✓</div><h3>You're in, ${esc(d.name.split(" ")[0])}.</h3><p class="muted">${esc(p.name)} · ${rs(p.price)}. Reference ${esc(r.id)}. A coach will call you on ${esc(d.phone)} within a day.</p></div>`;
+  } catch (er) { $("#err").textContent = er.message; }
+};
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fajr Athletic Club · Strength & conditioning gym in Lahore</title>
+<meta name="description" content="Fajr Athletic Club is a strength and conditioning gym in a Lahore warehouse. Coached classes from 5 am, ladies-only hours, 1-to-1 coaching and a free trial class.">
+<meta name="theme-color" content="#0b0e11">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="film" id="film" aria-label="A morning at Fajr, told as a short film">
+    <div class="film-stick">
+      <div class="film-shade"></div>
+      <div class="bar top"></div><div class="bar bot"></div>
+      <div class="intro"><div><div class="clock">05<i>:</i>00</div><p id="introLine"></p></div><span class="hint">Scroll to play</span></div>
+      <div class="hud tl"><i></i><span>REC</span><span id="tc">05:00:00</span></div>
+      <div class="hud tr"></div>
+      <div class="chap"></div>
+      <div class="subs"></div>
+      <div class="reel"><i></i></div>
+      <div class="film-end"><div class="wrap">
+        <span class="kicker">Fajr Athletic Club · Lahore</span>
+        <h2>Your first chapter<br>starts <em>Monday.</em></h2>
+        <div class="ctas"><a class="btn btn-amber" href="trial.html">Book a free trial</a><a class="btn btn-line" href="#club">See the club</a></div>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="sec statement" id="club">
+    <div class="wrap">
+      <span class="kicker reveal">The club</span>
+      <h2 class="reveal">A warehouse in Kot Lakhpat. No mirrors, no music videos, no selfies. Just <em>coaches, iron and the people who show up.</em></h2>
+      <div class="stats">
+        <div class="reveal" style="--i:0"><b>5:00</b><span>first class, six days a week</span></div>
+        <div class="reveal" style="--i:1"><b>12</b><span>athletes per class, never more</span></div>
+        <div class="reveal" style="--i:2"><b>1,400</b><span>square metres of training floor</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:120px">
+    <div class="wrap head"><div><span class="kicker reveal">Programs</span><h2 class="reveal">Six ways to train.</h2></div><a class="btn btn-line reveal" href="programs.html">Timetable</a></div>
+    <div class="strip"><div class="frames" id="frames"></div></div>
+  </section>
+
+  <section class="sec" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head"><div><span class="kicker reveal">Starring</span><h2 class="reveal">Your coaches.</h2></div><a class="btn btn-line reveal" href="coaches.html">Meet the team</a></div>
+      <div class="cast" id="cast"></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head"><div><span class="kicker reveal">The reviews</span><h2 class="reveal">From the 5 am regulars.</h2></div></div>
+      <div class="critics" id="critics"></div>
+    </div>
+  </section>
+
+  <section class="sec" style="padding-top:20px">
+    <div class="wrap">
+      <div class="head"><div><span class="kicker reveal">Tickets</span><h2 class="reveal">Pick your membership.</h2></div><a class="btn btn-line reveal" href="membership.html">Compare plans</a></div>
+      <div class="tickets" id="tickets"></div>
+    </div>
+  </section>
+
+  <section class="wrap credits reveal" aria-label="Credits">
+    <div class="roll">
+      <h4>A Fajr Athletic Club production</h4><p class="big">The 5 am Club</p>
+      <h4>Starring</h4><p>You</p>
+      <h4>Coached by</h4><p id="credCoaches"></p>
+      <h4>Filmed at</h4><p>Warehouse 7, Kot Lakhpat, Lahore</p>
+      <h4>Doors open</h4><p>5:00 am, Monday to Saturday</p>
+      <h4>No stunt doubles were used</h4><p>Every rep in this film was real.</p>
+      <h4>Coming soon to your mornings</h4><p class="big">Chapter one.</p>
+    </div>
+  </section>
+
+  <section class="final wrap">
+    <span class="kicker reveal">Free trial · no card · no contract</span>
+    <h2 class="reveal">Your first chapter<br>starts <em>Monday.</em></h2>
+    <a class="btn btn-amber reveal" href="trial.html">Book a free trial class</a>
+  </section>
+</main>
+<script type="module">
+import { init, $, esc, img, reveal, dragScroll } from "./js/layout.js";
+import { PROGRAMS, COACHES, STORIES, PLANS, rs } from "./js/data.js";
+init("home");
+$("#frames").innerHTML = PROGRAMS.map((p, i) => `<a class="frame" href="programs.html#${p.id}" draggable="false"><img src="${img(p.img)}" alt="${esc(p.name)} class" loading="lazy" draggable="false"><span class="no">${String(i + 1).padStart(2, "0")} · ${esc(p.len)}</span><div class="cap"><h3>${esc(p.name)}</h3><p>${esc(p.text)}</p></div></a>`).join("");
+dragScroll($("#frames"));
+$("#cast").innerHTML = COACHES.slice(0, 3).map((c, i) => `<article class="actor reveal" style="--i:${i}"><figure><img src="${img(c.img)}" alt="${esc(c.name)}" loading="lazy"></figure><span class="role">${esc(c.role)}</span><h3>${esc(c.name)}</h3><p>“${esc(c.quote)}”</p></article>`).join("");
+$("#critics").innerHTML = STORIES.map((s, i) => `<article class="critic reveal" style="--i:${i}"><b>${esc(s.stat)}</b><p>“${esc(s.text)}”</p><small>★★★★★ — ${esc(s.name)}</small></article>`).join("");
+$("#tickets").innerHTML = PLANS.map((p, i) => `<article class="ticket reveal ${p.id === "monthly" ? "hot" : ""}" style="--i:${i}"><span class="t-tag">${esc(p.tag)}</span><h3>${esc(p.name)}</h3><div class="price">${rs(p.price)} <small>/ ${esc(p.per)}</small></div><ul>${p.perks.map((x) => `<li>${esc(x)}</li>`).join("")}</ul><div class="stub"><a class="btn" href="membership.html?plan=${p.id}">Choose</a></div></article>`).join("");
+$("#credCoaches").innerHTML = COACHES.map((c) => esc(c.name)).join("<br>");
+reveal();
+let ok = false;
+try { const { startFilm } = await import("./js/film.js?v=1"); ok = startFilm($("#film")); } catch (e) { console.warn(e); }
+if (!ok) document.documentElement.classList.add("no-film");
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

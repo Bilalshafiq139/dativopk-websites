@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visit & contact · Fajr Athletic Club Lahore</title>
+<meta name="description" content="Visit Fajr Athletic Club in Kot Lakhpat, Lahore. Opening hours, ladies-only hours, directions and a contact form.">
+<meta name="theme-color" content="#0b0e11">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=1">
+</head>
+<body>
+<main id="main">
+  <section class="phero" style="height:56vh"><img src="assets/img/barbell-fog.webp" alt="A loaded barbell on the floor in the fog"><div class="wrap"><span class="kicker">Visit</span><h1>Find the warehouse.</h1><p>Free parking inside the gate. The door with the light on, from 5 am.</p></div></section>
+  <section class="sec" style="padding-top:50px">
+    <div class="wrap split">
+      <div class="reveal"><div class="map"><iframe title="Map to Fajr Athletic Club" loading="lazy" id="map"></iframe></div><div class="info-list" id="info"></div></div>
+      <form class="panel reveal" id="cf" novalidate style="--i:1">
+        <h2 style="font-size:44px;font-style:italic;margin-bottom:22px">Write to us.</h2>
+        <div class="two"><div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name"></div><div class="field"><label for="phone">Mobile</label><input id="phone" name="phone" autocomplete="tel" placeholder="03xx xxxxxxx"></div></div>
+        <div class="field"><label for="topic">About</label><select id="topic" name="topic"><option>General</option><option>Ladies timing</option><option>Personal training</option><option>Corporate</option><option>Membership</option></select></div>
+        <div class="field"><label for="message">Message</label><textarea id="message" name="message"></textarea></div>
+        <p class="err" id="err"></p>
+        <button class="btn btn-amber btn-block">Send</button>
+      </form>
+    </div>
+  </section>
+</main>
+<script type="module">
+import { init, $, esc, reveal } from "./js/layout.js";
+import { CLUB } from "./js/data.js";
+import * as S from "./js/store.js";
+init("contact");
+$("#map").src = CLUB.map;
+$("#info").innerHTML = [["Address", CLUB.address], ...CLUB.hours, ["WhatsApp", CLUB.phone], ["Email", CLUB.email]].map(([a, b]) => `<div><span>${esc(a)}</span><b style="text-align:right">${esc(b)}</b></div>`).join("");
+$("#cf").onsubmit = async (e) => {
+  e.preventDefault(); const d = Object.fromEntries(new FormData(e.target));
+  if (d.name.trim().length < 2 || d.message.trim().length < 3) { $("#err").textContent = "Please add your name and a message."; return; }
+  try { await S.submit("messages", d); e.target.innerHTML = '<div class="ok"><div class="tick">✓</div><h3>Message received.</h3><p class="muted">We reply within a few hours, usually on WhatsApp.</p></div>'; }
+  catch (er) { $("#err").textContent = er.message; }
+};
+reveal();
+</script>
+<script src="../dativo-lead.js" defer></script>
+</body>
+</html>

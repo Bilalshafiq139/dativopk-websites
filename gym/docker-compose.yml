@@ -1,0 +1,23 @@
+services:
+  web:
+    build: .
+    container_name: fajr-club-web
+    ports:
+      - "8095:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: fajr-club-api
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+    volumes:
+      - club-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  club-data:
